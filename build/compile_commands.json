@@ -1,8 +1,0 @@
-[
-{
-  "directory": "/Users/dmitryginzburg/Development/denoise-machine-x/build",
-  "command": "/usr/bin/c++  -I/Users/dmitryginzburg/Development/denoise-machine-x/include -g -arch arm64 -o CMakeFiles/dmxdenoiser.dir/src/cli/main.cpp.o -c /Users/dmitryginzburg/Development/denoise-machine-x/src/cli/main.cpp",
-  "file": "/Users/dmitryginzburg/Development/denoise-machine-x/src/cli/main.cpp",
-  "output": "CMakeFiles/dmxdenoiser.dir/src/cli/main.cpp.o"
-}
-]
