@@ -5,9 +5,10 @@
 
 namespace dmxdenoiser::io
 {
-    struct IImageIOParams
+    struct EXRIOParams : public IImageIOParams
     {
-        virtual ~IImageIOParams() = default;
+        bool multilayer = false;
+        ~EXRIOParams() override {};
     };
 }
 

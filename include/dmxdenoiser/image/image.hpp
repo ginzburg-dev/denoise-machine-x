@@ -20,6 +20,10 @@ namespace dmxdenoiser
         virtual Pixel& get(int x, int y) = 0;
         
         virtual ~IImage() = default;
+        
+    protected:
+        int m_width{};
+        int m_height{};
     };
 }
 

@@ -2,20 +2,24 @@
 #define DMXDENOISER_IMAGE_IMAGE_FLAT_H
 
 #include <dmxdenoiser/image/image.hpp>
+#include <vector>
 
 namespace dmxdenoiser
 {
     class ImageFlat : public IImage
     {
     public:
-        IImage() = default;
-        IImage(int width, int height);
+        ImageFlat() = default;
+        ImageFlat(int width, int height);
 
-        virtual int width() const;
-        virtual int height() const;
-        virtual Pixel& get(int x, int y);
+        int width() const override { return m_width; };
+        int height() const override { return m_height; };
+        Pixel& get(int x, int y);
         
-        ~IImage() override {};
+        ~ImageFlat() override {};
+
+    protected:
+        std::vector<Pixel> m_pixels{};
     };
 }
 
