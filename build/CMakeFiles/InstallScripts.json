@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
