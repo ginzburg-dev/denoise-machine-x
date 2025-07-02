@@ -9,6 +9,8 @@ namespace dmxdenoiser
 {
     struct Params
     {
+        int ncores = -1;
+        bool gpu = false;
         std::string inputPath{};
         std::string outputPath{};
         bool multilayer = true;

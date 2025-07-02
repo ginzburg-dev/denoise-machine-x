@@ -1,6 +1,6 @@
 CMakeFiles/dmxdenoiser.dir/src/cli/main.cpp.o: \
   /Users/dmitryginzburg/Development/denoise-machine-x/src/cli/main.cpp \
-  /Users/dmitryginzburg/Development/denoise-machine-x/include/dmxdenoiser/core/image.hpp \
+  /Users/dmitryginzburg/Development/denoise-machine-x/include/dmxdenoiser/io/image.hpp \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/string \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__config \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__config_site \
