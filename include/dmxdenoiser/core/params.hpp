@@ -13,7 +13,6 @@ namespace dmxdenoiser
         bool gpu = false;
         std::string inputPath{};
         std::string outputPath{};
-        bool multilayer = true;
         bool albedoDivide = true;
         std::string aovAlbedo{};
         std::string aovNormal{};

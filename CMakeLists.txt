@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.15)
 project(DenoiseMachineX VERSION 0.1.0 LANGUAGES C CXX)
 
-set(CXX_STANDARD 20)
-set(XX_STANDARD _REQUIRED ON)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_XX_STANDARD _REQUIRED ON)
 
 # Output binaries to "bin/"
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/dmxdenoiser)

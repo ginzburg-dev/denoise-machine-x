@@ -5,10 +5,10 @@ namespace dmxdenoiser
 {
     struct Pixel 
     {
-            float r{};
-            float g{};
-            float b{};
-            float a{};
+            float r;
+            float g;
+            float b;
+            float a;
     };
 }
 
