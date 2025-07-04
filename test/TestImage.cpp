@@ -100,14 +100,32 @@ int main()
 
     img.clear();
     copy.clear();
-    
+
     for(int i = 0; i < img.data().size(); ++i)
     {
         assert(flatPixels[i] == 0.0f);
         assert(flatCopyPixels[i] == 0.0f);
     }
 
+    /////
+
+    ImageOptions opt{2, 2, {"RGBA", "Specular", "Diffuse", "Z"}, 2};
+    Image img2(opt);
+
+    std::cout << "Test image constructor with opt." << '\n';
+
+    count = 0;
+    for(const auto& e : img2.layerNames() )
+    {
+        std::cout << e << ' ';
+        assert(e == img.layerNames()[count++]);
+    }
+    std::cout << '\n';
+
     
+    ////
+
+    assert(img2.data().size() == initW*initH*initFrames*initLayers.size()*Settings::numChannels);
 
     return 0;
 }
