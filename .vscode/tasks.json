@@ -2,9 +2,9 @@
     "version": "2.0.0",
     "tasks": [
     {
-        "label": "Build & Run dmxdenoiser-cli",
+        "label": "Build & Run dmx-cli",
         "type": "shell",
-        "command": "cmake --build build && ./build/dmxdenoiser/dmxdenoiser -filter nlm -gpu 0 -input shot.exr -output shot_filtered.exr",
+        "command": "cmake --build build && ./build/dmxdenoiser/dmxdenoiser -filter nlm -gpu 0 -input shot.exr -output shot_filtered.exr && cd build && ctest --output-on-failure --verbose",
         "group": {
         "kind": "build",
         "isDefault": true
@@ -18,6 +18,15 @@
         "showReuseMessage": false,
         "clear": true
         }
+    
+    },
+    {
+    "label": "Run Tests",
+    "type": "shell",
+    "command": "cd build && ctest --output-on-failure",
+    "options": {
+        "cwd": "${workspaceFolder}/build"
+    }
     }
     ]
 }

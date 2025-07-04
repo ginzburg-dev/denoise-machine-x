@@ -18,3 +18,17 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
 # CLI executable
 add_executable(dmxdenoiser ${SRC_FILES} src/cli/main.cpp)
 
+#tests
+enable_testing()
+
+file(GLOB TEST_SOURCES test/*.cpp)
+
+foreach(test_src ${TEST_SOURCES})
+    get_filename_component(test_name ${test_src} NAME_WE)
+    add_executable(${test_name} ${test_src})
+    target_include_directories(${test_name} PRIVATE ${CMAKE_SOURCE_DIR}/include)
+    add_test(NAME ${test_name} COMMAND ${test_name})
+endforeach()
+
+
+

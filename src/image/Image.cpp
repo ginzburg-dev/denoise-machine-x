@@ -2,6 +2,7 @@
 
 namespace dmxdenoiser
 {
+    /*
     Image& ImageCollection::getImage(std::string_view channelName, int frame)
     {
         return m_data[std::string(channelName)][frame];
@@ -28,4 +29,5 @@ namespace dmxdenoiser
         m_data[std::string(channelName)].push_back(std::move(img));
         return true;
     }
+        */
 }
