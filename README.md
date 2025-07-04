@@ -1,6 +1,6 @@
 # DenoiseMachineX
 
-![Build](https://github.com/ginzburg-dev/denoise-machine-x/actions/workflows/cpp.yml/badge.svg?branch=main)
+[![linux_build_and_tests](https://github.com/ginzburg-dev/denoise-machine-x/actions/workflows/linux_build_and_tests.yaml/badge.svg?branch=main)](https://github.com/ginzburg-dev/denoise-machine-x/actions/workflows/linux_build_and_tests.yaml)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 A modular, high-performance C++ image denoiser with support for multi-layer, multi-frame images.
