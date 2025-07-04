@@ -19,9 +19,7 @@ enum ChannelSet
 
 namespace Settings 
 {
-
     inline constexpr int numChannels = kRGBA;
-
 }
 
 struct Pixel
@@ -40,7 +38,7 @@ struct ImageOptions
     int numFrames{};
 };
 
-// Hash key or heterogeneous lookup in unordered map C++20
+// Hash functor to enable efficient heterogeneous lookup in unordered_map (C++20)
 struct TransparentHash : std::hash<std::string_view> {
     using is_transparent = void;
 };
@@ -80,6 +78,7 @@ public:
         return it->second; 
     };
     int frames() const { return m_numFrames; }
+    //float* data() { return m_pixels.data(); }
     std::vector<float>& data() { return m_pixels; }
     const std::vector<float>& data() const { return m_pixels; }
     std::size_t getPixelIndex(int x, int y, int frame, int layer) const
@@ -104,6 +103,11 @@ public:
     {
         int layerIdx = this->getLayerIndex(layer);
         return at(x, y, frame, layerIdx);
+    }
+
+    void clear() { 
+        /*memset(m_pixels.data(), 0, sizeof(float)*m_pixels.size());*/
+        std::fill(m_pixels.begin(), m_pixels.end(), 0.0f); 
     }
 
     ~Image() = default;
