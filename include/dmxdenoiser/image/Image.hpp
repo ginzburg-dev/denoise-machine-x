@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <stdexcept>
 #include <unordered_map>
 #include <string_view>
 #include <cstddef> // for std::size_t
