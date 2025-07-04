@@ -17,18 +17,10 @@ namespace dmxdenoiser::io
     class ImageIO
     {
     public:
-        ImageIO(std::string_view filename, std::unique_ptr<ImageIOParams> params)
-            : m_filename{ filename }, m_params{ std::move(params) }
-        {}
-
+        ImageIO(std::string_view filename, std::unique_ptr<>) = default;
         virtual bool read(Image& img) = 0;
         virtual bool write(const Image& img) const = 0;
-
         virtual ~ImageIO() = default;
-
-    protected:
-        std::string m_filename{};
-        std::unique_ptr<ImageIOParams> m_params;
     };
 }
 

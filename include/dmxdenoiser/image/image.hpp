@@ -10,45 +10,74 @@
 
 namespace dmxdenoiser
 {
-    class Image
-    {
-    public:
-        Image(int width, int height)
-            : m_width{width}, m_height{height}, m_pixels(width*height)
-        {} 
 
-        int width() const { return m_width; }
-        int height() const { return m_height; }
+enum ChannelSet
+{
+    GRAY = 1,
+    RGB = 3,
+    RGBA = 4,
+};
 
-        std::vector<Pixel>* get() { return &m_pixels; }
+struct Rgba
+{
+    float r, g, b, a;
+};
 
-        Pixel& at(int x, int y) { return m_pixels[x + y*m_width]; }
+struct Layer
+{
+    int numChannels{};
+    std::string name{};
+};
 
-        ~Image() = default;
+struct ImageOptions
+{
+    int width{};
+    int height{};
+    std::vector<Layer> layers{};
+    int numFrames{};
+};
 
-    private:
-        int m_width;
-        int m_height;
-        std::vector<Pixel> m_pixels;
-    };
+class Image
+{
+public:
+    Image(int width, int height, int numChannels, const std::vector<std::string>& layers, int numFrames)
+        : m_width{width}, 
+        m_height{height}, 
+        m_numChannels{numChannels},
+        m_numLayers{static_cast<int>(layers.size())},
+        m_numFrames{numFrames},
+        m_layers{layers},
+        m_pixels(width * height * numChannels * layers.size() * numFrames)
+    {}
 
-    class ImageCollection
-    {
-    public:
-        ImageCollection() = default;
+    Image(const ImageOptions& opt)
+        : m_width{opt.width}, 
+        m_height{opt.height}, 
+        m_numChannels{opt.numChannels},
+        m_numLayers{static_cast<int>(opt.layers.size())},
+        m_numFrames{opt.numFrames},
+        m_layers{opt.layers},
+        m_pixels(opt.width * opt.height * opt.numChannels * opt.layers.size() * opt.numFrames)
+    {}
 
-        bool addImage(std::string_view channelName, int frame, Image&& img);
-        bool addImage(std::string_view channelName, Image&& img);
-        Image& getImage(std::string_view channelName, int frame);
-        Pixel& at(std::string_view channelName, int frame, int x, int y);
+    int width() const { return m_width; }
+    int height() const { return m_height; }
+    int channels() const { return m_numChannels; }
+    int layers() const { return m_numLayers; }
+    int frames() const { return m_numFrames; }
+    std::vector<float>* get() { return &m_pixels; }
+    float* at(int x, int y) { return m_pixels[x + y*m_width]; }
+    ~Image() = default;
 
-        ~ImageCollection() = default;
-    private:
-        int m_frames{};
-        int m_width{};
-        int m_height{};
-        std::map<std::string, std::vector<Image>> m_data{};
-    };
+protected:
+    int m_width{};
+    int m_height{};
+    int m_numChannels{};
+    int m_numLayers{};
+    int m_numFrames{};
+    std::vector<float> m_pixels;
+    std::vector<std::string> m_layers{};
+};
 
 }
 

@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
     {
-        "label": "Build & Run dmx-cli",
+        "label": "Build & Run dmxdenoiser-cli",
         "type": "shell",
         "command": "cmake --build build && ./build/dmxdenoiser/dmxdenoiser -filter nlm -gpu 0 -input shot.exr -output shot_filtered.exr",
         "group": {

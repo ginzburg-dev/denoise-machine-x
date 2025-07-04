@@ -10,6 +10,8 @@ namespace dmxdenoiser::io
 {
     std::string getFileExtension(std::string_view filename);
     std::unique_ptr<ImageIO> createImageIO(std::string_view filename);
+
+    auto io = 
 }
 
 #endif
