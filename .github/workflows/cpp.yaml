@@ -1,0 +1,30 @@
+name: C++ CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up CMake
+      uses: jwlawson/actions-setup-cmake@v2
+
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install -y g++ ninja-build
+
+    - name: Configure
+      run: cmake -S . -B build -G Ninja
+
+    - name: Build
+      run: cmake --build build
+
+    - name: Run tests
+      run: cd build && ctest --output-on-failure --verbose
