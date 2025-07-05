@@ -122,10 +122,15 @@ int main()
     }
     std::cout << '\n';
 
-    
+
     ////
 
     assert(img2.data().size() == initW*initH*initFrames*initLayers.size()*Settings::numChannels);
+
+    //// 
+
+    assert(img.hasLayer("Wrong layer") == false);
+    assert(img.hasLayer("RGBA") == true);
 
     return 0;
 }

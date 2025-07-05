@@ -71,6 +71,7 @@ public:
     int height() const { return m_height; }
     int numLayers() const { return m_layers.size(); }
     const std::vector<std::string>& layerNames() const { return m_layers; }
+    bool hasLayer(std::string_view layer) const { return m_layerNameToIndex.contains(layer); }
     int getLayerIndex(std::string_view layer) const 
     {
         auto it = m_layerNameToIndex.find(layer);
