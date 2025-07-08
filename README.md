@@ -30,6 +30,21 @@ Featuring spatial and temporal filtering, multi-layer and multi-frame support, d
 
 ### Build
 
+This project uses OpenEXR and Imath for image file IO.
+
+**macOS:**  
+    brew install openexr imath
+
+**Ubuntu/Debian:**  
+    sudo apt install libopenexr-dev libimath-dev
+
+**Windows (recommended):**  
+    - Install [vcpkg](https://vcpkg.io/)  
+    - vcpkg install openexr
+
+**If OpenEXR is installed in a non-standard location:**  
+    cmake -DCMAKE_PREFIX_PATH=/path/to/openexr;/path/to/imath ..
+
 ```bash
 git clone https://github.com/ginzburg-dev/denoise-machine-x.git
 cd denoise-machine-x

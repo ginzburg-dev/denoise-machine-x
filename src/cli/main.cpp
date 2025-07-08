@@ -1,4 +1,4 @@
-#include <dmxdenoiser/image/Image.hpp>
+#include <dmxdenoiser/image/DMXImage.hpp>
 #include <iostream>
 
 int main(int argc, char** argv)

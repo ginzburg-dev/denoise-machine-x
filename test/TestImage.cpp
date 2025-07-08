@@ -1,7 +1,7 @@
 /*
 
 */
-#include <dmxdenoiser/image/Image.hpp>
+#include <dmxdenoiser/image/DMXImage.hpp>
 #include <cassert>
 #include <iostream>
 #include <iostream>
@@ -21,7 +21,7 @@ int main()
     int initH = 2;
     int initFrames = 2;
     std::vector<std::string> initLayers = {"RGBA", "Specular", "Diffuse", "Z"};
-    Image img(initW, initH, initLayers, initFrames);
+    DMXImage img(initW, initH, initLayers, initFrames);
 
     ////
 
@@ -82,7 +82,7 @@ int main()
     
     /////
 
-    Image copy = img;
+    DMXImage copy = img;
     assert(copy.data().size() == img.data().size());
 
     auto& flatCopyPixels = copy.data();
@@ -109,8 +109,8 @@ int main()
 
     /////
 
-    ImageOptions opt{2, 2, {"RGBA", "Specular", "Diffuse", "Z"}, 2};
-    Image img2(opt);
+    DMXImageOptions opt{2, 2, {"RGBA", "Specular", "Diffuse", "Z"}, 2};
+    DMXImage img2(opt);
 
     std::cout << "Test image constructor with opt." << '\n';
 

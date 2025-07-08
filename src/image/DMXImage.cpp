@@ -1,4 +1,4 @@
-#include <dmxdenoiser/image/Image.hpp>
+#include <dmxdenoiser/image/DMXImage.hpp>
 
 namespace dmxdenoiser
 {

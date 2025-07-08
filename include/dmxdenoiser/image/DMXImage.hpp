@@ -18,7 +18,7 @@ enum ChannelSet
     kRGBA = 4,
 };
 
-namespace Settings 
+namespace Settings
 {
     inline constexpr int numChannels = kRGBA;
 }
@@ -31,7 +31,7 @@ struct Pixel
     float& a;
 };
 
-struct ImageOptions
+struct DMXImageOptions
 {
     int width{};
     int height{};
@@ -44,10 +44,10 @@ struct TransparentHash : std::hash<std::string_view> {
     using is_transparent = void;
 };
 
-class Image
+class DMXImage
 {
 public:
-    Image(int width, int height, const std::vector<std::string>& layers, int numFrames)
+    DMXImage(int width, int height, const std::vector<std::string>& layers, int numFrames)
         : m_width{width},
         m_height{height},
         m_layers{layers},
@@ -57,7 +57,7 @@ public:
         buildLayerToIndex(layers);
     }
 
-    Image(const ImageOptions& opt)
+    DMXImage(const DMXImageOptions& opt)
         : m_width{opt.width}, 
         m_height{opt.height},
         m_layers{opt.layers},
@@ -112,7 +112,7 @@ public:
         std::fill(m_pixels.begin(), m_pixels.end(), 0.0f); 
     }
 
-    ~Image() = default;
+    ~DMXImage() = default;
 
 private:
     int m_width{};
