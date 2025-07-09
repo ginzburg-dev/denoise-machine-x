@@ -38,7 +38,7 @@ bool ExrImageIO::read(
 
     // RGBA
     for (const auto& i : exrParams->channels)
-    {
+    {/*
         if (toLower(i.name) == "r")
         {
             std::vector<half> pixels{};
@@ -47,11 +47,11 @@ bool ExrImageIO::read(
             i.name.data(),
             Imf::Slice (
                 i.type,
-                (char*)(&pixels[0] - dw.min.x*4 - dw.min.y*width*4),
+                (char*)(&pixels[0] - dw.min.x * c - dw.min.y * width * c),
                 sizeof (pixels[0]) * c,
                 sizeof (pixels[0]) * width * c));
         }
-
+        */
         //std::vector<half> pixels{};
         //pixels.resize(width * height * Settings::numChannels);
     }
@@ -105,19 +105,51 @@ std::unique_ptr<ImageInfo> ExrImageIO::getImageInfo(std::string_view filename) c
     info->compression = static_cast<ExrCompression>(file.header().compression());
 
     const Imf::ChannelList &channels = file.header().channels();
-    std::set<std::string> layerSet;
+
+    //std::set<std::string> layerSet;
+    std::string defaultChannelSet{ "rgba" };
     info->channels.clear();
-    //info->layers.clear();
     for (Imf::ChannelList::ConstIterator i = channels.begin(); i != channels.end(); ++i) 
     {
         std::string name = i.name();
-        info->channels.emplace_back(i.name(), i.channel().type);
-        /*
-        auto pos = name.find('.');
+        auto pos = name.rfind('.');
+        std::string layer{};
+        std::string channel{};
         if (pos != std::string::npos)
-            layerSet.insert(name.substr(0, pos));
-        */
+        {
+            layer = name.substr(0, pos);
+            channel = name.substr(pos + 1);
+        } else
+        {
+            channel = name;
+            auto it = defaultChannelSet.find(channel.empty() ? '\0' : std::tolower(channel[0]));
+            if (it != std::string::npos)
+                layer = "default";
+            else
+                layer = "others";
+        }
+
+        info->channels[layer].emplace_back(channel, i.channel().type);
     }
+
+    // Sort channels
+    std::string order{ "rgbaz" };
+    for (auto& [layer, channel] : info->channels)
+    {
+        std::sort(channel.begin(), channel.end(), 
+            [&](const auto& a, const auto& b){
+                auto ia = order.find(a.name.empty() ? '\0' : std::tolower(a.name[0]));
+                auto ib = order.find(b.name.empty() ? '\0' : std::tolower(b.name[0]));
+
+                if (ia == std::string::npos)
+                    ia = order.size();
+                if (ib == std::string::npos)
+                    ib = order.size();
+                return ia < ib;
+        });
+        
+    }
+
     //params->layers.assign(layerSet.begin(), layerSet.end());
     return info; // pass
 }

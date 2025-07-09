@@ -8,6 +8,7 @@
 #include <vector>
 #include <memory>
 #include <functional>
+#include <map>
 
 namespace dmxdenoiser::io
 {
@@ -32,12 +33,12 @@ struct ImageInfo
 {
     int width{};
     int height{};
-    std::vector<ExrChannel> channels{};
     virtual ~ImageInfo() = default;
 };
 
 struct ExrImageInfo : public ImageInfo
 {
+    std::map<std::string, std::vector<ExrChannel>> channels{};
     ExrCompression compression{};
     ~ExrImageInfo () override = default;
 };
@@ -51,7 +52,7 @@ struct ImageIOParams
 struct ExrIOParams : public ImageIOParams
 {
     ExrCompression compression = ExrCompression::None; // for writing EXR image
-    std::vector<ExrChannel> channels{};
+    std::vector<std::pair<std::string, std::vector<ExrChannel>>> channels{}; // { {layer1, { {channel1, type}, {channel2, type} } }, ...}
     ~ExrIOParams() override = default;
 };
 
