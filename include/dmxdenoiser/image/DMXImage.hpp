@@ -1,12 +1,17 @@
 #ifndef DMXDENOISER_IMAGE_IMAGE_H
 #define DMXDENOISER_IMAGE_IMAGE_H
 
+/*
+ptr math in DMX image map
+*/
+#include <OpenEXR/ImfPixelType.h>
 #include <string>
 #include <vector>
 #include <stdexcept>
 #include <unordered_map>
 #include <string_view>
 #include <cstddef> // for std::size_t
+#include <optional>
 
 namespace dmxdenoiser
 {
@@ -37,6 +42,41 @@ struct DMXImageOptions
     int height{};
     std::vector<std::string> layers{};
     int numFrames{};
+};
+
+struct DMXChannel
+{
+    std::string name{};
+    std::optional<int> pixelType{};
+    std::string metadata{};
+    void* ptr = nullptr;
+
+    DMXChannel() = default;
+    DMXChannel(std::string_view name_)
+        : name{name_}
+    {}
+    DMXChannel(std::string_view name_, Imf::PixelType pixelType_)
+        : name{name_}, pixelType{static_cast<int>(pixelType_)}
+    {}
+    DMXChannel(std::string_view name_, void* ptr_)
+        : name{name_}, ptr{ptr_}
+    {}
+};
+
+struct DMXLayer
+{
+    std::string name{};
+    std::vector<DMXChannel> channels{};
+    std::string metadata{};
+    void* ptr = nullptr;
+
+    DMXLayer() = default;
+    DMXLayer(std::string_view name_)
+        : name{name_}
+    {}
+    DMXLayer(std::string_view name_, const std::vector<DMXChannel>& channels_)
+        : name{name_}, channels{channels_}
+    {}
 };
 
 // Hash functor to enable efficient heterogeneous lookup in unordered_map (C++20)

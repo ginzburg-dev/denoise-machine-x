@@ -38,8 +38,10 @@ struct ImageInfo
 
 struct ExrImageInfo : public ImageInfo
 {
-    std::map<std::string, std::vector<ExrChannel>> channels{};
+    //std::map<std::string, std::vector<ExrChannel>> channels{};
+    std::vector<DMXLayer> layers{};
     ExrCompression compression{};
+    int channelCount() const;
     ~ExrImageInfo () override = default;
 };
 
@@ -52,7 +54,9 @@ struct ImageIOParams
 struct ExrIOParams : public ImageIOParams
 {
     ExrCompression compression = ExrCompression::None; // for writing EXR image
-    std::vector<std::pair<std::string, std::vector<ExrChannel>>> channels{}; // { {layer1, { {channel1, type}, {channel2, type} } }, ...}
+    //std::map<std::string, std::vector<ExrChannel>> channels{};
+    std::vector<DMXLayer> layers{}; // { {layer1, { {channel1, type}, {channel2, type} } }, ...}
+    int channelCount() const;
     ~ExrIOParams() override = default;
 };
 

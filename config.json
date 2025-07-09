@@ -1,0 +1,20 @@
+{
+
+    "gpu": 0,
+    "input_mapping": {
+        "beauty": "default",
+        "passes": [
+            "specular",
+            "diffuse",
+            "reflection",
+            "refraction",
+            "indirectDiffuse"
+        ],
+        "tech": {
+            "albedo": "albedo",
+            "normal": "N",
+            "depth": "z"
+        }
+        
+    }
+}
