@@ -1,8 +1,5 @@
-/*
+#include <dmxdenoiser/io/ImageIO.hpp>
 #include <dmxdenoiser/io/ImageIOFactory.hpp>
-#include <dmxdenoiser/io/ExrImageIO.hpp>
-#include <dmxdenoiser/io/JpgImageIO.hpp>
-#include <dmxdenoiser/io/PngImageIO.hpp>
 #include <string_view>
 #include <algorithm>
 
@@ -30,20 +27,19 @@ namespace dmxdenoiser::io
         if ( ext == kFormatEXR )
         {
             std::unique_ptr<ImageIOParams> params = std::make_unique<ExrIOParams>();
-            static_cast<ExrIOParams*>(params.get())->channelName = "rgba";
-            return std::make_unique<ExrImageIO>(filename, std::move(params));
+            return std::make_unique<ExrImageIO>();
         }
 
         if ( ext == kFormatJPG || ext == kFormatJPEG )
         {
-            std::unique_ptr<ImageIOParams> params = std::make_unique<JpgIOParams>();
-            return std::make_unique<JpgImageIO>(filename, std::move(params));
+            //std::unique_ptr<ImageIOParams> params = std::make_unique<JpgIOParams>();
+            //return std::make_unique<JpgImageIO>(filename, std::move(params));
         }
 
         if ( ext == kFormatPNG )
         {
-            std::unique_ptr<ImageIOParams> params = std::make_unique<PngIOParams>();
-            return std::make_unique<PngImageIO>(filename, std::move(params));
+            //std::unique_ptr<ImageIOParams> params = std::make_unique<PngIOParams>();
+            //return std::make_unique<PngImageIO>(filename, std::move(params));
         }
 
         return nullptr;
@@ -51,4 +47,3 @@ namespace dmxdenoiser::io
 
 }
 
-*/

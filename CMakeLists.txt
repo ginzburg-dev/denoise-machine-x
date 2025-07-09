@@ -69,9 +69,15 @@ enable_testing()
 
 file(GLOB TEST_SOURCES test/*.cpp)
 
+# Source files for tests
+file(GLOB_RECURSE CORE_SRC_FILES CONFIGURE_DEPENDS
+    src/*.cpp
+)
+list(REMOVE_ITEM CORE_SRC_FILES ${CMAKE_SOURCE_DIR}/src/cli/main.cpp)
+
 foreach(test_src ${TEST_SOURCES})
     get_filename_component(test_name ${test_src} NAME_WE)
-    add_executable(${test_name} ${test_src})
+    add_executable(${test_name} ${CORE_SRC_FILES} ${test_src})
     target_include_directories(${test_name} PRIVATE ${CMAKE_SOURCE_DIR}/include)
     target_link_libraries(${test_name} PRIVATE OpenEXR::OpenEXR Imath::Imath)
     add_test(NAME ${test_name} COMMAND ${test_name})
