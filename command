@@ -10,6 +10,3 @@
     --aluxary
     --output filtered.####.exr
 
-notes:
-    Every channel has it's own ptr and ID.
-
