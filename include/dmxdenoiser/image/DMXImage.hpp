@@ -47,7 +47,7 @@ struct DMXImageOptions
 struct DMXChannel
 {
     std::string name{};
-    std::optional<int> pixelType{};
+    std::optional<Imf::PixelType> pixelType{};
     std::string metadata{};
     void* ptr = nullptr;
 
@@ -56,7 +56,7 @@ struct DMXChannel
         : name{name_}
     {}
     DMXChannel(std::string_view name_, Imf::PixelType pixelType_)
-        : name{name_}, pixelType{static_cast<int>(pixelType_)}
+        : name{name_}, pixelType{pixelType_}
     {}
     DMXChannel(std::string_view name_, void* ptr_)
         : name{name_}, ptr{ptr_}
@@ -73,6 +73,9 @@ struct DMXLayer
     DMXLayer() = default;
     DMXLayer(std::string_view name_)
         : name{name_}
+    {}
+    DMXLayer(std::string_view name_, void* ptr_)
+        : name{name_}, ptr{ptr_}
     {}
     DMXLayer(std::string_view name_, const std::vector<DMXChannel>& channels_)
         : name{name_}, channels{channels_}

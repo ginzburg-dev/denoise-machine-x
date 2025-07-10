@@ -98,45 +98,6 @@ int main()
         }
         std::cout << i.name() << ' ' << typeStr << '\n';
     }
-        
-    /*
-    std::set<std::string> layerNames;
-    for (Imf::ChannelList::ConstIterator i = channels.begin(); i != channels.end(); ++i) {
-        std::string name = i.name();
-        std::cout << i.name() << '\n';
-
-        auto pos = name.find('.');
-        if (pos != std::string::npos)
-            layerNames.insert(name.substr(0, pos));
-    }
-*/
-    //channels.layers(layerNames);
-/*
-    for (auto i = layerNames.begin(); i != layerNames.end(); ++i)
-        std::cout << "EXR Layer: " << *i << '\n'; 
-*/
-
-
-    
-    /*
-    RGBA
-    Diffuse
-    Specular
-    */
-
-    /*
-    frameBuffer.insert (
-        "Z",
-        Slice (
-            FLOAT,
-            (char*) &pixels[-dy][-dx].z,
-            sizeof (pixels[0][0]) * 1,
-            sizeof (pixels[0][0]) * width));
-
-    file.setFrameBuffer (frameBuffer);
-    file.readPixels (dw.min.y, dw.max.y);
-*/
-
     
     return 0;
 }

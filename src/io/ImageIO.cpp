@@ -3,6 +3,7 @@
 #include <dmxdenoiser/image/DMXImage.hpp>
 #include <OpenEXR/ImfInputFile.h>
 #include <OpenEXR/ImfOutputFile.h>
+#include <OpenEXR/ImfPixelType.h>
 #include <OpenEXR/ImfRgbaFile.h>
 #include <OpenEXR/ImfChannelList.h>
 #include <OpenEXR/ImfHeader.h>
@@ -57,23 +58,31 @@ bool ExrImageIO::read(
 
     std::vector<DMXLayer> tmpBuffers;
 
-    // RGBA
     for (const auto& layer : exrParams->layers)
     {
         tmpBuffers.emplace_back(layer.name);
         for (const auto& c : layer.channels)
         {
-            tmpBuffers.emplace_back(c.name);
-            std::string name = layer.name + "." + c.name;
+            std::string name{};
+            if ( layer.name == "default" ||  layer.name == "others" )
+                name = c.name;
+            else
+                name = layer.name + "." + c.name;
+
+                
             std::ptrdiff_t offset = dw.min.x * layer.channels.size() + dw.min.y * width * layer.channels.size();
+
+            if(c.pixelType.has_value())
+                tmpBuffers.back().channels.emplace_back(name, c.pixelType.value());
+            else
+                throw std::runtime_error("[Error]: Pixel Type was not provided.");
 
             switch(c.pixelType.value())
             {
             case Imf::FLOAT: 
             {
                 float* buf = new float[width * height * layer.channels.size()];
-                tmpBuffers.back().channels.emplace_back(name, buf);
-                tmpBuffers.back().channels.back().metadata = "FLOAT:" + std::to_string(layer.channels.size());
+                tmpBuffers.back().channels.back().ptr = buf;
                 frameBuffer.insert(
                     name, /*channel name*/
                     Imf::Slice(
@@ -88,8 +97,7 @@ bool ExrImageIO::read(
             case Imf::HALF:
             {
                 half* buf = new half[width * height * layer.channels.size()];
-                tmpBuffers.back().channels.emplace_back(name, buf);
-                tmpBuffers.back().channels.back().metadata = "HALF:" + std::to_string(layer.channels.size());
+                tmpBuffers.back().channels.back().ptr = buf;
                 frameBuffer.insert(
                     name, /*channel name*/
                     Imf::Slice(
@@ -104,8 +112,7 @@ bool ExrImageIO::read(
             case Imf::UINT:
             {
                 unsigned int* buf = new unsigned int[width * height * layer.channels.size()];
-                tmpBuffers.back().channels.emplace_back(name, buf);
-                tmpBuffers.back().channels.back().metadata = "UINT:" + std::to_string(layer.channels.size());
+                tmpBuffers.back().channels.back().ptr = buf;
                 frameBuffer.insert(
                     name, /*channel name*/
                     Imf::Slice(
@@ -129,12 +136,55 @@ bool ExrImageIO::read(
     file.setFrameBuffer(frameBuffer);
     file.readPixels(dw.min.y, dw.max.y);
 
+    int offset = width * height * numChannels;
     for(int w = 0; w < width; ++w)
-        for(int h = 0; h < height; ++w)
+        for(int h = 0; h < height; ++h)
         {
-            for (const auto& layer : exrParams->layers)
+            for (int l = 0; l < exrParams->layers.size(); ++l)
             {
-                int offset = width * height * layer.channels.size();
+                auto& layer = exrParams->layers[l];
+                DMXLayer* tmpLayer = nullptr;
+                auto it = std::find_if(tmpBuffers.begin(), tmpBuffers.end(), [&](const auto& tmpLayer){ return layer.name == tmpLayer.name; });
+                if (it != tmpBuffers.end())
+                    tmpLayer = &(*it);
+                else
+                    throw std::runtime_error("ImageIO.cpp:143[Error]: Channel name mismatch.");
+                
+                for(int c = 0; c < layer.channels.size(); ++c)
+                {
+                    
+                    if(c < numChannels)
+                    {
+                        auto* basePixel = reinterpret_cast<float*>(layer.ptr);
+                        auto* pixel = basePixel + (h*width + w)*numChannels + c;
+
+                        auto type = tmpLayer->channels[c].pixelType;
+                        if(!type.has_value())
+                            throw std::runtime_error("[Error]: Pixel Type was not provided.");
+                    
+                        if(type == Imf::FLOAT)
+                        {
+                            auto* baseTmpPixel = reinterpret_cast<float*>(tmpLayer->channels[c].ptr);
+                            auto* tmpPixel = baseTmpPixel + (h*width + w)*tmpLayer->channels.size() + c;
+                            *pixel = *tmpPixel;
+                        }
+                            
+                        if(type == Imf::HALF)
+                        {
+                            auto* baseTmpPixel = reinterpret_cast<half*>(tmpLayer->channels[c].ptr);
+                            auto* tmpPixel = baseTmpPixel + (h*width + w)*tmpLayer->channels.size() + c;
+                            *pixel = *tmpPixel;
+                        }
+                        
+                        if(type == Imf::UINT)
+                        {
+                            auto* baseTmpPixel = reinterpret_cast<unsigned int*>(tmpLayer->channels[c].ptr);
+                            auto* tmpPixel = baseTmpPixel + (h*width + w)*tmpLayer->channels.size() + c;
+                            *pixel = *tmpPixel;
+                        }
+                        
+                    }
+                }
             }
             
         }
@@ -143,11 +193,23 @@ bool ExrImageIO::read(
     for(auto& l : tmpBuffers)
         for(auto& chan : l.channels)
         {
-            if (chan.metadata == "FLOAT")
+            Imf::PixelType type{};
+            if (chan.pixelType.has_value())
+                type = chan.pixelType.value();
+            else
+                throw std::runtime_error("InageIO.cpp:151[Error]: Wrong pixelType metadata.");
+            /*
+            auto pos = chan.metadata.find(':');
+            if (pos != std::string::npos)
+                type = chan.metadata.substr(0, pos);
+            else
+                throw std::runtime_error("InageIO.cpp:151[Error]: Wrong pixelType metadata.");
+            */
+            if (type == Imf::FLOAT)
                 delete[] reinterpret_cast<float*>(chan.ptr);
-            if (chan.metadata == "HALF")
+            if (type == Imf::HALF)
                 delete[] reinterpret_cast<half*>(chan.ptr);
-            if (chan.metadata == "UINT")
+            if (type == Imf::UINT)
                 delete[] reinterpret_cast<unsigned int*>(chan.ptr);
         }
     
