@@ -102,12 +102,13 @@ int main()
         int c = dmxdenoiser::Settings::numChannels;
         int width = exrInfo->width;
         int height = exrInfo->height;
-        int layersCount = exrInfo->layers.size();
+        int layersCount = 3;
         int offset = width * height * c;
 
         dmxdenoiser::DMXImage image{width, height, {"default", "Diffuse", "depth"}, 1};
 
         std::vector<float> data(width * height * layersCount * c);
+        std::fill(data.begin(), data.end(), 0);
 
         auto* base = data.data();
 
@@ -124,22 +125,53 @@ int main()
         paramDiff.get()->layers.back().channels.emplace_back("A", Imf::HALF);
 
         paramDiff.get()->layers.emplace_back("depth", base + offset*2);
+        paramDiff.get()->layers.back().channels.emplace_back("R", Imf::HALF);
+        paramDiff.get()->layers.back().channels.emplace_back("G", Imf::HALF);
+        paramDiff.get()->layers.back().channels.emplace_back("B", Imf::HALF);
         paramDiff.get()->layers.back().channels.emplace_back("A", Imf::HALF);
-        paramDiff.get()->layers.back().channels.emplace_back("Z", Imf::HALF);
 
         try
         {
-            IO->read("../examples/exr_samples/sample2x2_diff.exr", nullptr, paramDiff.get());
+            IO->read("../examples/exr_samples/sample2x2_mono.exr", nullptr, paramDiff.get());
         }
         catch(const std::exception& e)
         {
             std::cerr << e.what() << '\n';
         }
         
+        auto info_mono = IO->getImageInfo("../examples/exr_samples/sample2x2_mono.exr");
+        auto exr_info_mono = dynamic_cast<ExrImageInfo*>(info_mono.get());
+
+        for (const auto& layer : exr_info_mono->layers)
+        {
+            std::cout << "Layer: " << layer.name << " {";
+
+            for (const auto& c : layer.channels)
+            {
+                std::cout << "{" << c.name << ", " << c.pixelType.value() << "} ";
+                ++i;
+            }
+        }
+        const float comparingTable[] = {
+            1.000000f, 1.000000f, 1.000000f, 1.000000f, 1.000000f, 
+            1.000000f, 1.000000f, 1.000000f, 1.000000f, 1.000000f, 
+            1.000000f, 1.000000f, 1.000000f, 1.000000f, 1.000000f, 
+            1.000000f, 0.000000f, 0.000000f, 0.000000f, 1.000000f, 
+            0.000000f, 0.000000f, 0.000000f, 1.000000f, 0.000000f, 
+            0.000000f, 0.000000f, 1.000000f, 0.000000f, 0.000000f, 
+            0.000000f, 1.000000f, 0.556641f, 0.556641f, 0.556641f, 
+            1.000000f, 0.556641f, 0.556641f, 0.556641f, 1.000000f, 
+            0.556641f, 0.556641f, 0.556641f, 1.000000f, 0.556641f, 
+            0.556641f, 0.556641f, 1.000000f
+        };
         std::cout << "Pixels: \n";
-        for (int i = 0; i < width*height*layersCount*c; ++i)
-            std::cout << data[i] << ' ';
-        
+        for (int i = 0; i < data.size(); ++i)
+        {
+            //std::cout << data[i*4] << ", " <<  data[i*4 + 1] << ", " << data[i*4 + 2] << ", " << data[i*4 + 3] << ", ";
+            std::cout << data[i] << "f, ";
+            //assert(comparingTable[i] == data[i]);
+        }
+
         for(int l = 0; l < layersCount; ++l)
         {
             std::cout << "Layer: " << paramDiff.get()->layers[l].name << '\n';
@@ -147,7 +179,7 @@ int main()
             {
                 for(int w = 0; w < width; ++w)
                 {
-                    std::cout << "<" << data[(width*h + w)*4] << ", " << data[(width*h + w)*4+ 1] << ", " << data[(width*h + w)*4 + 2] << ", " << data[(width*h + w)*4 + 3] << ">   ";
+                    std::cout << "<" << data[(l*width*height + (width*h + w))*4] << ", " << data[(l*width*height + (width*h + w))*4 + 1] << ", " << data[(l*width*height + (width*h + w))*4 + 2] << ", " << data[(l*width*height + (width*h + w))*4 + 3] << ">   ";
                 }
                 std::cout << '\n';
             }

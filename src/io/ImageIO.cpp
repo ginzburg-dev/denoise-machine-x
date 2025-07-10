@@ -70,7 +70,7 @@ bool ExrImageIO::read(
                 name = layer.name + "." + c.name;
 
                 
-            std::ptrdiff_t offset = dw.min.x * layer.channels.size() + dw.min.y * width * layer.channels.size();
+            std::ptrdiff_t offset = dw.min.x /** layer.channels.size()*/ + dw.min.y * width /** layer.channels.size()*/;
 
             if(c.pixelType.has_value())
                 tmpBuffers.back().channels.emplace_back(name, c.pixelType.value());
@@ -81,45 +81,51 @@ bool ExrImageIO::read(
             {
             case Imf::FLOAT: 
             {
-                float* buf = new float[width * height * layer.channels.size()];
+                float* buf = new float[width * height /** layer.channels.size()*/];
                 tmpBuffers.back().channels.back().ptr = buf;
                 frameBuffer.insert(
                     name, /*channel name*/
                     Imf::Slice(
                         Imf::FLOAT, 
                         reinterpret_cast<char*>(buf - offset),
-                        sizeof(float) * layer.channels.size(),
-                        sizeof(float) * width * layer.channels.size()
+                        sizeof(float) /** layer.channels.size()*/,
+                        sizeof(float) * width /** layer.channels.size()*/,
+                        1, 1,
+                        0.0
                     )
                 );
                 break;
             }
             case Imf::HALF:
             {
-                half* buf = new half[width * height * layer.channels.size()];
+                half* buf = new half[width * height /** layer.channels.size()*/];
                 tmpBuffers.back().channels.back().ptr = buf;
                 frameBuffer.insert(
                     name, /*channel name*/
                     Imf::Slice(
                         Imf::HALF, 
                         reinterpret_cast<char*>(buf - offset),
-                        sizeof(half) * layer.channels.size(),
-                        sizeof(half) * width * layer.channels.size()
+                        sizeof(half) /** layer.channels.size()*/,
+                        sizeof(half) * width /** layer.channels.size()*/,
+                        1, 1,
+                        0.0
                     )
                 );
                 break;
             }
             case Imf::UINT:
             {
-                unsigned int* buf = new unsigned int[width * height * layer.channels.size()];
+                unsigned int* buf = new unsigned int[width * height /** layer.channels.size()*/];
                 tmpBuffers.back().channels.back().ptr = buf;
                 frameBuffer.insert(
                     name, /*channel name*/
                     Imf::Slice(
                         Imf::UINT, 
                         reinterpret_cast<char*>(buf - offset),
-                        sizeof(unsigned int) * layer.channels.size(),
-                        sizeof(unsigned int) * width * layer.channels.size()
+                        sizeof(unsigned int) /** layer.channels.size()*/,
+                        sizeof(unsigned int) * width /** layer.channels.size()*/,
+                        1, 1,
+                        0.0
                     )
                 );
                 break;
@@ -165,21 +171,21 @@ bool ExrImageIO::read(
                         if(type == Imf::FLOAT)
                         {
                             auto* baseTmpPixel = reinterpret_cast<float*>(tmpLayer->channels[c].ptr);
-                            auto* tmpPixel = baseTmpPixel + (h*width + w)*tmpLayer->channels.size() + c;
+                            auto* tmpPixel = baseTmpPixel + (h*width + w);
                             *pixel = *tmpPixel;
                         }
                             
                         if(type == Imf::HALF)
                         {
                             auto* baseTmpPixel = reinterpret_cast<half*>(tmpLayer->channels[c].ptr);
-                            auto* tmpPixel = baseTmpPixel + (h*width + w)*tmpLayer->channels.size() + c;
+                            auto* tmpPixel = baseTmpPixel + (h*width + w);
                             *pixel = *tmpPixel;
                         }
                         
                         if(type == Imf::UINT)
                         {
                             auto* baseTmpPixel = reinterpret_cast<unsigned int*>(tmpLayer->channels[c].ptr);
-                            auto* tmpPixel = baseTmpPixel + (h*width + w)*tmpLayer->channels.size() + c;
+                            auto* tmpPixel = baseTmpPixel + (h*width + w);
                             *pixel = *tmpPixel;
                         }
                         
