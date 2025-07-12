@@ -57,12 +57,13 @@ bool ExrImageIO::read(
     Imf::FrameBuffer frameBuffer;
 
     std::vector<LayerInfo> tmpBuffers;
-    ExrChannelBuffersMap channelBuffers{};
+    ChannelBufferDictionary channelBuffers{};
 
+    
     for (const auto& layer : exrParams->layers)
     {
-        tmpBuffers.emplace_back(layer.name);
-        channelBuffers[layer.name] = {};
+        //tmpBuffers.emplace_back(layer.name);
+        
         for (const auto& c : layer.channels)
         {
             std::string name{};
@@ -74,11 +75,11 @@ bool ExrImageIO::read(
                 
             std::ptrdiff_t offset = dw.min.x + dw.min.y * width;
 
-            tmpBuffers.back().channels.emplace_back(name, c.pixelType);
-
-            switch(toEXRPixelType(c.pixelType))
+            //tmpBuffers.back().channels.emplace_back(name, c.pixelType);
+            channelBuffers[layer.name].push_back(ChannelBuffer::createEmpty(name, c.pixelType, width * height));
+            switch(c.pixelType)
             {
-            case Imf::FLOAT: 
+            case PixelType::Float: 
             {
                 float* buf = new float[width * height];
                 tmpBuffers.back().channels.back().ptr = buf;
@@ -95,7 +96,7 @@ bool ExrImageIO::read(
                 );
                 break;
             }
-            case Imf::HALF:
+            case PixelType::Half:
             {
                 half* buf = new half[width * height];
                 tmpBuffers.back().channels.back().ptr = buf;
@@ -112,7 +113,7 @@ bool ExrImageIO::read(
                 );
                 break;
             }
-            case Imf::UINT:
+            case PixelType::UInt32:
             {
                 unsigned int* buf = new unsigned int[width * height];
                 tmpBuffers.back().channels.back().ptr = buf;

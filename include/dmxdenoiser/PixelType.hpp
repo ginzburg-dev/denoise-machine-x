@@ -2,6 +2,8 @@
 #define DMXDENOISER_IMAGE_PIXEL_TYPE_H
 
 #include <OpenEXR/ImfPixelType.h>
+#include <Imath/half.h>
+#include <cstddef>
 
 namespace dmxdenoiser
 {
@@ -19,6 +21,44 @@ namespace dmxdenoiser
         MAX_TYPE,
     };
 
+    using PixelDataVariant = std::variant<
+        std::monostate,
+        std::vector<uint8_t>,
+        std::vector<uint16_t>,
+        std::vector<uint32_t>,
+        std::vector<half>,
+        std::vector<float>,
+        std::vector<double>
+    >;
+
+    inline PixelDataVariant allocatePixelData(PixelType type, std::size_t count) {
+        switch (type) {
+            case PixelType::UInt8:    return std::vector<uint8_t>(count);
+            case PixelType::UInt16:   return std::vector<uint16_t>(count);
+            case PixelType::UInt32:   return std::vector<uint32_t>(count);
+            case PixelType::Half:     return std::vector<half>(count);
+            case PixelType::Float:    return std::vector<float>(count);
+            case PixelType::Double:   return std::vector<double>(count);
+            default:                  return std::monostate{};
+        }
+    }
+
+    template<typename T>
+    inline constexpr PixelType PixelTypeOf<T> = PixelType::Unknown;
+    template<>
+    inline constexpr PixelType PixelTypeOf<uint8_t> = PixelType::UInt8;
+    template<>
+    inline constexpr PixelType PixelTypeOf<uint16_t> = PixelType::UInt16;
+    template<>
+    inline constexpr PixelType PixelTypeOf<uint32_t> = PixelType::UInt32;
+    template<>
+    inline constexpr PixelType PixelTypeOf<half> = PixelType::Half;
+    template<>
+    inline constexpr PixelType PixelTypeOf<float> = PixelType::Float;
+    template<>
+    inline constexpr PixelType PixelTypeOf<double> = PixelType::Double;
+
+
     inline Imf::PixelType toEXRPixelType(PixelType t) 
     {
         switch (t)
@@ -28,6 +68,11 @@ namespace dmxdenoiser
         case PixelType::UInt32: return Imf::UINT;
         default: throw std::runtime_error("Unsupported channel pixel type for OpenEXR");
         }
+    }
+
+    inline PixelType toPixelType(PixelType t) 
+    {
+        return t;
     }
 
     /// @brief Convert OpenEXR Imf::PixelType to dmxdenoiser::PixelType. Overloaded conversion function

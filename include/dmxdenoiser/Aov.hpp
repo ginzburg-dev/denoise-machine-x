@@ -5,6 +5,7 @@
 #include <string_view>
 #include <array>
 #include <algorithm>
+#include <variant>
 #include <map>
 
 namespace dmxdenoiser
@@ -50,11 +51,11 @@ namespace dmxdenoiser
             for (const auto& [name, layer] : aovs)
             {
                 auto it = std::find(DEFAULT_AOVS.begin(), DEFAULT_AOVS.end(), name);
-                if (it != DEFAULT_AOVS.end() && !layer.empty() )
-                    return true;
+                if (it == DEFAULT_AOVS.end() || layer.empty() )
+                    return false;
             }
         }
-        return false;
+        return true;
     }
 
 } // namespace dmxdenoiser

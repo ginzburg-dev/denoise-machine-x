@@ -3,6 +3,8 @@
 
 #include <dmxdenoiser/DMXImage.hpp>
 #include <dmxdenoiser/LayerDictionary.hpp>
+#include <dmxdenoiser/PixelType.hpp>
+#include <dmxdenoiser/ChannelBuffer.hpp>
 #include <OpenEXR/ImfPixelType.h>
 #include <OpenEXR/ImfCompression.h>
 #include <Imath/half.h>
@@ -18,15 +20,6 @@ namespace dmxdenoiser
 {
 
     std::string toLower(const std::string& s);
-
-    struct ExrChannelBuffer
-    {
-        std::string name{};
-        std::optional<Imf::PixelType> pixelType{};
-        std::variant<std::monostate, std::vector<float>, std::vector<half>, std::vector<unsigned int>> data{};
-    };
-
-    using ExrChannelBuffersMap = std::unordered_map<std::string, std::vector<ExrChannelBuffer>>;
 
     /*Abstract*/
     struct ImageInfo
