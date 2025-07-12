@@ -3,7 +3,7 @@
 #include <string_view>
 #include <algorithm>
 
-namespace dmxdenoiser::io
+namespace dmxdenoiser
 {
     constexpr std::string_view kFormatEXR = "exr";
     constexpr std::string_view kFormatJPG = "jpg";
@@ -45,5 +45,5 @@ namespace dmxdenoiser::io
         return nullptr;
     }
 
-}
+} // namespace dmxdenoiser
 

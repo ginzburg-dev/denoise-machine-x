@@ -1,13 +1,15 @@
 #include <dmxdenoiser/image/DMXImage.hpp>
 #include <dmxdenoiser/io/ImageIO.hpp>
+#include <OpenEXR/ImfCompression.h>
 #include <memory>
 #include <array>
 #include <iostream>
 #include <cassert>
 #include <string>
 #include <string_view>
+#include <cmath>
 
-using namespace dmxdenoiser::io;
+using namespace dmxdenoiser;
 
 int main()
 {
@@ -60,7 +62,7 @@ int main()
 
     assert(exrInfo->width == 2);
     assert(exrInfo->height == 2);
-    assert(exrInfo->compression == ExrCompression::ZIPS);
+    assert(exrInfo->compression == Imf::ZIPS_COMPRESSION);
 
 
     info = IO->getImageInfo("../test/sample2x2_write.exr");
@@ -78,7 +80,6 @@ int main()
         std::cout << "}\n";
         
     }
-
 
     /// 
     {
@@ -99,16 +100,19 @@ int main()
         std::cout << "}\n";
 
         auto paramDiff = std::make_unique<ExrIOParams>();
-        int c = dmxdenoiser::Settings::numChannels;
+        int c = NUM_CHANNELS;
         int width = exrInfo->width;
         int height = exrInfo->height;
         int layersCount = 3;
         int offset = width * height * c;
+        int testNumber = 1234567;
 
         dmxdenoiser::DMXImage image{width, height, {"default", "Diffuse", "depth"}, 1};
 
         std::vector<float> data(width * height * layersCount * c);
-        std::fill(data.begin(), data.end(), 0);
+
+        // fill with a flag number 
+        std::fill(data.begin(), data.end(), testNumber); 
 
         auto* base = data.data();
 
@@ -119,9 +123,9 @@ int main()
         paramDiff.get()->layers.back().channels.emplace_back("A", Imf::HALF);
 
         paramDiff.get()->layers.emplace_back("Diffuse", base + offset*1);
-        paramDiff.get()->layers.back().channels.emplace_back("R", Imf::HALF);
-        paramDiff.get()->layers.back().channels.emplace_back("G", Imf::HALF);
-        paramDiff.get()->layers.back().channels.emplace_back("B", Imf::HALF);
+        paramDiff.get()->layers.back().channels.emplace_back("red", Imf::HALF);
+        paramDiff.get()->layers.back().channels.emplace_back("green", Imf::HALF);
+        paramDiff.get()->layers.back().channels.emplace_back("blue", Imf::HALF);
         paramDiff.get()->layers.back().channels.emplace_back("A", Imf::HALF);
 
         paramDiff.get()->layers.emplace_back("depth", base + offset*2);
@@ -168,8 +172,9 @@ int main()
         for (int i = 0; i < data.size(); ++i)
         {
             //std::cout << data[i*4] << ", " <<  data[i*4 + 1] << ", " << data[i*4 + 2] << ", " << data[i*4 + 3] << ", ";
-            std::cout << data[i] << "f, ";
-            //assert(comparingTable[i] == data[i]);
+            std::cout << data[i] << ", ";
+            assert(static_cast<int>(data[i]) != testNumber);
+            assert(std::abs(data[i] - comparingTable[i]) < 1e-6); // compare with the original table
         }
 
         for(int l = 0; l < layersCount; ++l)
@@ -185,6 +190,8 @@ int main()
             }
         }
         
+
+
         
     }
     delete IO;

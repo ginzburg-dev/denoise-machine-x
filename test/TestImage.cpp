@@ -28,7 +28,7 @@ int main()
     assert(img.width() == initW);
     assert(img.height() == initH);
     assert(img.frames() == initFrames);
-    assert(img.data().size() == initW*initH*initFrames*initLayers.size()*Settings::numChannels);
+    assert(img.data().size() == initW * initH * initFrames * initLayers.size() * NUM_CHANNELS);
 
     ////
 
@@ -125,7 +125,7 @@ int main()
 
     ////
 
-    assert(img2.data().size() == initW*initH*initFrames*initLayers.size()*Settings::numChannels);
+    assert(img2.data().size() == initW * initH * initFrames * initLayers.size() * NUM_CHANNELS);
 
     //// 
 

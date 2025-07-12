@@ -1,6 +1,7 @@
 #include <algorithm>
-#include <dmxdenoiser/io/ImageIO.hpp>
-#include <dmxdenoiser/image/DMXImage.hpp>
+#include <dmxdenoiser/ImageIO.hpp>
+#include <dmxdenoiser/DMXImage.hpp>
+#include <dmxdenoiser/PixelType.hpp>
 #include <OpenEXR/ImfInputFile.h>
 #include <OpenEXR/ImfOutputFile.h>
 #include <OpenEXR/ImfPixelType.h>
@@ -11,8 +12,9 @@
 #include <Imath/half.h>
 #include <Imath/ImathBox.h>
 #include <cstddef> // for std::ptrdiff_t and std::size_t
+#include <unordered_map>
 
-namespace dmxdenoiser::io
+namespace dmxdenoiser
 {
 
 std::string toLower(const std::string& s)
@@ -44,8 +46,6 @@ bool ExrImageIO::read(
         float* img,
         const ImageIOParams* params)
 {
-    using namespace Settings;
-
     auto exrParams = dynamic_cast<const ExrIOParams*>(params);
 
     Imf::InputFile file(filename.data());
@@ -56,11 +56,13 @@ bool ExrImageIO::read(
     
     Imf::FrameBuffer frameBuffer;
 
-    std::vector<DMXLayer> tmpBuffers;
+    std::vector<LayerInfo> tmpBuffers;
+    ExrChannelBuffersMap channelBuffers{};
 
     for (const auto& layer : exrParams->layers)
     {
         tmpBuffers.emplace_back(layer.name);
+        channelBuffers[layer.name] = {};
         for (const auto& c : layer.channels)
         {
             std::string name{};
@@ -70,26 +72,23 @@ bool ExrImageIO::read(
                 name = layer.name + "." + c.name;
 
                 
-            std::ptrdiff_t offset = dw.min.x /** layer.channels.size()*/ + dw.min.y * width /** layer.channels.size()*/;
+            std::ptrdiff_t offset = dw.min.x + dw.min.y * width;
 
-            if(c.pixelType.has_value())
-                tmpBuffers.back().channels.emplace_back(name, c.pixelType.value());
-            else
-                throw std::runtime_error("[Error]: Pixel Type was not provided.");
+            tmpBuffers.back().channels.emplace_back(name, c.pixelType);
 
-            switch(c.pixelType.value())
+            switch(toEXRPixelType(c.pixelType))
             {
             case Imf::FLOAT: 
             {
-                float* buf = new float[width * height /** layer.channels.size()*/];
+                float* buf = new float[width * height];
                 tmpBuffers.back().channels.back().ptr = buf;
                 frameBuffer.insert(
-                    name, /*channel name*/
+                    name,
                     Imf::Slice(
                         Imf::FLOAT, 
                         reinterpret_cast<char*>(buf - offset),
-                        sizeof(float) /** layer.channels.size()*/,
-                        sizeof(float) * width /** layer.channels.size()*/,
+                        sizeof(float),
+                        sizeof(float) * width,
                         1, 1,
                         0.0
                     )
@@ -98,15 +97,15 @@ bool ExrImageIO::read(
             }
             case Imf::HALF:
             {
-                half* buf = new half[width * height /** layer.channels.size()*/];
+                half* buf = new half[width * height];
                 tmpBuffers.back().channels.back().ptr = buf;
                 frameBuffer.insert(
-                    name, /*channel name*/
+                    name,
                     Imf::Slice(
                         Imf::HALF, 
                         reinterpret_cast<char*>(buf - offset),
-                        sizeof(half) /** layer.channels.size()*/,
-                        sizeof(half) * width /** layer.channels.size()*/,
+                        sizeof(half),
+                        sizeof(half) * width,
                         1, 1,
                         0.0
                     )
@@ -115,15 +114,15 @@ bool ExrImageIO::read(
             }
             case Imf::UINT:
             {
-                unsigned int* buf = new unsigned int[width * height /** layer.channels.size()*/];
+                unsigned int* buf = new unsigned int[width * height];
                 tmpBuffers.back().channels.back().ptr = buf;
                 frameBuffer.insert(
-                    name, /*channel name*/
+                    name,
                     Imf::Slice(
                         Imf::UINT, 
                         reinterpret_cast<char*>(buf - offset),
-                        sizeof(unsigned int) /** layer.channels.size()*/,
-                        sizeof(unsigned int) * width /** layer.channels.size()*/,
+                        sizeof(unsigned int),
+                        sizeof(unsigned int) * width,
                         1, 1,
                         0.0
                     )
@@ -142,7 +141,7 @@ bool ExrImageIO::read(
     file.setFrameBuffer(frameBuffer);
     file.readPixels(dw.min.y, dw.max.y);
 
-    int offset = width * height * numChannels;
+    int offset = width * height * NUM_CHANNELS;
     for(int w = 0; w < width; ++w)
         for(int h = 0; h < height; ++h)
         {
@@ -156,14 +155,13 @@ bool ExrImageIO::read(
                 else
                     throw std::runtime_error("ImageIO.cpp:143[Error]: Channel name mismatch.");
                 
-                for(int c = 0; c < layer.channels.size(); ++c)
+                for(int c = 0; c < NUM_CHANNELS; ++c)
                 {
-                    
-                    if(c < numChannels)
+                    auto* basePixel = reinterpret_cast<float*>(layer.ptr);
+                    auto* pixel = basePixel + (h*width + w) * NUM_CHANNELS + c;
+    
+                    if(c < layer.channels.size())
                     {
-                        auto* basePixel = reinterpret_cast<float*>(layer.ptr);
-                        auto* pixel = basePixel + (h*width + w)*numChannels + c;
-
                         auto type = tmpLayer->channels[c].pixelType;
                         if(!type.has_value())
                             throw std::runtime_error("[Error]: Pixel Type was not provided.");
@@ -189,6 +187,10 @@ bool ExrImageIO::read(
                             *pixel = *tmpPixel;
                         }
                         
+                    }
+                    else
+                    {
+                        *pixel = 0.0f; 
                     }
                 }
             }
@@ -239,7 +241,7 @@ std::unique_ptr<ImageInfo> ExrImageIO::getImageInfo(std::string_view filename) c
     info->width = dw.max.x - dw.min.x + 1;
     info->height = dw.max.y - dw.min.y + 1;
 
-    info->compression = static_cast<ExrCompression>(file.header().compression());
+    info->compression = file.header().compression();
 
     const Imf::ChannelList &channels = file.header().channels();
 
@@ -247,13 +249,13 @@ std::unique_ptr<ImageInfo> ExrImageIO::getImageInfo(std::string_view filename) c
     std::string defaultChannelSet{ "rgba" };
     info->layers.clear();
 
-    std::map<std::string, std::vector<ExrChannel>> layersMap{};
+    std::map<std::string, std::vector<DMXChannel>> layersMap{};
     for (Imf::ChannelList::ConstIterator i = channels.begin(); i != channels.end(); ++i) 
     {
         std::string name = i.name();
-        auto pos = name.rfind('.');
         std::string layer{};
         std::string channel{};
+        auto pos = name.rfind('.');
         if (pos != std::string::npos)
         {
             layer = name.substr(0, pos);
@@ -288,18 +290,23 @@ std::unique_ptr<ImageInfo> ExrImageIO::getImageInfo(std::string_view filename) c
         });
         
     }
+
     for(const auto& [layer, channels] : layersMap)
     {
         info->layers.emplace_back(layer);
         for(const auto& ch : channels)
         {
-            info->layers.back().channels.emplace_back(ch.name, ch.type);
+            if (ch.pixelType.has_value())
+                info->layers.back().channels.emplace_back(ch.name, ch.pixelType.value());
+            else
+                throw std::runtime_error("Layer '" + info->layers.back().name + "', channel '" + ch.name + "' does not have PixelType attribute.");
+            
         }
     }
-    //params->layers.assign(layerSet.begin(), layerSet.end());
+
     return info; // pass
 }
 
 ExrImageIO::~ExrImageIO(){}
 
-}
+} // namespace dmxdenoiser

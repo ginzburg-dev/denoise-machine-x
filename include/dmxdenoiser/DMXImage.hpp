@@ -1,9 +1,10 @@
-#ifndef DMXDENOISER_IMAGE_IMAGE_H
-#define DMXDENOISER_IMAGE_IMAGE_H
+#ifndef DMXDENOISER_DMXIMAGE_H
+#define DMXDENOISER_DMXIMAGE_H
 
 /*
 ptr math in DMX image map
 */
+#include <dmxdenoiser/LayerDictionary.hpp>
 #include <OpenEXR/ImfPixelType.h>
 #include <string>
 #include <vector>
@@ -16,17 +17,7 @@ ptr math in DMX image map
 namespace dmxdenoiser
 {
 
-enum ChannelSet
-{
-    kGRAY = 1,
-    kRGB = 3,
-    kRGBA = 4,
-};
-
-namespace Settings
-{
-    inline constexpr int numChannels = kRGBA;
-}
+inline constexpr int NUM_CHANNELS = 4; // RGBA global internal fixed size for all images
 
 struct Pixel
 {
@@ -40,46 +31,8 @@ struct DMXImageOptions
 {
     int width{};
     int height{};
-    std::vector<std::string> layers{};
+    LayerDictionary layers{};
     int numFrames{};
-};
-
-struct DMXChannel
-{
-    std::string name{};
-    std::optional<Imf::PixelType> pixelType{};
-    std::string metadata{};
-    void* ptr = nullptr;
-
-    DMXChannel() = default;
-    DMXChannel(std::string_view name_)
-        : name{name_}
-    {}
-    DMXChannel(std::string_view name_, Imf::PixelType pixelType_)
-        : name{name_}, pixelType{pixelType_}
-    {}
-    DMXChannel(std::string_view name_, void* ptr_)
-        : name{name_}, ptr{ptr_}
-    {}
-};
-
-struct DMXLayer
-{
-    std::string name{};
-    std::vector<DMXChannel> channels{};
-    std::string metadata{};
-    void* ptr = nullptr;
-
-    DMXLayer() = default;
-    DMXLayer(std::string_view name_)
-        : name{name_}
-    {}
-    DMXLayer(std::string_view name_, void* ptr_)
-        : name{name_}, ptr{ptr_}
-    {}
-    DMXLayer(std::string_view name_, const std::vector<DMXChannel>& channels_)
-        : name{name_}, channels{channels_}
-    {}
 };
 
 // Hash functor to enable efficient heterogeneous lookup in unordered_map (C++20)
@@ -90,14 +43,14 @@ struct TransparentHash : std::hash<std::string_view> {
 class DMXImage
 {
 public:
-    DMXImage(int width, int height, const std::vector<std::string>& layers, int numFrames)
+    DMXImage(int width, int height, LayerDictionary layers, int numFrames)
         : m_width{width},
         m_height{height},
         m_layers{layers},
         m_numFrames{numFrames},
-        m_pixels(width * height * Settings::numChannels * layers.size() * numFrames)
+        m_pixels(width * height * NUM_CHANNELS * layers.size() * numFrames)
     {
-        buildLayerToIndex(layers);
+        //buildLayerToIndex(layers);
     }
 
     DMXImage(const DMXImageOptions& opt)
@@ -105,15 +58,15 @@ public:
         m_height{opt.height},
         m_layers{opt.layers},
         m_numFrames{opt.numFrames},
-        m_pixels(opt.width * opt.height * Settings::numChannels * opt.layers.size() * opt.numFrames)
+        m_pixels(opt.width * opt.height * NUM_CHANNELS * opt.layers.size() * opt.numFrames)
     {
-        buildLayerToIndex(opt.layers);
+       //buildLayerToIndex(opt.layers);
     }
 
     int width() const { return m_width; }
     int height() const { return m_height; }
     int numLayers() const { return m_layers.size(); }
-    const std::vector<std::string>& layerNames() const { return m_layers; }
+    LayerDictionary getLayerDictionary() const { return m_layers; }
     bool hasLayer(std::string_view layer) const { return m_layerNameToIndex.contains(layer); }
     int getLayerIndex(std::string_view layer) const 
     {
@@ -122,6 +75,12 @@ public:
             throw std::runtime_error("Layer not found: " + std::string(layer));
         return it->second; 
     };
+
+    std::string ToString() const
+    {
+
+    }
+
     int frames() const { return m_numFrames; }
     //float* data() { return m_pixels.data(); }
     std::vector<float>& data() { return m_pixels; }
@@ -129,7 +88,7 @@ public:
     std::size_t getPixelIndex(int x, int y, int frame, int layer) const
     {
         return static_cast<std::size_t>(
-            (((frame*this->numLayers() + layer)*m_height + y)*m_width + x)*Settings::numChannels);
+            (((frame * this->numLayers() + layer) * m_height + y) * m_width + x) * NUM_CHANNELS);
     }
 
     std::size_t getPixelIndex(int x, int y, int frame, std::string_view layer) const 
@@ -161,17 +120,19 @@ private:
     int m_width{};
     int m_height{};
     int m_numFrames{};
-    std::vector<std::string> m_layers;
+    //std::vector<std::string> m_layers;
+    LayerDictionary m_layers;
     std::vector<float> m_pixels;
     std::unordered_map<std::string, int, TransparentHash, std::equal_to<>> m_layerNameToIndex;
-
+    /*
     void buildLayerToIndex(const std::vector<std::string>& layers)
     {
         for (int i = 0; i < layers.size(); ++i)
             m_layerNameToIndex[layers[i]] = i;
     }
+            */
 };
 
-}
+} // namespace dmxdenoiser
 
-#endif
+#endif // DMXDENOISER_DMXIMAGE_H

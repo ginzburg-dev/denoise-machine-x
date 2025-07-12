@@ -1,4 +1,0 @@
-#ifndef DMXDENOISER_CORE_AOV_H
-#define DMXDENOISER_CORE_AOV_H
-
-#endif

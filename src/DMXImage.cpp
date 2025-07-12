@@ -1,4 +1,4 @@
-#include <dmxdenoiser/image/DMXImage.hpp>
+#include <dmxdenoiser/DMXImage.hpp>
 
 namespace dmxdenoiser
 {
@@ -30,4 +30,4 @@ namespace dmxdenoiser
         return true;
     }
         */
-}
+} // namespace dmxdenoiser
