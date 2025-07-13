@@ -13,7 +13,7 @@ namespace dmxdenoiser
     using FilterParamMap = std::unordered_map<std::string, float>;
     using FilterMap = std::map<std::string, FilterParamMap>;
 
-    /*Abstract*/
+    /*Abstract Base*/
     class Filter
     {
     public:
