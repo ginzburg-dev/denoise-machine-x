@@ -1,12 +1,12 @@
 #ifndef DMXDENOISER_AOV_H
 #define DMXDENOISER_AOV_H
 
+#include <algorithm>
+#include <array>
 #include <string>
 #include <string_view>
-#include <array>
-#include <algorithm>
-#include <variant>
 #include <map>
+#include <variant>
 
 namespace dmxdenoiser
 {
@@ -42,7 +42,7 @@ namespace dmxdenoiser
     *      {"/images/shot02.exr", {{"beauty", "default"}}}
     *   };
     */
-    using InputFileDictionary = std::map<std::string, AovDictionary>;
+    using InputFilesMap = std::map<std::string, AovDictionary>;
 
     inline bool hasRequiredAovs(InputFileDictionary& dict)
     {   

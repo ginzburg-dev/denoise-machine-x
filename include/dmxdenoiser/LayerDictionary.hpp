@@ -1,14 +1,15 @@
 #ifndef DMXDENOISER_LAYER_DICTIONARY_H
 #define DMXDENOISER_LAYER_DICTIONARY_H
 
-#include <dmxdenoiser/LayerInfo.hpp>
 #include <dmxdenoiser/ChannelInfo.hpp>
+#include <dmxdenoiser/LayerInfo.hpp>
+
+#include <cstddef>
+#include <map>
+#include <optional>
 #include <string>
 #include <string_view>
-#include <optional>
 #include <vector>
-#include <map>
-#include <cstddef>
 
 namespace dmxdenoiser
 {
@@ -21,16 +22,15 @@ namespace dmxdenoiser
         void addLayer(const std::string& name);
         void addLayer(const std::vector<std::string>& names);
         void removeLayer(const std::string& name);
-        std::optional<LayerInfo> operator[](const std::string& layerName) const 
+        std::optional<LayerInfo> getLayer(const std::string& name) const
         { 
-            auto it = m_layers.find(layerName);
+            auto it = m_layers.find(name);
             if (it != m_layers.end())
                 return it->second;
             else
                 return std::nullopt;
         }
-        int getLayer(const std::string& name) const;
-        int getLayerIdx(const std::string& name) const;
+        int getLayerIndex(const std::string& name) const;
         std::size_t size() const { return m_layers.size(); }
         ~LayerDictionary() = default;
 

@@ -1,18 +1,17 @@
 #ifndef DMXDENOISER_DMXIMAGE_H
 #define DMXDENOISER_DMXIMAGE_H
 
-/*
-ptr math in DMX image map
-*/
 #include <dmxdenoiser/LayerDictionary.hpp>
-#include <OpenEXR/ImfPixelType.h>
+
+#include <cstddef>
+#include <optional>
 #include <string>
-#include <vector>
+#include <string_view>
 #include <stdexcept>
 #include <unordered_map>
-#include <string_view>
-#include <cstddef> // for std::size_t
-#include <optional>
+#include <vector>
+
+#include <OpenEXR/ImfPixelType.h>
 
 namespace dmxdenoiser
 {
@@ -43,7 +42,7 @@ struct TransparentHash : std::hash<std::string_view> {
 class DMXImage
 {
 public:
-    DMXImage(int width, int height, LayerDictionary layers, int numFrames)
+    DMXImage(int width, int height, int numFrames, LayerDictionary layers)
         : m_width{width},
         m_height{height},
         m_layers{layers},

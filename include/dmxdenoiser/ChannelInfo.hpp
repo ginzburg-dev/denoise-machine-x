@@ -3,6 +3,7 @@
 
 #include <dmxdenoiser/MetaData.hpp>
 #include <dmxdenoiser/PixelType.hpp>
+
 #include <string>
 #include <string_view>
 
@@ -12,8 +13,8 @@ namespace dmxdenoiser
     struct ChannelInfo
     {
         std::string name{};
-        MetaData metadata{};
         PixelType pixelType{};
+        MetaData metadata{};
         float* ptr = nullptr; // optional
 
         ChannelInfo(std::string_view name_) 

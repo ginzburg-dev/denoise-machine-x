@@ -1,9 +1,11 @@
 #ifndef DMXDENOISER_IMAGE_PIXEL_TYPE_H
 #define DMXDENOISER_IMAGE_PIXEL_TYPE_H
 
-#include <OpenEXR/ImfPixelType.h>
-#include <Imath/half.h>
+#include <cstdint>
 #include <cstddef>
+
+#include <Imath/half.h>
+#include <OpenEXR/ImfPixelType.h>
 
 namespace dmxdenoiser
 {
@@ -21,44 +23,16 @@ namespace dmxdenoiser
         MAX_TYPE,
     };
 
-    using PixelDataVariant = std::variant<
-        std::monostate,
-        std::vector<uint8_t>,
-        std::vector<uint16_t>,
-        std::vector<uint32_t>,
-        std::vector<half>,
-        std::vector<float>,
-        std::vector<double>
-    >;
+    /// @brief Compile-time C++ type to PixelType mapping (type trait).
+    template<typename T> inline constexpr PixelType PixelTypeOf = PixelType::Unknown;
+    template<> inline constexpr PixelType PixelTypeOf<uint8_t> = PixelType::UInt8;
+    template<> inline constexpr PixelType PixelTypeOf<uint16_t> = PixelType::UInt16;
+    template<> inline constexpr PixelType PixelTypeOf<uint32_t> = PixelType::UInt32;
+    template<> inline constexpr PixelType PixelTypeOf<half> = PixelType::Half;
+    template<> inline constexpr PixelType PixelTypeOf<float> = PixelType::Float;
+    template<> inline constexpr PixelType PixelTypeOf<double> = PixelType::Double;
 
-    inline PixelDataVariant allocatePixelData(PixelType type, std::size_t count) {
-        switch (type) {
-            case PixelType::UInt8:    return std::vector<uint8_t>(count);
-            case PixelType::UInt16:   return std::vector<uint16_t>(count);
-            case PixelType::UInt32:   return std::vector<uint32_t>(count);
-            case PixelType::Half:     return std::vector<half>(count);
-            case PixelType::Float:    return std::vector<float>(count);
-            case PixelType::Double:   return std::vector<double>(count);
-            default:                  return std::monostate{};
-        }
-    }
-
-    template<typename T>
-    inline constexpr PixelType PixelTypeOf<T> = PixelType::Unknown;
-    template<>
-    inline constexpr PixelType PixelTypeOf<uint8_t> = PixelType::UInt8;
-    template<>
-    inline constexpr PixelType PixelTypeOf<uint16_t> = PixelType::UInt16;
-    template<>
-    inline constexpr PixelType PixelTypeOf<uint32_t> = PixelType::UInt32;
-    template<>
-    inline constexpr PixelType PixelTypeOf<half> = PixelType::Half;
-    template<>
-    inline constexpr PixelType PixelTypeOf<float> = PixelType::Float;
-    template<>
-    inline constexpr PixelType PixelTypeOf<double> = PixelType::Double;
-
-
+    /// @brief Convert dmxdenoiser::PixelType to OpenEXR Imf::PixelType (runtime).
     inline Imf::PixelType toEXRPixelType(PixelType t) 
     {
         switch (t)
@@ -70,12 +44,13 @@ namespace dmxdenoiser
         }
     }
 
+    /// @brief Identity overload for PixelType (runtime).
     inline PixelType toPixelType(PixelType t) 
     {
         return t;
     }
 
-    /// @brief Convert OpenEXR Imf::PixelType to dmxdenoiser::PixelType. Overloaded conversion function
+    /// @brief Convert OpenEXR Imf::PixelType to dmxdenoiser::PixelType. 
     inline PixelType toPixelType(Imf::PixelType t) 
     {
         switch (t)
@@ -87,6 +62,7 @@ namespace dmxdenoiser
         }
     }
 
+    /// @brief Get PNG bit depth from PixelType (runtime).
     inline int toPngBitDepth(PixelType t) {
         switch (t) 
         {
@@ -95,6 +71,7 @@ namespace dmxdenoiser
         default: throw std::runtime_error("Unsupported pixel type for PNG");
         }
     }
-}
 
-#endif // DMXDENOISER_IMAGE_DMX_INFO_TYPES_H
+} // namespace dmxdenoiser
+
+#endif // DMXDENOISER_IMAGE_PIXEL_TYPE_H

@@ -1,7 +1,8 @@
-#include <dmxdenoiser/io/ImageIO.hpp>
-#include <dmxdenoiser/io/ImageIOFactory.hpp>
-#include <string_view>
+#include <dmxdenoiser/ImageIO.hpp>
+#include <dmxdenoiser/ImageIOFactory.hpp>
+
 #include <algorithm>
+#include <string_view>
 
 namespace dmxdenoiser
 {
@@ -10,16 +11,7 @@ namespace dmxdenoiser
     constexpr std::string_view kFormatJPEG = "jpeg";
     constexpr std::string_view kFormatPNG = "exr";
 
-    std::string getFileExtension(std::string_view filename)
-    {
-        auto pos = filename.find_last_of('.');
-        if (pos == std::string_view::npos)
-            return {};
-        std::string ext = std::string(filename.substr(pos + 1));
-        std::transform(ext.begin(), ext.end(), ext.begin(), [](unsigned char c){ return std::tolower(c); });
-        return ext;
-    }
-
+    
     std::unique_ptr<ImageIO> createImageIO(std::string_view filename)
     {
         auto ext = getFileExtension(filename);

@@ -1,10 +1,11 @@
-#include <dmxdenoiser/image/DMXImageInfoTypes.hpp>
+#include <dmxdenoiser/LayerDictionary.hpp>
+
+#include <cstddef>
+#include <map>
+#include <optional>
 #include <string>
 #include <string_view>
-#include <optional>
 #include <vector>
-#include <map>
-#include <cstddef>
 
 namespace dmxdenoiser
 {

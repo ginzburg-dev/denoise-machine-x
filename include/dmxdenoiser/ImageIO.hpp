@@ -1,24 +1,28 @@
 #ifndef DMXDENOISER_IMAGE_IO_H
 #define DMXDENOISER_IMAGE_IO_H
 
+#include <dmxdenoiser/ChannelBuffer.hpp>
 #include <dmxdenoiser/DMXImage.hpp>
 #include <dmxdenoiser/LayerDictionary.hpp>
 #include <dmxdenoiser/PixelType.hpp>
-#include <dmxdenoiser/ChannelBuffer.hpp>
-#include <OpenEXR/ImfPixelType.h>
-#include <OpenEXR/ImfCompression.h>
-#include <Imath/half.h>
-#include <string>
-#include <string_view>
-#include <vector>
-#include <memory>
+
 #include <functional>
 #include <map>
+#include <memory>
+#include <string>
+#include <string_view>
 #include <variant>
+#include <vector>
+
+#include <Imath/half.h>
+#include <OpenEXR/ImfPixelType.h>
+#include <OpenEXR/ImfCompression.h>
 
 namespace dmxdenoiser
 {
 
+    std::string getFileExtension(std::string_view filename);
+    
     std::string toLower(const std::string& s);
 
     /*Abstract*/

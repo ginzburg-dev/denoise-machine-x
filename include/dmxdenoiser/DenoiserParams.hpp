@@ -2,6 +2,8 @@
 #define DMXDENOISER_DENOISER_PARAMS_H
 
 #include <dmxdenoiser/Aov.hpp>
+#include <dmxdenoiser/Filter.hpp>
+
 #include <string>
 #include <string_view>
 #include <map>
@@ -13,10 +15,13 @@ namespace dmxdenoiser
     {
         int ncores = -1;
         bool gpu = false;
+        int startFrame;
+        int endFrame;
         std::string inputFileName{};
         std::string outputFileName{};
         bool albedoDivide = true;
-        InputFileDictionary inputs{};
+        InputFilesMap inputs{};
+        FilterMap filters{};
     };
 
 } // namespace dmxdenoiser

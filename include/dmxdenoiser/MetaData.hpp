@@ -1,8 +1,8 @@
 #ifndef DMXDENOISER_METADATA_H
 #define DMXDENOISER_METADATA_H
 
-#include <string>
 #include <map>
+#include <string>
 
 namespace dmxdenoiser {
 
