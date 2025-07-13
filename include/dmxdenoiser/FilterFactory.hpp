@@ -30,7 +30,7 @@
 
 namespace dmxdenoiser
 {
-
+    /// Singleton factory for registering and creating filters
     class FilterFactory
     {
     public:
@@ -42,11 +42,13 @@ namespace dmxdenoiser
             return f;
         }
 
+        /// Register a filter by name
         void registerFilter(const std::string& name, Creator creator)
         {
             m_creators[name] = std::move(creator);
         }
 
+        /// Create filter by name
         std::unique_ptr<Filter> create(const std::string& name) const
         {
             auto it = m_creators.find(name);
@@ -57,7 +59,8 @@ namespace dmxdenoiser
 
     private:
         std::unordered_map<std::string, Creator> m_creators;
-
+        
+        /// Singleton: prevent copying
         FilterFactory() = default;
         FilterFactory(const FilterFactory&) = delete;
         FilterFactory& operator=(const FilterFactory&) = delete;
