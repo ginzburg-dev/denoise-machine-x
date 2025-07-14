@@ -52,12 +52,13 @@ namespace dmxdenoiser
             count += l.channels.size();
         return count;
     }
-    /*
+    
     bool ExrImageIO::read(
             std::string_view filename,
             float* img,
             const ImageIOParams* params)
     {
+        /*
         auto exrParams = dynamic_cast<const ExrIOParams*>(params);
 
         Imf::InputFile file(filename.data());
@@ -227,10 +228,10 @@ namespace dmxdenoiser
                 if (type == Imf::UINT)
                     delete[] reinterpret_cast<unsigned int*>(chan.ptr);
             }
-        
+        */
         return true;
     }
-    */
+    
     bool ExrImageIO::write(
             std::string_view filename,
             const float* img,
@@ -238,9 +239,10 @@ namespace dmxdenoiser
     {
         return true; // pass
     }
-    /*
+    
     std::unique_ptr<ImageInfo> ExrImageIO::getImageInfo(std::string_view filename) const
     {
+        /*
         auto info = std::make_unique<ExrImageInfo>();
         Imf::InputFile file(filename.data());
         Imath::Box2i dw = file.header().dataWindow();
@@ -310,10 +312,12 @@ namespace dmxdenoiser
 
             }
         }
-
+        
         return info; // pass
+        */
+        return std::make_unique<ImageInfo>(); // temporary
     }
-    */
+    
     ExrImageIO::~ExrImageIO(){}
 
 } // namespace dmxdenoiser
