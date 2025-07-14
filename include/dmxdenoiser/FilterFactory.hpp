@@ -1,6 +1,8 @@
 #ifndef DMXDENOISER_FILTER_FACTORY_H
 #define DMXDENOISER_FILTER_FACTORY_H
 
+#include <dmxdenoiser/Filter.hpp>
+
 #include <functional>
 #include <memory>
 #include <unordered_map>
@@ -18,10 +20,10 @@
             CLASS##Registrator() { \
                 /* Registration happens in the constructor, which is called before main() */ \
                 FilterFactory::instance().registerFilter( \
-                    ClASS::StaticClassName(), /* Register filter under its static name */ \
+                    CLASS::StaticClassName(), /* Register filter under its static name */ \
                     [](){ return std::make_unique<CLASS>(); }); /* Lambda creates new instance */ \
             } \
-        } \
+        }; \
         /* Object in anonymous namespace guarantees constructor runs for each translation unit before main(). */ \
         /* In C++11 and later, `static` is not required here—anonymous namespace is sufficient. */ \
         static CLASS##Registrator global_##CLASS##Registrator; \
@@ -34,7 +36,7 @@ namespace dmxdenoiser
     class FilterFactory
     {
     public:
-        using Creator = std:function<std::unique_ptr<Filter>()>
+        using Creator = std::function<std::unique_ptr<Filter>()>;
 
         static FilterFactory& instance()
         {
@@ -59,7 +61,7 @@ namespace dmxdenoiser
 
     private:
         std::unordered_map<std::string, Creator> m_creators;
-        
+
         /// Singleton: prevent copying
         FilterFactory() = default;
         FilterFactory(const FilterFactory&) = delete;

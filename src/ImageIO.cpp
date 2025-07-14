@@ -36,7 +36,7 @@ namespace dmxdenoiser
             [](unsigned char c){ return std::tolower(c); });
         return result;
     }
-    
+
     int ExrImageInfo::channelCount() const 
     { 
         int count = 0; 
@@ -44,7 +44,7 @@ namespace dmxdenoiser
             count += l.channels.size();
         return count;
     };
-    
+
     int ExrIOParams::channelCount() const
     {
         int count = 0; 
@@ -52,30 +52,30 @@ namespace dmxdenoiser
             count += l.channels.size();
         return count;
     }
-    
+    /*
     bool ExrImageIO::read(
             std::string_view filename,
             float* img,
             const ImageIOParams* params)
     {
         auto exrParams = dynamic_cast<const ExrIOParams*>(params);
-    
+
         Imf::InputFile file(filename.data());
-    
+
         Imath::Box2i dw = file.header().dataWindow();
         int width   = dw.max.x - dw.min.x + 1;
         int height  = dw.max.y - dw.min.y + 1;
-        
+
         Imf::FrameBuffer frameBuffer;
-    
+
         std::vector<LayerInfo> tmpBuffers;
         LayerChannelBufferMap channelBuffers{};
-    
-        
+
+
         for (const auto& layer : exrParams->layers)
         {
             //tmpBuffers.emplace_back(layer.name);
-            
+
             for (const auto& c : layer.channels)
             {
                 std::string name{};
@@ -83,10 +83,10 @@ namespace dmxdenoiser
                     name = c.name;
                 else
                     name = layer.name + "." + c.name;
-            
-                    
+
+
                 std::ptrdiff_t offset = dw.min.x + dw.min.y * width;
-            
+
                 //tmpBuffers.back().channels.emplace_back(name, c.pixelType);
                 channelBuffers[layer.name].push_back(ChannelBuffer::createEmpty(name, c.pixelType, width * height));
                 switch(c.pixelType) !!!! NEED TO BE COMPARED AS A SOURCE TYPE !!!!
@@ -149,11 +149,11 @@ namespace dmxdenoiser
                 }
                 }
             }
-            
+
         }
         file.setFrameBuffer(frameBuffer);
         file.readPixels(dw.min.y, dw.max.y);
-    
+
         int offset = width * height * NUM_CHANNELS;
         for(int w = 0; w < width; ++w)
             for(int h = 0; h < height; ++h)
@@ -167,7 +167,7 @@ namespace dmxdenoiser
                         tmpLayer = &(*it);
                     else
                         throw std::runtime_error("ImageIO.cpp:143[Error]: Channel name mismatch.");
-                    
+
                     for(int c = 0; c < NUM_CHANNELS; ++c)
                     {
                         auto* basePixel = reinterpret_cast<float*>(layer.ptr);
@@ -185,21 +185,21 @@ namespace dmxdenoiser
                                 auto* tmpPixel = baseTmpPixel + (h*width + w);
                                 *pixel = *tmpPixel;
                             }
-                                
+
                             if(type == Imf::HALF)
                             {
                                 auto* baseTmpPixel = reinterpret_cast<half*>(tmpLayer->channels[c].ptr);
                                 auto* tmpPixel = baseTmpPixel + (h*width + w);
                                 *pixel = *tmpPixel;
                             }
-                            
+
                             if(type == Imf::UINT)
                             {
                                 auto* baseTmpPixel = reinterpret_cast<unsigned int*>(tmpLayer->channels[c].ptr);
                                 auto* tmpPixel = baseTmpPixel + (h*width + w);
                                 *pixel = *tmpPixel;
                             }
-                            
+
                         }
                         else
                         {
@@ -207,9 +207,9 @@ namespace dmxdenoiser
                         }
                     }
                 }
-                
+
             }
-        
+
         // Delete tmpBuffers
         for(auto& l : tmpBuffers)
             for(auto& chan : l.channels)
@@ -219,13 +219,7 @@ namespace dmxdenoiser
                     type = chan.pixelType.value();
                 else
                     throw std::runtime_error("InageIO.cpp:151[Error]: Wrong pixelType metadata.");
-                /*
-                auto pos = chan.metadata.find(':');
-                if (pos != std::string::npos)
-                    type = chan.metadata.substr(0, pos);
-                else
-                    throw std::runtime_error("InageIO.cpp:151[Error]: Wrong pixelType metadata.");
-                */
+                
                 if (type == Imf::FLOAT)
                     delete[] reinterpret_cast<float*>(chan.ptr);
                 if (type == Imf::HALF)
@@ -236,7 +230,7 @@ namespace dmxdenoiser
         
         return true;
     }
-    
+    */
     bool ExrImageIO::write(
             std::string_view filename,
             const float* img,
@@ -244,24 +238,24 @@ namespace dmxdenoiser
     {
         return true; // pass
     }
-    
+    /*
     std::unique_ptr<ImageInfo> ExrImageIO::getImageInfo(std::string_view filename) const
     {
         auto info = std::make_unique<ExrImageInfo>();
         Imf::InputFile file(filename.data());
         Imath::Box2i dw = file.header().dataWindow();
-    
+
         info->width = dw.max.x - dw.min.x + 1;
         info->height = dw.max.y - dw.min.y + 1;
-    
+
         info->compression = file.header().compression();
-    
+
         const Imf::ChannelList &channels = file.header().channels();
-    
+
         //std::set<std::string> layerSet;
         std::string defaultChannelSet{ "rgba" };
         info->layers.clear();
-    
+
         std::map<std::string, std::vector<DMXChannel>> layersMap{};
         for (Imf::ChannelList::ConstIterator i = channels.begin(); i != channels.end(); ++i) 
         {
@@ -282,10 +276,10 @@ namespace dmxdenoiser
                 else
                     layer = "others";
             }
-        
+
             layersMap[layer].emplace_back(channel, i.channel().type);
         }
-    
+
         // Sort channels
         std::string order{ "rgbaz" };
         for (auto& [layer, channel] : layersMap)
@@ -294,16 +288,16 @@ namespace dmxdenoiser
                 [&](const auto& a, const auto& b){
                     auto ia = order.find(a.name.empty() ? '\0' : std::tolower(a.name[0]));
                     auto ib = order.find(b.name.empty() ? '\0' : std::tolower(b.name[0]));
-                
+
                     if (ia == std::string::npos)
                         ia = order.size();
                     if (ib == std::string::npos)
                         ib = order.size();
                     return ia < ib;
             });
-            
+
         }
-    
+
         for(const auto& [layer, channels] : layersMap)
         {
             info->layers.emplace_back(layer);
@@ -313,13 +307,13 @@ namespace dmxdenoiser
                     info->layers.back().channels.emplace_back(ch.name, ch.pixelType.value());
                 else
                     throw std::runtime_error("Layer '" + info->layers.back().name + "', channel '" + ch.name + "' does not have PixelType attribute.");
-                
+
             }
         }
-    
+
         return info; // pass
     }
-    
+    */
     ExrImageIO::~ExrImageIO(){}
 
 } // namespace dmxdenoiser

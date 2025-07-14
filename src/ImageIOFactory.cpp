@@ -11,7 +11,7 @@ namespace dmxdenoiser
     constexpr std::string_view kFormatJPEG = "jpeg";
     constexpr std::string_view kFormatPNG = "exr";
 
-    
+    /*
     std::unique_ptr<ImageIO> createImageIO(std::string_view filename)
     {
         auto ext = getFileExtension(filename);
@@ -36,6 +36,6 @@ namespace dmxdenoiser
 
         return nullptr;
     }
-
+    */
 } // namespace dmxdenoiser
 

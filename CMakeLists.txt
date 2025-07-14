@@ -9,7 +9,6 @@ set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
 # Output binaries to "bin/"
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/dmxdenoiser)
 
-
 find_package(OpenEXR REQUIRED)
 find_package(Imath REQUIRED)
 
@@ -66,12 +65,21 @@ target_link_libraries (dmxdenoiser
         $<$<TARGET_EXISTS:IlmBase::Iex>:IlmBase::Iex>
     )
 
+# Add Google test packages
+include(FetchContent)
+FetchContent_Declare(
+    googletest
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG        v1.14.0  # Use latest stable release
+)
+FetchContent_MakeAvailable(googletest)
+
 #tests
-#enable_testing()
+enable_testing()
 
-file(GLOB TEST_SOURCES test/*.cpp)
+file(GLOB TEST_SOURCES tests/*.cpp)
 
-# Source files for tests
+#Source files for tests
 file(GLOB_RECURSE CORE_SRC_FILES CONFIGURE_DEPENDS
     src/*.cpp
 )
@@ -82,6 +90,11 @@ foreach(test_src ${TEST_SOURCES})
     add_executable(${test_name} ${CORE_SRC_FILES} ${test_src})
     target_include_directories(${test_name} PRIVATE ${CMAKE_SOURCE_DIR}/include)
     target_link_libraries(${test_name} PRIVATE OpenEXR::OpenEXR Imath::Imath)
+    target_link_libraries(${test_name}
+        PRIVATE
+            gtest_main  # for main(), or gtest for custom main()
+            #dmxdenoiser # your actual library/target
+    )
     add_test(NAME ${test_name} COMMAND ${test_name})
 endforeach()
 

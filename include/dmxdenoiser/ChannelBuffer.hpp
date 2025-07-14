@@ -7,6 +7,8 @@
 #include <string>
 #include <string_view>
 #include <variant>
+#include <vector>
+#include <unordered_map>
 
 #include <Imath/half.h>
 
@@ -56,8 +58,8 @@ namespace dmxdenoiser
         {
             ChannelBuffer buf;
             buf.name = name;
-            buf.pixelType = toPixelType(T);
-            buf.data = allocatePixelData(toPixelType(T), size);
+            buf.pixelType = PixelTypeOf<T>;
+            buf.data = allocatePixelData(PixelTypeOf<T>, size);
             return buf;
         }
     };
