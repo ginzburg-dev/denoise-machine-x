@@ -6,7 +6,7 @@ namespace dmxdenoiser
 
     void ExampleFilter::setParams(const ParamDictionary& params)
     {
-
+        /* Set all parameters */
     };
 
     void ExampleFilter::apply(DMXImage& img) const

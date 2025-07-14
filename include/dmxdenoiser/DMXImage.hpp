@@ -77,7 +77,8 @@ public:
 
     std::string ToString() const
     {
-
+        // TODO: Implement actual logic!
+        return "DMXImage";
     }
 
     int frames() const { return m_numFrames; }
