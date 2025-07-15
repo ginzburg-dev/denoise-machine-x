@@ -1,17 +1,41 @@
 #include <dmxdenoiser/FilterFactory.hpp>
 #include <dmxdenoiser/filters/ExampleFilter.hpp>
 
+#include <optional>
+#include <iostream>
+
+// ExampleFilter parameters:
+// int kernel
+// int radius
+// float sigma
+
 namespace dmxdenoiser
 {
 
     void ExampleFilter::setParams(const ParamDictionary& params)
     {
-        /* Set all parameters */
+        auto kernel_param = params.getSingleParam<int>("kernel");
+        if (kernel_param)
+            kernel = *kernel_param;
+        else
+            throw std::runtime_error("ExampleFilter: Missing required parameter 'kernel'");
+
+        auto radius_param = params.getSingleParam<int>("radius");
+        if (radius_param)
+            radius = *radius_param;
+        else
+            throw std::runtime_error("ExampleFilter: Missing required parameter 'radius'");
+
+        auto sigma_param = params.getSingleParam<float>("sigma");
+        if (sigma_param)
+            sigma = *sigma_param;
+        else
+            throw std::runtime_error("ExampleFilter: Missing required parameter 'sigma'");
     };
 
     void ExampleFilter::apply(DMXImage& img) const
     {
-        /* Process image */
+        std::cout << "Filtering DMXImage... \n";
     };
 
     std::string ExampleFilter::ToString() const

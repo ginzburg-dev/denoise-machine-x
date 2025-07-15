@@ -44,7 +44,7 @@ namespace dmxdenoiser
         PixelDataVariant data{};
         
         template<typename T>
-        static ChannelBuffer create(const std::string& name, std::vector<T> pixels)
+        static ChannelBuffer create(const std::string& name, std::vector<T>&& pixels)
         {
             ChannelBuffer buf;
             buf.name = name;
@@ -53,13 +53,12 @@ namespace dmxdenoiser
             return buf;
         }
 
-        template<typename T>
-        static ChannelBuffer createEmpty(const std::string& name, T pixelType, std::size_t size)
+        static ChannelBuffer createEmpty(const std::string& name, PixelType pixelType, std::size_t size)
         {
             ChannelBuffer buf;
             buf.name = name;
-            buf.pixelType = PixelTypeOf<T>;
-            buf.data = allocatePixelData(PixelTypeOf<T>, size);
+            buf.pixelType = pixelType;
+            buf.data = allocatePixelData(pixelType, size);
             return buf;
         }
     };
