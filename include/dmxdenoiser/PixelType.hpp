@@ -33,7 +33,7 @@ namespace dmxdenoiser
     template<> inline constexpr PixelType PixelTypeOf<double> = PixelType::Double;
 
     /// @brief Convert dmxdenoiser::PixelType to OpenEXR Imf::PixelType (runtime).
-    inline Imf::PixelType toEXRPixelType(PixelType t) 
+    /*inline*/ constexpr Imf::PixelType toEXRPixelType(PixelType t) 
     {
         switch (t)
         {
@@ -45,13 +45,13 @@ namespace dmxdenoiser
     }
 
     /// @brief Identity overload for PixelType (runtime).
-    inline PixelType toPixelType(PixelType t) 
+    /*inline*/ constexpr PixelType toPixelType(PixelType t) 
     {
         return t;
     }
 
     /// @brief Convert OpenEXR Imf::PixelType to dmxdenoiser::PixelType. 
-    inline PixelType toPixelType(Imf::PixelType t) 
+    /*inline*/ constexpr PixelType toPixelType(Imf::PixelType t) 
     {
         switch (t)
         {

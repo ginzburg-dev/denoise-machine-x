@@ -44,7 +44,7 @@ namespace dmxdenoiser
     */
     using InputFilesMap = std::map<std::string, AovDictionary>;
 
-    inline bool hasRequiredAovs(InputFileDictionary& dict)
+    inline bool hasRequiredAovs(InputFilesMap& dict)
     {   
         for (const auto& [filename, aovs] : dict)
         {

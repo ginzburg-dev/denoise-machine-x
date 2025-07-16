@@ -16,7 +16,6 @@ namespace dmxdenoiser
     class Filter
     {
     public:
-        Filter() = default;
         virtual const char* Name() const = 0;
         virtual void apply(DMXImage& img) const = 0;
         virtual void setParams(const ParamDictionary& params) = 0;

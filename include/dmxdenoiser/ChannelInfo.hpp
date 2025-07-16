@@ -1,7 +1,7 @@
 #ifndef DMXDENOISER_CHANNEL_INFO_H
 #define DMXDENOISER_CHANNEL_INFO_H
 
-#include <dmxdenoiser/MetaData.hpp>
+#include <dmxdenoiser/ParamDictionary.hpp>
 #include <dmxdenoiser/PixelType.hpp>
 
 #include <string>
@@ -14,7 +14,7 @@ namespace dmxdenoiser
     {
         std::string name{};
         PixelType pixelType{};
-        MetaData metadata{};
+        ParamDictionary metadata{};
         float* ptr = nullptr; // optional
 
         ChannelInfo(std::string_view name_) 

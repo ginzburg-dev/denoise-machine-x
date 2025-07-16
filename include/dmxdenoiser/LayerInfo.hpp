@@ -2,7 +2,7 @@
 #define DMXDENOISER_LAYER_INFO_H
 
 #include <dmxdenoiser/ChannelInfo.hpp>
-#include <dmxdenoiser/MetaData.hpp>
+#include <dmxdenoiser/ParamDictionary.hpp>
 
 #include <cstddef>
 #include <string>
@@ -16,7 +16,7 @@ namespace dmxdenoiser
     {
         std::string name{}; ///< Layer name (e.g. "Diffuse", "Specular").
         std::vector<ChannelInfo> channels{}; ///< List of channels in this layer (e.g. R, G, B).
-        MetaData metadata{}; ///< Metadata for the layer.
+        ParamDictionary metadata{}; ///< Metadata for the layer.
         std::size_t offset; ///< Start of channel in the DMXImage flat buffer.
 
         LayerInfo(std::string_view name_)

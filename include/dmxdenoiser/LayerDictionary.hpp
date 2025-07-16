@@ -1,6 +1,7 @@
 #ifndef DMXDENOISER_LAYER_DICTIONARY_H
 #define DMXDENOISER_LAYER_DICTIONARY_H
 
+#include <dmxdenoiser/Aov.hpp>
 #include <dmxdenoiser/ChannelInfo.hpp>
 #include <dmxdenoiser/LayerInfo.hpp>
 
@@ -19,6 +20,7 @@ namespace dmxdenoiser
     public:
         LayerDictionary() = default;
         LayerDictionary(const std::vector<std::string>& layerList);
+        explicit LayerDictionary(const InputFilesMap& inputFilesMap);
         void addLayer(const std::string& name);
         void addLayer(const std::vector<std::string>& names);
         void removeLayer(const std::string& name);
@@ -27,8 +29,7 @@ namespace dmxdenoiser
             auto it = m_layers.find(name);
             if (it != m_layers.end())
                 return it->second;
-            else
-                return std::nullopt;
+            return std::nullopt;
         }
         int getLayerIndex(const std::string& name) const;
         std::size_t size() const { return m_layers.size(); }

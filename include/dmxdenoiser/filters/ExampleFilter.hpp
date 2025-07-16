@@ -18,6 +18,7 @@ namespace dmxdenoiser
         const char* Name() const override { return StaticClassName(); };
 
         ExampleFilter() = default;
+        ExampleFilter(const ParamDictionary& params) { setParams(params); };
         ~ExampleFilter() override = default;
 
         void setParams(const ParamDictionary& params) override;
