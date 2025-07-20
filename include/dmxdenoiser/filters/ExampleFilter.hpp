@@ -7,12 +7,13 @@
 namespace dmxdenoiser
 {
 
-    class ExampleFilter : public Filter
+    struct ExampleFilter : public Filter
     {
+        // Parameters
         int kernel = 3;
         int radius = 4;
         float sigma = 0.7f;
-    public:
+
         // Required: unique filter name
         static constexpr const char* StaticClassName() { return "ExampleFilter"; }
         const char* Name() const override { return StaticClassName(); };
@@ -29,4 +30,4 @@ namespace dmxdenoiser
 
 } // namespace dmxdenoiser
 
-#endif
+#endif // DMXDENOISER_EXAMPLE_FILTER_H

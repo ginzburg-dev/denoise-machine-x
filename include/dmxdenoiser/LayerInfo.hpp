@@ -1,5 +1,5 @@
-#ifndef DMXDENOISER_LAYER_INFO_H
-#define DMXDENOISER_LAYER_INFO_H
+// LayerInfo.hpp
+#pragma once
 
 #include <dmxdenoiser/ChannelInfo.hpp>
 #include <dmxdenoiser/ParamDictionary.hpp>
@@ -21,10 +21,8 @@ namespace dmxdenoiser
 
         LayerInfo(std::string_view name_)
             : name{name_} {}
-        LayerInfo(std::string_view name_, std::size_t offset_) 
+        LayerInfo(std::string_view name_, std::size_t offset_)
             : name{name_}, offset{offset_} {}
     };
 
 } // namespace dmxdenoiser
-
-#endif // DMXDENOISER_LAYER_INFO_H

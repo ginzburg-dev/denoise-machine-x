@@ -13,9 +13,8 @@ namespace dmxdenoiser
 {
 
     /*Abstract Base*/
-    class Filter
+    struct Filter
     {
-    public:
         virtual const char* Name() const = 0;
         virtual void apply(DMXImage& img) const = 0;
         virtual void setParams(const ParamDictionary& params) = 0;

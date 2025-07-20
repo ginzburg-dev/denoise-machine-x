@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <dmxdenoiser/util/AlwaysFalse.hpp>
+
 #include <map>
 #include <optional>
 #include <string>
@@ -9,12 +11,6 @@
 
 namespace dmxdenoiser
 {
-
-    template<class> 
-    struct always_false{
-        static constexpr bool value = false;
-    };
-
 
     struct ParamDictionary
     {
