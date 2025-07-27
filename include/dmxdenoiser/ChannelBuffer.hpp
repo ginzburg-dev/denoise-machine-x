@@ -4,11 +4,11 @@
 #include <dmxdenoiser/PixelType.hpp>
 
 #include <cstddef>
+#include <map>
 #include <string>
 #include <string_view>
 #include <variant>
 #include <vector>
-#include <unordered_map>
 
 #include <Imath/half.h>
 #include <OpenEXR/ImfPixelType.h>
@@ -38,72 +38,47 @@ namespace dmxdenoiser
                 default:                  break;
             }
         }
-        /*
-        char* get(PixelType type){
-            swith(type)
-            {
-                case PixelType::UInt8:    return reinterpret_cast<char*>(uint8s.data());
-                case PixelType::UInt16:   return reinterpret_cast<char*>(uint16s.data());
-                case PixelType::UInt32:   return reinterpret_cast<char*>(uint32s.data());
-                case PixelType::Half:     return reinterpret_cast<char*>(halfs.data());
-                case PixelType::Float:    return reinterpret_cast<char*>(floats.data());
-                case PixelType::Double:   return reinterpret_cast<char*>(doubles.data());
-            }
-        }
-        */
 
         PixelDataContainer(PixelType type, std::size_t size)
         {
             allocate(type, size);
         }
     };
-    /*
-    inline PixelDataContainer allocatePixelData(PixelType type, std::size_t count) {
-        switch (type) {
-            case PixelType::UInt8:    return std::vector<uint8_t>(count);
-            case PixelType::UInt16:   return std::vector<uint16_t>(count);
-            case PixelType::UInt32:   return std::vector<uint32_t>(count);
-            case PixelType::Half:     return std::vector<half>(count);
-            case PixelType::Float:    return std::vector<float>(count);
-            case PixelType::Double:   return std::vector<double>(count);
-            default:                  return std::monostate{};
-        }
-    }
-    */
-    struct ChannelBuffer
+
+    class ChannelBuffer
     {
-        std::string name{};
-        PixelType pixelType = PixelType::Unknown;
-        PixelDataContainer data;
+    public:
+        ChannelBuffer(const std::string& name, PixelType pixelType, std::size_t size)
+            : m_name{name}, m_pixelType{pixelType}, m_data{PixelDataContainer{pixelType, size}} {}
+        ChannelBuffer(const ChannelBuffer&) = delete;
+        ChannelBuffer operator=(const ChannelBuffer&) = delete;
+        ~ChannelBuffer() = default;
 
-        char* get(PixelType type) const
+        const std::string& getName() const { return m_name; };
+        char* getRawPtr()
         {
-            case PixelType::UInt8:    uint8s.resize(size);
-                case PixelType::UInt16:   uint16s.resize(size);
-                case PixelType::UInt32:   uint32s.resize(size);
-                case PixelType::Half:     halfs.resize(size);
-                case PixelType::Float:    floats.resize(size);
-                case PixelType::Double:   doubles.resize(size);
-                default:                  break;
+            switch(m_pixelType)
+            {
+            case PixelType::UInt8:    return reinterpret_cast<char*>(m_data.uint8s.data());
+            case PixelType::UInt16:   return reinterpret_cast<char*>(m_data.uint16s.data());
+            case PixelType::UInt32:   return reinterpret_cast<char*>(m_data.uint32s.data());
+            case PixelType::Half:     return reinterpret_cast<char*>(m_data.halfs.data());
+            case PixelType::Float:    return reinterpret_cast<char*>(m_data.floats.data());
+            case PixelType::Double:   return reinterpret_cast<char*>(m_data.doubles.data());
+            default:                  throw std::runtime_error("Unsupported pixel type");
+            }
         }
 
-        ChannelBuffer(const std::string& name_, PixelType pixelType_, std::size_t size)
-            : name{name_}, pixelType{pixelType_}, data{PixelDataContainer{pixelType_, size}} {}
-        /*
-        static ChannelBuffer create(const std::string& name, PixelType pixelType, std::size_t size)
-        {
-            ChannelBuffer buf;
-            buf.name = name;
-            buf.pixelType = pixelType;
-            buf.data.resize(size);
-            return buf;
-        }
-        */
+        const PixelDataContainer& getData() const { return m_data; }
+
+    private:
+        std::string m_name{};
+        PixelType m_pixelType = PixelType::Unknown;
+        PixelDataContainer m_data;
     };
 
     /// @brief Stores per-layer channel buffers: layer name -> list of ChannelBuffer (e.g. R, G, B, A)
-    using LayerChannelBufferMap = std::unordered_map<std::string, std::vector<ChannelBuffer>>;
-
+    using LayerChannelBufferMap = std::map<std::string, std::vector<ChannelBuffer>>;
 }
 
 #endif
