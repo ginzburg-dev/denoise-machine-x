@@ -61,6 +61,16 @@ TEST(LayerDictionary, AddLayerToDictionary)
     }
 }
 
+TEST(LayerDictionary, AddLayerOverrides)
+{
+    LayerDictionary dict{std::vector<std::string>{"beauty", "normal"}};
+    dict.addLayer("normal");
+    auto layers = dict.data();
+
+    ASSERT_EQ(layers.size(), 2);
+    EXPECT_EQ(layers[1].name, "normal");
+}
+
 TEST(LayerDictionary, RemoveLayerFromDictionary)
 {
     std::vector<std::string> aovsRef{"beauty", "albedo", "normal", "depth", "position"};

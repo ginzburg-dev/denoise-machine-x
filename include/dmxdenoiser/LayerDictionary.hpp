@@ -95,10 +95,21 @@ namespace dmxdenoiser
                 [&](const auto& a, const auto& b){
                     auto ia = std::find(DEFAULT_AOVS.begin(), DEFAULT_AOVS.end(), a.name);
                     auto ib = std::find(DEFAULT_AOVS.begin(), DEFAULT_AOVS.end(), b.name);
-                    return ia < ib;
+
+                    bool aInList = ia != DEFAULT_AOVS.end();
+                    bool bInList = ib != DEFAULT_AOVS.end();
+
+                    if (aInList && bInList)
+                        return ia < ib;
+                    if (aInList)
+                        return true;
+                    if (bInList)
+                        return false;
+                        
+                    return false;
             });
 
-            // Set offsets for layers
+            // Set sequential offsets based on current sorted order
             for (int i = 0; i < m_layers.size(); ++i)
                 m_layers[i].offset = i;
         }
