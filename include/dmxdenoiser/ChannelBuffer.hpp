@@ -55,6 +55,7 @@ namespace dmxdenoiser
         ~ChannelBuffer() = default;
 
         const std::string& getName() const { return m_name; };
+
         char* getRawPtr()
         {
             switch(m_pixelType)
@@ -69,7 +70,7 @@ namespace dmxdenoiser
             }
         }
 
-        const PixelDataContainer& getData() const { return m_data; }
+        PixelDataContainer& data() { return m_data; }
 
     private:
         std::string m_name{};
