@@ -5,11 +5,8 @@
 #include <dmxdenoiser/ChannelInfo.hpp>
 #include <dmxdenoiser/LayerInfo.hpp>
 
-#include <algorithm>
 #include <cstddef>
-#include <map>
 #include <optional>
-#include <set>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -32,7 +29,7 @@ namespace dmxdenoiser
         std::optional<LayerInfo> getLayer(const std::string& name) const;
         std::optional<int> getLayerOffset(const std::string& name) const;
         std::size_t size() const { return m_layers.size(); }
-        
+
         bool hasLayer(const std::string& name) const;
     private:
         std::vector<LayerInfo> m_layers;

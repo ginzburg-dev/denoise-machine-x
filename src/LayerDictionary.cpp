@@ -1,11 +1,6 @@
 #include <dmxdenoiser/LayerDictionary.hpp>
 
-#include <cstddef>
-#include <map>
-#include <optional>
-#include <string>
-#include <string_view>
-#include <vector>
+#include <algorithm>
 
 namespace dmxdenoiser
 {
