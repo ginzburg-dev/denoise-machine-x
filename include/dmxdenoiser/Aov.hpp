@@ -15,7 +15,7 @@ namespace dmxdenoiser
     /// @details
     /// These AOVs are mandatory for denoising operations.
     /// They typically include essential render passes like beauty, albedo, normal, depth, and position.
-    constexpr std::array<std::string_view, 5> DEFAULT_AOVS = {
+    const std::array<std::string, 5> DEFAULT_AOVS = {
         "beauty", "albedo", "normal", "depth", "position" 
     };
 

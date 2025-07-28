@@ -9,7 +9,7 @@
 #include <optional>
 #include <string>
 #include <string_view>
-#include <vector>
+#include <unordered_map>
 
 namespace dmxdenoiser
 {
@@ -25,15 +25,17 @@ namespace dmxdenoiser
         void addLayer(const std::string& name);
         void removeLayer(const std::string& name);
 
-        std::vector<LayerInfo>& data() { return m_layers; }
-        std::optional<LayerInfo> getLayer(const std::string& name) const;
-        std::optional<int> getLayerOffset(const std::string& name) const;
+        std::unordered_map<std::string, LayerInfo>& data() { return m_layers; }
+        const std::unordered_map<std::string, LayerInfo>& data() const { return m_layers; }
+        LayerInfo* getLayer(const std::string& name);
+        const LayerInfo* getLayer(const std::string& name) const;
         std::size_t size() const { return m_layers.size(); }
 
         bool hasLayer(const std::string& name) const;
+
     private:
-        std::vector<LayerInfo> m_layers;
-        void sort();
+        std::unordered_map<std::string, LayerInfo> m_layers;
+        void setLayerOffsets();
     };
 
 } // namespace dmxdenoiser

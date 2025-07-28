@@ -8,9 +8,8 @@ namespace dmxdenoiser
     LayerDictionary::LayerDictionary(const std::vector<std::string>& layerList)
     {
         for(const auto& name : layerList)
-            if (!hasLayer(name))
-                m_layers.push_back(LayerInfo{name});
-        sort();
+            m_layers[name] = LayerInfo{name};
+        setLayerOffsets();
     }
 
     LayerDictionary::LayerDictionary(const InputFilesMap& inputFilesMap)
@@ -18,73 +17,62 @@ namespace dmxdenoiser
         for (const auto& [key, aovs] : inputFilesMap)
             for (const auto& [name, layer] : aovs )
             {
-                if (!hasLayer(name))
-                    m_layers.push_back(LayerInfo{name});
+                m_layers[name] = LayerInfo{name};
             }
-        sort();
+        setLayerOffsets();
     }
 
     void LayerDictionary::addLayer(const std::string& name)
     {
-        auto it = std::find_if(m_layers.begin(), m_layers.end(), [&](const auto& a){ return a.name == name; });
-        if (it == m_layers.end())
-            m_layers.push_back(LayerInfo{name});
-        else
-            *it = LayerInfo{name};
-        sort();
+        m_layers[name] = LayerInfo{name};
+        setLayerOffsets();
     }
 
     void LayerDictionary::removeLayer(const std::string& name)
     {
-        auto it = std::find_if(m_layers.begin(), m_layers.end(), [&](const auto& a){ return a.name == name; });
+        auto it = m_layers.find(name);
         if (it != m_layers.end())
             m_layers.erase(it);
-        sort();
+        setLayerOffsets();
     }
 
-    std::optional<LayerInfo> LayerDictionary::getLayer(const std::string& name) const
-    { 
-        auto it = std::find_if(m_layers.begin(), m_layers.end(), [&](const auto& a){ return a.name == name; });
-        if (it != m_layers.end())
-            return *it;
-        return std::nullopt;
+    LayerInfo* LayerDictionary::getLayer(const std::string& name)
+    {
+        auto it = m_layers.find(name);
+        return (it != m_layers.end()) ? &it->second : nullptr;
     }
 
-    std::optional<int> LayerDictionary::getLayerOffset(const std::string& name) const {
-        auto it = std::find_if(m_layers.begin(), m_layers.end(), [&](const auto& a){ return a.name == name; });
-        if (it != m_layers.end())
-            return it->offset;
-        return std::nullopt;
+    const LayerInfo* LayerDictionary::getLayer(const std::string& name) const
+    {
+        auto it = m_layers.find(name);
+        return (it != m_layers.end()) ? &it->second : nullptr;
     }
     
     bool LayerDictionary::hasLayer(const std::string& name) const
     {
-        auto it = std::find_if(m_layers.begin(), m_layers.end(), [&](const auto& a){ return a.name == name; });
-        if (it != m_layers.end())
-            return true;
-        return false;
+        auto it = m_layers.find(name);
+        return (it != m_layers.end()) ? true : false;
     }
 
-    void LayerDictionary::sort()
+    void LayerDictionary::setLayerOffsets()
     {
-        std::sort(m_layers.begin(), m_layers.end(), 
-            [&](const auto& a, const auto& b){
-                auto ia = std::find(DEFAULT_AOVS.begin(), DEFAULT_AOVS.end(), a.name);
-                auto ib = std::find(DEFAULT_AOVS.begin(), DEFAULT_AOVS.end(), b.name);
-                bool aInList = ia != DEFAULT_AOVS.end();
-                bool bInList = ib != DEFAULT_AOVS.end();
-                if (aInList && bInList)
-                    return ia < ib;
-                if (aInList)
-                    return true;
-                if (bInList)
-                    return false;
-                    
-                return false;
-        });
-        // Set sequential offsets based on current sorted order
-        for (int i = 0; i < m_layers.size(); ++i)
-            m_layers[i].offset = i;
+        int offset = 0;
+
+        for (auto& [name, layerInfo] : m_layers)
+            layerInfo.offset = -1;
+
+        for (const auto& name : DEFAULT_AOVS)
+        {
+            auto it = m_layers.find(name);
+            if (it != m_layers.end())
+                it->second.offset = offset++;
+        }
+
+        for(auto& [name, layerInfo] : m_layers)
+        {
+            if (layerInfo.offset == -1)
+                layerInfo.offset = offset++;
+        }
     }
 
 } // namespace dmxdenoiser
