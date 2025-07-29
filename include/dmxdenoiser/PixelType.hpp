@@ -72,6 +72,24 @@ namespace dmxdenoiser
         }
     }
 
+    inline std::string ToString(PixelType type)
+    {   
+        switch (type)
+        {
+        case PixelType::UInt8:  return "UInt8";
+        case PixelType::UInt10: return "UInt10";
+        case PixelType::UInt12: return "UInt12";
+        case PixelType::UInt14: return "UInt14";
+        case PixelType::UInt16: return "UInt16";
+        case PixelType::UInt32: return "UInt32";
+        case PixelType::Half:   return "Half";
+        case PixelType::Float:  return "Float";
+        case PixelType::Double: return "Double";
+        case PixelType::Unknown:
+        default:                return "Unknown";
+        }
+    }
+
 } // namespace dmxdenoiser
 
 #endif // DMXDENOISER_IMAGE_PIXEL_TYPE_H

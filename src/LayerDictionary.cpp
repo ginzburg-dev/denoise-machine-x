@@ -24,8 +24,10 @@ namespace dmxdenoiser
 
     void LayerDictionary::addLayer(const std::string& name)
     {
-        m_layers[name] = LayerInfo{name};
-        setLayerOffsets();
+        auto it = m_layers.find(name);
+        if (it == m_layers.end())
+            m_layers[name] = LayerInfo{name};
+            setLayerOffsets();
     }
 
     void LayerDictionary::removeLayer(const std::string& name)
@@ -52,6 +54,11 @@ namespace dmxdenoiser
     {
         auto it = m_layers.find(name);
         return (it != m_layers.end()) ? true : false;
+    }
+
+    void LayerDictionary::clear()
+    {
+        m_layers.clear();
     }
 
     void LayerDictionary::setLayerOffsets()

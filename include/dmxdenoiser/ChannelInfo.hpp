@@ -10,13 +10,23 @@
 
 namespace dmxdenoiser
 {
+    const std::string DEFAULT_CHANNEL_ORDER = "rgbaz";
 
     struct ChannelInfo
     {
         std::string name{};
         PixelType pixelType{};
         ParamDictionary metadata{};
+
+        ChannelInfo() = default;
         ChannelInfo(std::string_view name_) : name{name_} {}
+        ChannelInfo(std::string_view name_, PixelType pixelType_, ParamDictionary metadata_) 
+            : name{name_}, 
+            pixelType{pixelType_},
+            metadata{metadata_}
+        {}
     };
+
+
 
 } // namespace dmxdenoiser

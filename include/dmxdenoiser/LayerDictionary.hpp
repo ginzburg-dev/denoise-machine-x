@@ -32,6 +32,7 @@ namespace dmxdenoiser
         std::size_t size() const { return m_layers.size(); }
 
         bool hasLayer(const std::string& name) const;
+        void clear();
 
     private:
         std::unordered_map<std::string, LayerInfo> m_layers;

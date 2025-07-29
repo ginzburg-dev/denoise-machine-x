@@ -7,6 +7,14 @@
 namespace dmxdenoiser{
     namespace utils{
 
+        inline std::string toLower(const std::string& s)
+        {
+            std::string result = s;
+            std::transform(result.begin(), result.end(), result.begin(),
+                [](unsigned char c){ return std::tolower(c); });
+            return result;
+        }
+
         inline std::string trimTrailingZeros(const std::string& str)
         {
             auto dec = str.find(".");

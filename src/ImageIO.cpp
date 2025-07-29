@@ -1,6 +1,8 @@
+#include <dmxdenoiser/ChannelInfo.hpp>
 #include <dmxdenoiser/ImageIO.hpp>
 #include <dmxdenoiser/DMXImage.hpp>
 #include <dmxdenoiser/PixelType.hpp>
+#include <dmxdenoiser/StringConversions.hpp>
 
 #include <algorithm>
 #include <cstddef>
@@ -29,34 +31,22 @@ namespace dmxdenoiser
         return ext;
     }
 
-    std::string toLower(const std::string& s)
+    ImageFileType getImageFileType(const std::string& filename)
     {
-        std::string result = s;
-        std::transform(result.begin(), result.end(), result.begin(),
-            [](unsigned char c){ return std::tolower(c); });
-        return result;
-    }
+        auto ext = getFileExtension(filename);
 
-    int ExrImageInfo::channelCount() const 
-    { 
-        int count = 0; 
-        for (const auto& l : layers)
-            count += l.channels.size();
-        return count;
-    };
+        if (ext == "exr")   return ImageFileType::EXR;
+        if (ext == "jpg")   return ImageFileType::JPG;
+        if (ext == "jpeg")  return ImageFileType::JPEG;
+        if (ext == "png")   return ImageFileType::PNG;
 
-    int ExrIOParams::channelCount() const
-    {
-        int count = 0; 
-        for (const auto& l: layers) 
-            count += l.channels.size();
-        return count;
+        return ImageFileType::Unknown;
     }
     
     bool ExrImageIO::read(
-            std::string_view filename,
-            float* img,
-            const ImageIOParams* params)
+            const std::string& filename,
+            DMXImage& img,
+            const AovDictionary& layers)
     {
         /*
         auto exrParams = dynamic_cast<const ExrIOParams*>(params);
@@ -233,32 +223,29 @@ namespace dmxdenoiser
     }
     
     bool ExrImageIO::write(
-            std::string_view filename,
-            const float* img,
-            const ImageIOParams* params) const
+            const std::string& filename,
+            DMXImage& img,
+            const AovDictionary& layers) const
     {
         return true; // pass
     }
     
-    std::unique_ptr<ImageInfo> ExrImageIO::getImageInfo(std::string_view filename) const
+    ImageInfo ExrImageIO::getImageInfo(const std::string& filename) const
     {
-        /*
-        auto info = std::make_unique<ExrImageInfo>();
+        
+        ImageInfo info{};
+        info.type = ImageFileType::EXR;
+
         Imf::InputFile file(filename.data());
         Imath::Box2i dw = file.header().dataWindow();
 
-        info->width = dw.max.x - dw.min.x + 1;
-        info->height = dw.max.y - dw.min.y + 1;
+        info.width = dw.max.x - dw.min.x + 1;
+        info.height = dw.max.y - dw.min.y + 1;
 
-        info->compression = file.header().compression();
+        info.params.addInt("compression", static_cast<int>(file.header().compression()));
 
         const Imf::ChannelList &channels = file.header().channels();
 
-        //std::set<std::string> layerSet;
-        std::string defaultChannelSet{ "rgba" };
-        info->layers.clear();
-
-        std::map<std::string, std::vector<DMXChannel>> layersMap{};
         for (Imf::ChannelList::ConstIterator i = channels.begin(); i != channels.end(); ++i) 
         {
             std::string name = i.name();
@@ -271,51 +258,14 @@ namespace dmxdenoiser
                 channel = name.substr(pos + 1);
             } else
             {
+                layer = "default";
                 channel = name;
-                auto it = defaultChannelSet.find(channel.empty() ? '\0' : std::tolower(channel[0]));
-                if (it != std::string::npos)
-                    layer = "default";
-                else
-                    layer = "others";
             }
-
-            layersMap[layer].emplace_back(channel, i.channel().type);
-        }
-
-        // Sort channels
-        std::string order{ "rgbaz" };
-        for (auto& [layer, channel] : layersMap)
-        {
-            std::sort(channel.begin(), channel.end(), 
-                [&](const auto& a, const auto& b){
-                    auto ia = order.find(a.name.empty() ? '\0' : std::tolower(a.name[0]));
-                    auto ib = order.find(b.name.empty() ? '\0' : std::tolower(b.name[0]));
-
-                    if (ia == std::string::npos)
-                        ia = order.size();
-                    if (ib == std::string::npos)
-                        ib = order.size();
-                    return ia < ib;
-            });
-
-        }
-
-        for(const auto& [layer, channels] : layersMap)
-        {
-            info->layers.emplace_back(layer);
-            for(const auto& ch : channels)
-            {
-                if (ch.pixelType.has_value())
-                    info->layers.back().channels.emplace_back(ch.name, ch.pixelType.value());
-                else
-                    throw std::runtime_error("Layer '" + info->layers.back().name + "', channel '" + ch.name + "' does not have PixelType attribute.");
-
-            }
+            info.layers.addLayer(layer);
+            info.layers.getLayer(layer)->addChannel(channel, toPixelType(i.channel().type));
         }
         
-        return info; // pass
-        */
-        return std::make_unique<ImageInfo>(); // temporary
+        return info;
     }
     
     ExrImageIO::~ExrImageIO(){}
