@@ -72,7 +72,7 @@ namespace dmxdenoiser
         }
     }
 
-    inline std::string ToString(PixelType type)
+    constexpr std::string_view ToString(PixelType type)
     {   
         switch (type)
         {

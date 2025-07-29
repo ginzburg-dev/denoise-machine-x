@@ -6,6 +6,7 @@
 #include <dmxdenoiser/LayerInfo.hpp>
 
 #include <cstddef>
+#include <initializer_list>
 #include <optional>
 #include <string>
 #include <string_view>
@@ -19,6 +20,9 @@ namespace dmxdenoiser
     public:
         LayerDictionary() = default;
         LayerDictionary(const std::vector<std::string>& layerList);
+        LayerDictionary(std::vector<std::string_view> layerList);
+        LayerDictionary(std::initializer_list<std::string_view> layerList)
+            : LayerDictionary(std::vector<std::string_view>{layerList}) {}
         explicit LayerDictionary(const InputFilesMap& inputFilesMap);
         ~LayerDictionary() = default;
 

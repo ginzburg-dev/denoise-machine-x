@@ -38,6 +38,7 @@ TEST(LayerDictionary, CreateLayerDictionaryWithVector)
         EXPECT_EQ(aovsRef[i], dict.getLayer(aovsRef[i])->name);
         std::cout << dict.getLayer(aovsRef[i])->name << ' ' << dict.getLayer(aovsRef[i])->offset << '\n';
     }
+    EXPECT_EQ(dict.size(), 7);
     checkOffsets(dict);
 }
 

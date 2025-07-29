@@ -8,7 +8,14 @@ namespace dmxdenoiser
     LayerDictionary::LayerDictionary(const std::vector<std::string>& layerList)
     {
         for(const auto& name : layerList)
-            m_layers[name] = LayerInfo{name};
+            m_layers[std::string(name)] = LayerInfo{name};
+        setLayerOffsets();
+    }
+
+    LayerDictionary::LayerDictionary(std::vector<std::string_view> layerList)
+    {
+        for(const auto& name : layerList)
+            m_layers[std::string(name)] = LayerInfo{name};
         setLayerOffsets();
     }
 
@@ -26,8 +33,10 @@ namespace dmxdenoiser
     {
         auto it = m_layers.find(name);
         if (it == m_layers.end())
+        {
             m_layers[name] = LayerInfo{name};
             setLayerOffsets();
+        }
     }
 
     void LayerDictionary::removeLayer(const std::string& name)
