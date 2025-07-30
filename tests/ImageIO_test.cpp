@@ -181,7 +181,7 @@ TEST(ImageIO, CopyChannelBufferToDMXImage)
 
     count = 0;
     for(int i = 0; i < img.data().size(); ++i)
-        dataRef[i] = img.data()[i];
+        EXPECT_EQ(dataRef[i], img.data()[i]);
 }
 
 TEST(ImageIO, ReadTestImageEXRFile)
