@@ -166,16 +166,28 @@ TEST(ImageIO, CopyChannelBufferToDMXImage)
 
     int count = 0;
     for(auto& buffer : buffersBeauty)
+    {
+        std::cout << "ChannelBuffer: name=" << buffer.getName()
+        << ", type=" << int(buffer.getPixelType())
+        << ", halfs=" << buffer.data().halfs.size()
+        << ", uint32s=" << buffer.data().uint32s.size() << std::endl;
+
         for(auto& p : buffer.data().halfs)
         {
             p = half(count++);
         }
+    }
     for(auto& buffer : buffersAlbedo)
+    {
+        std::cout << "ChannelBuffer: name=" << buffer.getName()
+        << ", type=" << int(buffer.getPixelType())
+        << ", halfs=" << buffer.data().halfs.size()
+        << ", uint32s=" << buffer.data().uint32s.size() << std::endl;
         for(auto& p : buffer.data().uint32s)
         {
-            p = half(count++);
+            p = count++;
         }
-    
+    }
     copyChannelBuffersToDMXImage(buffersBeauty, "beauty", 0, img);
     copyChannelBuffersToDMXImage(buffersAlbedo, "albedo", 0, img);
 
