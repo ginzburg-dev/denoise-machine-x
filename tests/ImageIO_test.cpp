@@ -201,7 +201,7 @@ TEST(ImageIO, ReadTestImageEXRFile)
         23.1f, 0.0f, 0.0f, 0.0f
     };
 
-    const char* pixelTypeRef[] = {
+    std::string pixelTypeRef[] = {
         "Half", "Half", "Half", "Half", "Float", "Half", "Half", "Half", "Half"
     };
 
