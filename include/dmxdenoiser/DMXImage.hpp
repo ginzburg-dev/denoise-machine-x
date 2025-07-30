@@ -81,7 +81,8 @@ namespace dmxdenoiser
             m_pixels.resize(size);
         };
 
-        LayerDictionary getLayers() const { return m_layers; }
+        LayerDictionary& getLayers() { return m_layers; }
+        const LayerDictionary& getLayers() const { return m_layers; }
         std::vector<float>& data() { return m_pixels; }
         const std::vector<float>& data() const { return m_pixels; }
 

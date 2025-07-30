@@ -138,6 +138,8 @@ TEST(ImageIO, ReadTestImageInfo)
             EXPECT_EQ(channels[i], layerInfo.channels[i].name );
         }
     }
+
+    std::cout << imageInfo << '\n';
 }
 
 TEST(ImageIO, CopyChannelBufferToDMXImage)
@@ -199,6 +201,10 @@ TEST(ImageIO, ReadTestImageEXRFile)
         23.1f, 0.0f, 0.0f, 0.0f
     };
 
+    const char* pixelTypeRef[] = {
+        "Half", "Half", "Half", "Half", "Float", "Half", "Half", "Half", "Half"
+    };
+
     std::map<std::string, std::vector<std::string>> layerMapRef = {
         {"default", {"R", "G", "B", "A"}},
         {"Layer", {"R", "G", "B", "A"}},
@@ -215,16 +221,25 @@ TEST(ImageIO, ReadTestImageEXRFile)
 
     std::unique_ptr<ImageIO> IO = std::make_unique<ExrImageIO>();
     ImageInfo info = IO->getImageInfo(filename);
+    
     DMXImage img{info.width, info.height, 1, LayerDictionary{aovs}};
-    bool success = IO->read(filename, img, 0, aovs);
-
+    
+    IO->read(filename, img, 0, aovs);
+    
     for(int i = 0; i < img.data().size(); ++i)
     {
         std::cout << img.data()[i] << ' ';
         EXPECT_NEAR(rgbaPixelsRef[i], img.data()[i], 1e-2);
     }
 
+    int count = 0;
     for (const auto& [name, layerInfo] : img.getLayers().data())
         for (const auto& channel : layerInfo.channels)
-            std::cout << ToString(channel.pixelType) << ' ';
+        {
+            std::cout << channel.ToString() << '\n';
+            EXPECT_EQ(pixelTypeRef[count], ToString(channel.pixelType));
+            count++;
+        }
+            
+
 }

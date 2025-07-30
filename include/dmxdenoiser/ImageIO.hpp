@@ -33,6 +33,24 @@ namespace dmxdenoiser
         PNG,
     };
 
+    inline constexpr std::string_view ToString(ImageFileType type)
+    {
+        switch (type)
+        {
+        case ImageFileType::EXR:  return "Exr";
+        case ImageFileType::JPEG : return "Jpeg";
+        case ImageFileType::JPG : return "Jpg";
+        case ImageFileType::PNG : return "Png";
+        default:                return "Unknown";
+        }
+    }
+
+    inline std::ostream& operator<<(std::ostream& out, ImageFileType type)
+    {
+        out << ToString(type);
+        return out;
+    }
+
     ImageFileType getImageFileType(const std::string& filename);
 
     void copyChannelBuffersToDMXImage(
@@ -48,7 +66,15 @@ namespace dmxdenoiser
         ImageFileType type{};
         LayerDictionary layers{};
         ParamDictionary params{};
+
+        std::string ToString() const;
     };
+
+    inline std::ostream& operator<<(std::ostream& out, ImageInfo info)
+    {
+        out << info.ToString();
+        return out;
+    }
 
     /*Abstract*/
     class ImageIO
@@ -56,14 +82,14 @@ namespace dmxdenoiser
     public:
         ImageIO() = default;
 
-        virtual bool read(
+        virtual void read(
             const std::string& filename,
             DMXImage& img,
             int frame,
             const AovDictionary& layers,
             int numChannels = DEFAULT_NUM_CHANNELS) = 0;
 
-        virtual bool write(
+        virtual void write(
             const std::string& filename,
             DMXImage& img,
             const AovDictionary& layers) const = 0;
@@ -78,14 +104,14 @@ namespace dmxdenoiser
     public:
         ExrImageIO() = default;
 
-        bool read(
+        void read(
             const std::string& filename,
             DMXImage& img,
             int frame,
             const AovDictionary& layers,
             int numChannels = DEFAULT_NUM_CHANNELS) override;
 
-        bool write(
+        void write(
             const std::string& filename,
             DMXImage& img,
             const AovDictionary& layers) const override;

@@ -33,7 +33,7 @@ namespace dmxdenoiser
     template<> inline constexpr PixelType PixelTypeOf<double> = PixelType::Double;
 
     /// @brief Convert dmxdenoiser::PixelType to OpenEXR Imf::PixelType (runtime).
-    /*inline*/ constexpr Imf::PixelType toEXRPixelType(PixelType t) 
+    inline constexpr Imf::PixelType toEXRPixelType(PixelType t) 
     {
         switch (t)
         {
@@ -72,7 +72,7 @@ namespace dmxdenoiser
         }
     }
 
-    constexpr std::string_view ToString(PixelType type)
+    inline constexpr std::string_view ToString(PixelType type)
     {   
         switch (type)
         {
@@ -88,6 +88,12 @@ namespace dmxdenoiser
         case PixelType::Unknown:
         default:                return "Unknown";
         }
+    }
+
+    inline std::ostream& operator<<(std::ostream& out, PixelType pixelType)
+    {
+        out << ToString(pixelType);
+        return out;
     }
 
 } // namespace dmxdenoiser
