@@ -35,8 +35,7 @@ TEST(LayerDictionary, CreateLayerDictionaryWithVector)
     for (int i = 0; i < aovsRef.size(); ++i)
     {
         ASSERT_TRUE(dict.getLayer(aovsRef[i]));
-        EXPECT_EQ("", dict.getLayer(aovsRef[i])->name);
-        //std::cout << dict.getLayer(aovsRef[i])->name << ' ' << dict.getLayer(aovsRef[i])->offset << '\n';
+        EXPECT_EQ("", dict.getLayer(aovsRef[i])->originalName);
     }
     EXPECT_EQ(dict.size(), 7);
     checkOffsets(dict);
@@ -54,8 +53,7 @@ TEST(LayerDictionary, CreateLayerDictionaryWithAovDictionary)
     for (int i = 0; i < aovsRef.size(); ++i)
     {
         ASSERT_TRUE(dict.getLayer(aovsRef[i]));
-        EXPECT_EQ(aovsNamesRef[i], dict.getLayer(aovsRef[i])->name);
-        //std::cout << dict.getLayer(aovsRef[i])->name << ' ' << dict.getLayer(aovsRef[i])->offset << '\n';
+        EXPECT_EQ(aovsNamesRef[i], dict.getLayer(aovsRef[i])->originalName);
     }
     checkOffsets(dict);
 }
@@ -72,8 +70,7 @@ TEST(LayerDictionary, CreateLayerDictionaryWithInputFilesMap)
     for (int i = 0; i < aovsRef.size(); ++i)
     {
         ASSERT_TRUE(dict.getLayer(aovsRef[i]));
-        EXPECT_EQ(aovsNamesRef[i], dict.getLayer(aovsRef[i])->name);
-        //std::cout << dict.getLayer(aovsRef[i])->name << ' ' << dict.getLayer(aovsRef[i])->offset << '\n';
+        EXPECT_EQ(aovsNamesRef[i], dict.getLayer(aovsRef[i])->originalName);
     }
     checkOffsets(dict);
 }
@@ -85,8 +82,7 @@ TEST(LayerDictionary, AddDublicatedLayerToDictionary)
     for (int i = 0; i < aovsRef.size(); ++i)
     {
         ASSERT_TRUE(dict.getLayer(aovsRef[i]));
-        EXPECT_EQ("", dict.getLayer(aovsRef[i])->name);
-        //std::cout << dict.getLayer(aovsRef[i])->name << ' ' << dict.getLayer(aovsRef[i])->offset << '\n';
+        EXPECT_EQ("", dict.getLayer(aovsRef[i])->originalName);
     }
     checkOffsets(dict);
 }
@@ -99,8 +95,7 @@ TEST(LayerDictionary, AddLayerToDictionary)
     for (int i = 0; i < aovsRef.size(); ++i)
     {
         ASSERT_TRUE(dict.getLayer(aovsRef[i]));
-        EXPECT_EQ("", dict.getLayer(aovsRef[i])->name);
-        //std::cout << dict.getLayer(aovsRef[i])->name << ' ' << dict.getLayer(aovsRef[i])->offset << '\n';
+        EXPECT_EQ("", dict.getLayer(aovsRef[i])->originalName);
     }
     checkOffsets(dict);
 }
@@ -113,8 +108,7 @@ TEST(LayerDictionary, AddLayerOverrides)
     for (int i = 0; i < aovsRef.size(); ++i)
     {
         ASSERT_TRUE(dict.getLayer(aovsRef[i]));
-        EXPECT_EQ("", dict.getLayer(aovsRef[i])->name);
-        //std::cout << dict.getLayer(aovsRef[i])->name << ' ' << dict.getLayer(aovsRef[i])->offset << '\n';
+        EXPECT_EQ("", dict.getLayer(aovsRef[i])->originalName);
     }
     checkOffsets(dict);
 }
@@ -128,8 +122,7 @@ TEST(LayerDictionary, RemoveLayerFromDictionary)
     for (int i = 0; i < aovsRef.size(); ++i)
     {
         ASSERT_TRUE(dict.getLayer(aovsRef[i]));
-        EXPECT_EQ("", dict.getLayer(aovsRef[i])->name);
-        //std::cout << dict.getLayer(aovsRef[i])->name << ' ' << dict.getLayer(aovsRef[i])->offset << '\n';
+        EXPECT_EQ("", dict.getLayer(aovsRef[i])->originalName);
     }
     checkOffsets(dict);
 }
@@ -157,6 +150,6 @@ TEST(LayerDictionary, GetLayerFromDictionary)
 {
     LayerDictionary dict{AovDictionary{{"normal", "norm"}, {"beauty", "default"}}};
     ASSERT_TRUE(dict.getLayer("beauty"));
-    EXPECT_EQ(dict.getLayer("beauty")->name, "default");
+    EXPECT_EQ(dict.getLayer("beauty")->originalName, "default");
     checkOffsets(dict);
 }

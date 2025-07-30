@@ -116,4 +116,15 @@ namespace dmxdenoiser
         return oss.str();
     }
 
+    void DMXImage::clear() { 
+        std::fill(m_pixels.begin(), m_pixels.end(), 0.0f);
+        m_pixels.clear();
+        m_layers.clear();
+        m_width = 0;
+        m_height = 0;
+        m_numFrames = 0;
+        m_numChannels = 0;
+        m_initialized = false;
+    }
+
 } // namespace dmxdenoiser

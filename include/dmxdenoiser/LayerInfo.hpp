@@ -15,16 +15,16 @@ namespace dmxdenoiser
 
     struct LayerInfo
     {
-        std::string name{}; ///< Layer name (e.g. "Diffuse", "Specular").
+        std::string originalName{}; ///< Layer name (e.g. "Diffuse", "Specular").
         std::vector<ChannelInfo> channels{}; ///< List of channels in this layer (e.g. R, G, B).
         ParamDictionary metadata{}; ///< Metadata for the layer.
         int offset = -1; ///< Start of channel in the DMXImage flat buffer.
 
         LayerInfo() = default;
         LayerInfo(std::string_view name_)
-            : name{name_} {}
+            : originalName{name_} {}
         LayerInfo(std::string_view name_, int offset_)
-            : name{name_}, offset{offset_} {}
+            : originalName{name_}, offset{offset_} {}
 
         void addChannel(std::string_view name, PixelType pixelType = PixelType::Unknown)
         {

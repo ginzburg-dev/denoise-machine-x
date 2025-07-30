@@ -19,7 +19,7 @@ TEST(LayerInfo, CreateLayerInfoAndOrderingChannels)
     info.addChannel("Z");
     info.addChannel("Depth");
 
-    EXPECT_EQ(info.name, "beauty");
+    EXPECT_EQ(info.originalName, "beauty");
     for(int i = 0; i < channelsRef.size(); ++i)
         EXPECT_EQ(info.channels[i].name, channelsRef[i]);
 }
@@ -49,7 +49,7 @@ TEST(LayerInfo, CustomChannelSort)
 
     info.sortChannels(CUSTOM_CHANNEL_ORDER);
 
-    EXPECT_EQ(info.name, "beauty");
+    EXPECT_EQ(info.originalName, "beauty");
     for(int i = 0; i < channelsRef.size(); ++i)
         EXPECT_EQ(info.channels[i].name, channelsRef[i]);
 }

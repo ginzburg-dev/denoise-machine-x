@@ -15,9 +15,7 @@
 #include <variant>
 #include <vector>
 
-#include <Imath/half.h>
 #include <OpenEXR/ImfPixelType.h>
-#include <OpenEXR/ImfCompression.h>
 
 namespace dmxdenoiser
 {
@@ -51,6 +49,16 @@ namespace dmxdenoiser
         return out;
     }
 
+    struct ExrOutputChannel
+    {
+        std::string name{};
+        Imf::PixelType pixelType{};
+        char* ptr = nullptr;
+        ExrOutputChannel(const std::string& name_, Imf::PixelType pixelType_, char* ptr_)
+            : name{name_}, pixelType{pixelType_}, ptr{ptr_}
+        {}
+    };
+
     ImageFileType getImageFileType(const std::string& filename);
 
     void copyChannelBuffersToDMXImage(
@@ -58,6 +66,11 @@ namespace dmxdenoiser
         std::string_view layer, 
         int frame, 
         DMXImage& img);
+
+    std::vector<ChannelBuffer> copyDMXImageToChannelBuffers(
+        const DMXImage& img,
+        const std::vector<std::string>& layers
+        );
 
     struct ImageInfo
     {
@@ -91,8 +104,8 @@ namespace dmxdenoiser
 
         virtual void write(
             const std::string& filename,
-            DMXImage& img,
-            const AovDictionary& layers) const = 0;
+            const DMXImage& img,
+            const std::vector<std::string>& layers) const = 0;
 
         virtual ImageInfo getImageInfo(const std::string& filename) const = 0;
         
@@ -113,8 +126,8 @@ namespace dmxdenoiser
 
         void write(
             const std::string& filename,
-            DMXImage& img,
-            const AovDictionary& layers) const override;
+            const DMXImage& img,
+            const std::vector<std::string>& layers) const override;
 
         ImageInfo getImageInfo(const std::string& filename) const override;
 

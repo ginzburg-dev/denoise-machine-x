@@ -68,7 +68,7 @@ namespace dmxdenoiser
         
         std::string ToString() const;
 
-        void clear() { std::fill(m_pixels.begin(), m_pixels.end(), 0.0f); }
+        void clear();
 
         ~DMXImage() = default;
 

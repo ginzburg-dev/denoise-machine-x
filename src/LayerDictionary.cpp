@@ -74,11 +74,6 @@ namespace dmxdenoiser
         return (it != m_layers.end()) ? true : false;
     }
 
-    void LayerDictionary::clear()
-    {
-        m_layers.clear();
-    }
-
     void LayerDictionary::setLayerOffsets()
     {
         int offset = 0;

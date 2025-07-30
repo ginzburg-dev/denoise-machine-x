@@ -12,9 +12,6 @@ namespace dmxdenoiser
     enum class PixelType {
         Unknown = 0,
         UInt8,      // 8-bit integer (PNG, JPG, TIFF)
-        UInt10,     // 10-bit integer (DPX, RAW)
-        UInt12,     // 12-bit integer (RAW, DPX)
-        UInt14,     // 14-bit integer (RAW)
         UInt16,     // 16-bit integer (PNG, TIFF)
         UInt32,     // 32-bit integer (EXR masks)
         Half,       // 16-bit float (OpenEXR)
@@ -22,6 +19,21 @@ namespace dmxdenoiser
         Double,      // 64-bit float (rare, TIFF)
         MAX_TYPE,
     };
+
+    /// @brief Return the size (in bytes) of the given pixel type.
+    constexpr std::size_t getPixelTypeSize(PixelType type)
+    {
+        switch(type)
+        {
+        case PixelType::UInt8:  return sizeof(uint8_t);
+        case PixelType::UInt16: return sizeof(uint16_t);
+        case PixelType::UInt32: return sizeof(uint32_t);
+        case PixelType::Half:   return sizeof(half);
+        case PixelType::Float:  return sizeof(float);
+        case PixelType::Double: return sizeof(double);
+        default:                return 0;
+        }
+    }
 
     /// @brief Compile-time C++ type to PixelType mapping (type trait).
     template<typename T> inline constexpr PixelType PixelTypeOf = PixelType::Unknown;
@@ -77,9 +89,6 @@ namespace dmxdenoiser
         switch (type)
         {
         case PixelType::UInt8:  return "UInt8";
-        case PixelType::UInt10: return "UInt10";
-        case PixelType::UInt12: return "UInt12";
-        case PixelType::UInt14: return "UInt14";
         case PixelType::UInt16: return "UInt16";
         case PixelType::UInt32: return "UInt32";
         case PixelType::Half:   return "Half";

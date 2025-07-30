@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <sstream>
 #include <unordered_map>
+#include <utility>
 
 #include <OpenEXR/ImfInputFile.h>
 #include <OpenEXR/ImfOutputFile.h>
@@ -107,6 +108,77 @@ namespace dmxdenoiser
                 }
             }
         }
+    }
+
+    std::vector<ChannelBuffer> copyDMXImageToChannelBuffers(
+        const DMXImage& img,
+        const std::vector<std::string>& layers
+        )
+    {
+        std::vector<ChannelBuffer> buff;
+        buff.resize(0);
+
+        int width = img.width();
+        int height = img.height();
+        int bufferSize = width * height;
+        auto& pixels = img.data();
+
+        for(int i = 0; i < layers.size(); ++i)
+        {
+            if(!img.hasLayer(layers[i]))
+                throw std::runtime_error("DMXImage does not contain \"" + layers[i] + "\" layer");
+
+            auto layerInfo = img.getLayers().getLayer(layers[i]);
+            std::size_t layerBaseIndex = img.getPixelIndex(0, 0, 0, layers[i]);
+            auto layerExrName = img.getLayers().getLayer(layers[i])->originalName;
+            auto layerChannels = img.getLayers().getLayer(layers[i])->channels;
+            int numChannels = layerChannels.size();
+            int numImageChannels = img.numChannels();
+
+            for (int c = 0; c < numChannels; ++c)
+            {
+                std::string channelName = 
+                    (layerExrName == "default") ? layerChannels[c].name : layerExrName + "." + layerChannels[c].name;
+                PixelType pixelType = layerChannels[c].pixelType;
+                buff.emplace_back(channelName, pixelType, bufferSize);
+                char* bufRawPtr = buff.back().getRawPtr();
+
+                for(int b = 0; b < bufferSize; ++b)
+                {
+                    std::size_t index = layerBaseIndex + b * numImageChannels + c;
+
+                    switch(pixelType)
+                    {
+                        case PixelType::UInt8: {
+                            reinterpret_cast<uint8_t*>(bufRawPtr)[b] = static_cast<uint8_t>(pixels[index]);
+                            break;
+                        }
+                        case PixelType::UInt16: {
+                            reinterpret_cast<uint16_t*>(bufRawPtr)[b] = static_cast<uint16_t>(pixels[index]);
+                            break;
+                        }
+                        case PixelType::UInt32 : {
+                            reinterpret_cast<uint32_t*>(bufRawPtr)[b] = static_cast<uint32_t>(pixels[index]);
+                            break;
+                        }
+                        case PixelType::Half: {
+                            reinterpret_cast<half*>(bufRawPtr)[b] = static_cast<half>(pixels[index]);
+                            break;
+                        }
+                        case PixelType::Float: {
+                            reinterpret_cast<float*>(bufRawPtr)[b] = pixels[index];
+                            break;
+                        }
+                        case PixelType::Double: {
+                            reinterpret_cast<double*>(bufRawPtr)[b] = static_cast<double>(pixels[index]);
+                            break;
+                        }
+                        default: throw std::runtime_error("Unsupported pixel type");
+                    }
+                }
+            }  
+        }
+        return buff;
     }
 
     void ExrImageIO::read(
@@ -222,10 +294,45 @@ namespace dmxdenoiser
     
     void ExrImageIO::write(
             const std::string& filename,
-            DMXImage& img,
-            const AovDictionary& layers) const
+            const DMXImage& img,
+            const std::vector<std::string>& layers) const
     {
-        // pass
+        int width = img.width();
+        int height = img.height();
+
+        Imf::Header header (width, height);
+        Imath::Box2i dataWindow{Imath::V2i(0, 0), Imath::V2i(width - 1, height - 1)};
+        header.dataWindow() = dataWindow;
+
+        auto buff = copyDMXImageToChannelBuffers(img, layers);
+
+        for (const auto& channel : buff)
+        {
+            Imf::PixelType pixelType = toEXRPixelType(channel.getPixelType());
+            header.channels().insert(channel.getName(), Imf::Channel(pixelType));
+        }
+
+        Imf::OutputFile file(filename.c_str(), header);
+        Imf::FrameBuffer frameBuffer;
+
+        for (int i = 0; i < buff.size(); ++i)
+        {
+            std::string channelName = buff[i].getName();
+            Imf::PixelType pixelType = toEXRPixelType(buff[i].getPixelType());
+            std::size_t pixelTypeSize = getPixelTypeSize(buff[i].getPixelType());
+            char* buffBasePtr = buff[i].getRawPtr();
+
+            frameBuffer.insert (
+                channelName, // name
+                Imf::Slice (
+                    pixelType,                        
+                    buffBasePtr,
+                    pixelTypeSize * 1,
+                    pixelTypeSize * width));
+        }
+        
+        file.setFrameBuffer (frameBuffer);
+        file.writePixels (dataWindow.max.y - dataWindow.min.y + 1);
     }
     
     ImageInfo ExrImageIO::getImageInfo(const std::string& filename) const

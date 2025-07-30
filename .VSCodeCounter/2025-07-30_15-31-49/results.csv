@@ -1,0 +1,8 @@
+"filename", "language", "C++", "comment", "blank", "total"
+"/Users/dmitryginzburg/Development/denoise-machine-x/src/ChannelBuffer.cpp", "C++", 116, 0, 16, 132
+"/Users/dmitryginzburg/Development/denoise-machine-x/src/DMXImage.cpp", "C++", 106, 0, 14, 120
+"/Users/dmitryginzburg/Development/denoise-machine-x/src/ImageIO.cpp", "C++", 231, 1, 40, 272
+"/Users/dmitryginzburg/Development/denoise-machine-x/src/ImageIOFactory.cpp", "C++", 11, 26, 5, 42
+"/Users/dmitryginzburg/Development/denoise-machine-x/src/LayerDictionary.cpp", "C++", 86, 0, 18, 104
+"/Users/dmitryginzburg/Development/denoise-machine-x/src/filters/ExampleFilter.cpp", "C++", 36, 4, 13, 53
+"Total", "-", 586, 31, 106, 723

@@ -72,7 +72,7 @@ void WriteEXRTestImage(const std::string& fileName)
             ch, // name
             Imf::Slice (
                 Imf::HALF,                        // type
-                (char*) &rgbaPixels[i],             // base
+                (char*) &rgbaPixels[0]+i*sizeof (rgbaPixels[0]) , // base
                 sizeof (rgbaPixels[0]) * 4,       // xStride
                 sizeof (rgbaPixels[0]) * width * 4)); // yStride
     }
@@ -101,6 +101,20 @@ void WriteEXRTestImage(const std::string& fileName)
     file.setFrameBuffer (frameBuffer);
     file.writePixels (dataWindow.max.y - dataWindow.min.y + 1);
 
+}
+
+void compareTwoImages(const DMXImage& a, const DMXImage& b)
+{
+    std::size_t aSize = a.data().size();
+    std::size_t bSize = b.data().size();
+    ASSERT_EQ(aSize, bSize);
+
+    auto aPixels = a.data();
+    auto bPixels = b.data();
+    for(int i = 0; i < aSize; ++i)
+    {
+        EXPECT_NEAR(aPixels[i], bPixels[i], 1e-6);
+    }
 }
 
 TEST(ImageIO, WriteTestImage)
@@ -142,16 +156,15 @@ TEST(ImageIO, ReadTestImageInfo)
     std::cout << imageInfo << '\n';
 }
 
-TEST(ImageIO, CopyChannelBufferToDMXImage)
+TEST(ImageIO, CopyChannelBufferToDMXImageAndBack)
 {
     float dataRef[32] = {0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15, 16, 20, 24, 28, 17, 21, 25, 29, 18, 22, 26, 30, 19, 23, 27, 31};
-    
-    
+
     DMXImageOptions opt;
     opt.width = 2;
     opt.height = 2;
     opt.numFrames = 1;
-    opt.layers = LayerDictionary{"beauty", "albedo" };
+    opt.layers = LayerDictionary{AovDictionary{{"beauty", "default"}, {"albedo", "albedo1"}}};
     DMXImage img{opt};
 
     std::vector<ChannelBuffer> buffersBeauty{};
@@ -159,12 +172,20 @@ TEST(ImageIO, CopyChannelBufferToDMXImage)
     buffersBeauty.emplace_back("G", PixelType::Half, 4);
     buffersBeauty.emplace_back("B", PixelType::Half, 4);
     buffersBeauty.emplace_back("A", PixelType::Half, 4);
+    img.getLayers().getLayer("beauty")->channels.emplace_back("R", PixelType::Half);
+    img.getLayers().getLayer("beauty")->channels.emplace_back("G", PixelType::Half);
+    img.getLayers().getLayer("beauty")->channels.emplace_back("B", PixelType::Half);
+    img.getLayers().getLayer("beauty")->channels.emplace_back("A", PixelType::Half);
 
     std::vector<ChannelBuffer> buffersAlbedo{};
     buffersAlbedo.emplace_back("R", PixelType::UInt32, 4);
     buffersAlbedo.emplace_back("G", PixelType::UInt32, 4);
     buffersAlbedo.emplace_back("B", PixelType::UInt32, 4);
     buffersAlbedo.emplace_back("A", PixelType::UInt32, 4);
+    img.getLayers().getLayer("albedo")->channels.emplace_back("R", PixelType::UInt32);
+    img.getLayers().getLayer("albedo")->channels.emplace_back("G", PixelType::UInt32);
+    img.getLayers().getLayer("albedo")->channels.emplace_back("B", PixelType::UInt32);
+    img.getLayers().getLayer("albedo")->channels.emplace_back("A", PixelType::UInt32);
     
     int count = 0;
     for(auto& buffer : buffersBeauty)
@@ -198,9 +219,25 @@ TEST(ImageIO, CopyChannelBufferToDMXImage)
     for(int i = 0; i < img.data().size(); ++i)
         EXPECT_EQ(dataRef[i], img.data()[i]);
     
+    auto buff = copyDMXImageToChannelBuffers(img,{{"beauty"},{"albedo"}});
+
+    count = 0;
+    for(int i = 0; i < 4; ++i)
+        for(const auto& ch : buff[i].data().halfs)
+        {
+            EXPECT_EQ(count, ch);
+            ++count;
+        }
+
+    for(int i = 4; i < 8; ++i)
+        for(const auto& ch : buff[i].data().uint32s)
+        {
+            EXPECT_EQ(count, ch);
+            ++count;
+        }
 }
 
-TEST(ImageIO, ReadTestImageEXRFile)
+TEST(ImageIO, ReadWriteTestImageEXRFile)
 {
     float rgbaPixelsRef[48] = {
         1.1f, 1.2f, 1.3f, 1.0f, 
@@ -240,6 +277,7 @@ TEST(ImageIO, ReadTestImageEXRFile)
     
     DMXImage img{info.width, info.height, 1, LayerDictionary{aovs}};
     
+    // Read EXR 
     IO->read(filename, img, 0, aovs);
     
     for(int i = 0; i < img.data().size(); ++i)
@@ -254,6 +292,28 @@ TEST(ImageIO, ReadTestImageEXRFile)
             std::cout << channel.ToString() << '\n';
             EXPECT_NE(channel.pixelType, PixelType::Unknown);
         }
-            
+    
+    // Write EXR 
+    std::string outputFileName = "../tests/test_files/test_output_exr_image2x2.exr";
+    IO->write(outputFileName, img, {{"beauty"}, {"albedo"}, {"depth"}});
 
+    // Read the new EXR
+    info = IO->getImageInfo(outputFileName);
+    DMXImage img1{info.width, info.height, 1, LayerDictionary{aovs}};
+
+    IO->read(outputFileName, img1, 0, aovs);
+    
+    for(int i = 0; i < img1.data().size(); ++i)
+    {
+        std::cout << img1.data()[i] << ' ';
+        EXPECT_NEAR(rgbaPixelsRef[i], img1.data()[i], 1e-2);
+    }
+
+    for (const auto& [name, layerInfo] : img1.getLayers().data())
+        for (const auto& channel : layerInfo.channels)
+        {
+            std::cout << channel.ToString() << '\n';
+            EXPECT_NE(channel.pixelType, PixelType::Unknown);
+        }
+    compareTwoImages(img, img1);
 }
