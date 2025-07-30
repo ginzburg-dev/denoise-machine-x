@@ -20,10 +20,8 @@ namespace dmxdenoiser
 
         ChannelInfo() = default;
         ChannelInfo(std::string_view name_) : name{name_} {}
-        ChannelInfo(std::string_view name_, PixelType pixelType_, ParamDictionary metadata_) 
-            : name{name_}, 
-            pixelType{pixelType_},
-            metadata{metadata_}
+        ChannelInfo(std::string_view name_, PixelType pixelType_) 
+            : name{name_}, pixelType{pixelType_}
         {}
     };
 

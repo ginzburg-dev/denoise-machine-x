@@ -23,19 +23,20 @@ namespace dmxdenoiser
         LayerDictionary(std::vector<std::string_view> layerList);
         LayerDictionary(std::initializer_list<std::string_view> layerList)
             : LayerDictionary(std::vector<std::string_view>{layerList}) {}
+        explicit LayerDictionary(const AovDictionary& aovDictionary);
         explicit LayerDictionary(const InputFilesMap& inputFilesMap);
         ~LayerDictionary() = default;
 
-        void addLayer(const std::string& name);
-        void removeLayer(const std::string& name);
+        void addLayer(std::string_view name, std::string_view fileLayerName = "");
+        void removeLayer(std::string_view name);
 
         std::unordered_map<std::string, LayerInfo>& data() { return m_layers; }
         const std::unordered_map<std::string, LayerInfo>& data() const { return m_layers; }
-        LayerInfo* getLayer(const std::string& name);
-        const LayerInfo* getLayer(const std::string& name) const;
+        LayerInfo* getLayer(std::string_view name);
+        const LayerInfo* getLayer(std::string_view name) const;
         std::size_t size() const { return m_layers.size(); }
 
-        bool hasLayer(const std::string& name) const;
+        bool hasLayer(std::string_view name) const;
         void clear();
 
     private:

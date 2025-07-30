@@ -35,6 +35,12 @@ namespace dmxdenoiser
 
     ImageFileType getImageFileType(const std::string& filename);
 
+    void copyChannelBuffersToDMXImage(
+        const std::vector<ChannelBuffer>& buff,
+        std::string_view layer, 
+        int frame, 
+        DMXImage& img);
+
     struct ImageInfo
     {
         int width{};
@@ -53,7 +59,9 @@ namespace dmxdenoiser
         virtual bool read(
             const std::string& filename,
             DMXImage& img,
-            const AovDictionary& layers) = 0;
+            int frame,
+            const AovDictionary& layers,
+            int numChannels = DEFAULT_NUM_CHANNELS) = 0;
 
         virtual bool write(
             const std::string& filename,
@@ -73,7 +81,9 @@ namespace dmxdenoiser
         bool read(
             const std::string& filename,
             DMXImage& img,
-            const AovDictionary& layers) override;
+            int frame,
+            const AovDictionary& layers,
+            int numChannels = DEFAULT_NUM_CHANNELS) override;
 
         bool write(
             const std::string& filename,

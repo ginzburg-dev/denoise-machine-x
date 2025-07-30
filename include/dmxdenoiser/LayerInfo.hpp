@@ -26,9 +26,9 @@ namespace dmxdenoiser
         LayerInfo(std::string_view name_, int offset_)
             : name{name_}, offset{offset_} {}
 
-        void addChannel(std::string_view name, PixelType pixelType = PixelType::Unknown, ParamDictionary metadata = {})
+        void addChannel(std::string_view name, PixelType pixelType = PixelType::Unknown)
         {
-            ChannelInfo channel{name, pixelType, metadata};
+            ChannelInfo channel{name, pixelType};
             auto it = std::find_if(channels.begin(), channels.end(), [&](const auto& s){ return s.name == name; });
             if (it != channels.end())
                 *it = channel;

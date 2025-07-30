@@ -49,7 +49,7 @@ namespace dmxdenoiser
             a = pv.a;
             return *this;
         }
-        
+
         friend constexpr bool operator==(const PixelRGBAView& pv1, const PixelRGBAView& pv2) 
         { 
             return  floatsEqual(pv1.r, pv2.r) &&

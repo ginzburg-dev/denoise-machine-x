@@ -31,3 +31,25 @@ TEST(ChannelBuffer, ReadAndWriteHalfBuffer)
     for (int i = 0; i < 10; ++i)
         EXPECT_NEAR(*(reinterpret_cast<half*>(ptr)+i), half(2.5),1e-6);
 }
+
+TEST(ChannelBuffer, LayerChannelBufferMapSet)
+{
+    LayerChannelBufferMap bufMap;
+    bufMap.set("beauty", ChannelBuffer{"R",PixelType::Half, 100});
+    bufMap.set("beauty", ChannelBuffer{"G",PixelType::Half, 100});
+    bufMap.set("beauty", ChannelBuffer{"B",PixelType::Half, 100});
+    bufMap.set("beauty", "A", PixelType::Half, 100);
+
+    ASSERT_TRUE(bufMap.hasLayer("beauty"));
+    ASSERT_TRUE(bufMap.hasBuffer("beauty", "R"));
+
+    ASSERT_TRUE(bufMap.getLayerBuffers("beauty"));
+    EXPECT_EQ(bufMap.getLayerBuffers("beauty")->size(), 4);
+
+    ASSERT_TRUE(bufMap.getBuffer("beauty", "R"));
+    ASSERT_TRUE(bufMap.getBuffer("beauty", "G"));
+    ASSERT_TRUE(bufMap.getBuffer("beauty", "B"));
+    ASSERT_TRUE(bufMap.getBuffer("beauty", "A"));
+    
+    EXPECT_EQ(bufMap.getBuffer("beauty", "R")->data().halfs.size(), 100);
+}
