@@ -146,14 +146,14 @@ TEST(ImageIO, CopyChannelBufferToDMXImage)
 {
     float dataRef[32] = {0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15, 16, 20, 24, 28, 17, 21, 25, 29, 18, 22, 26, 30, 19, 23, 27, 31};
     
-    /*
+    
     DMXImageOptions opt;
     opt.width = 2;
     opt.height = 2;
     opt.numFrames = 1;
     opt.layers = LayerDictionary{ {"beauty", "albedo" } };
     DMXImage img{opt};
-
+    /*
     std::vector<ChannelBuffer> buffersBeauty{};
     buffersBeauty.emplace_back("R", PixelType::Half, 4);
     buffersBeauty.emplace_back("G", PixelType::Half, 4);
