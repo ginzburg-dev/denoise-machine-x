@@ -151,9 +151,9 @@ TEST(ImageIO, CopyChannelBufferToDMXImage)
     opt.width = 2;
     opt.height = 2;
     opt.numFrames = 1;
-    opt.layers = LayerDictionary{ {"beauty", "albedo" } };
+    opt.layers = LayerDictionary{"beauty", "albedo" };
     DMXImage img{opt};
-    /*
+
     std::vector<ChannelBuffer> buffersBeauty{};
     buffersBeauty.emplace_back("R", PixelType::Half, 4);
     buffersBeauty.emplace_back("G", PixelType::Half, 4);
@@ -197,7 +197,7 @@ TEST(ImageIO, CopyChannelBufferToDMXImage)
     count = 0;
     for(int i = 0; i < img.data().size(); ++i)
         EXPECT_EQ(dataRef[i], img.data()[i]);
-    */
+    
 }
 
 TEST(ImageIO, ReadTestImageEXRFile)
