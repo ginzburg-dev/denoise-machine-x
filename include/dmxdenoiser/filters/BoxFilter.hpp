@@ -1,4 +1,4 @@
-// ExampleFilter.hpp
+// BoxFilter.hpp
 #pragma once
 
 #include <dmxdenoiser/DMXImage.hpp>
@@ -6,21 +6,21 @@
 
 namespace dmxdenoiser
 {
-
-    struct ExampleFilter : public Filter
+    /*
+    /// BoxFilter parameters:
+    /// int kernel
+    struct BoxFilter : public Filter
     {
         // Parameters
-        int kernel = 3;
-        int radius = 4;
-        float sigma = 0.7f;
-
+        int kernel = 1;
+        
         // Required: unique filter name
-        static constexpr const char* StaticClassName() { return "ExampleFilter"; }
+        static constexpr const char* StaticClassName() { return "BoxFilter"; }
         const char* Name() const override { return StaticClassName(); };
 
-        ExampleFilter() = default;
-        ExampleFilter(const ParamDictionary& params) { setParams(params); };
-        ~ExampleFilter() override = default;
+        BoxFilter() = default;
+        BoxFilter(const ParamDictionary& params) { setParams(params); };
+        ~BoxFilter() override = default;
 
         void setParams(const ParamDictionary& params) override;
         void apply(DMXImage& img) const override;
@@ -28,4 +28,6 @@ namespace dmxdenoiser
         std::string ToString() const override;
     };
 
+    void applySimpleBoxFilter(DMXImage& img);
+    */
 } // namespace dmxdenoiser

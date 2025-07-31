@@ -36,6 +36,6 @@ namespace dmxdenoiser{
             oss << std::fixed << std::setprecision(precision) << value;
             return trimTrailingZeros(oss.str());
         }
-
+        
     }
 }

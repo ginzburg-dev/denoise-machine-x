@@ -6,36 +6,28 @@
 
 namespace dmxdenoiser
 {
-    constexpr std::string_view kFormatEXR = "exr";
-    constexpr std::string_view kFormatJPG = "jpg";
-    constexpr std::string_view kFormatJPEG = "jpeg";
-    constexpr std::string_view kFormatPNG = "exr";
 
-    /*
-    std::unique_ptr<ImageIO> createImageIO(std::string_view filename)
+    std::unique_ptr<ImageIO> createImageIO(const std::string& filename)
     {
-        auto ext = getFileExtension(filename);
+        ImageFileType imageType = getImageFileType(filename);
 
-        if ( ext == kFormatEXR )
+        if ( imageType == ImageFileType::EXR )
         {
-            std::unique_ptr<ImageIOParams> params = std::make_unique<ExrIOParams>();
             return std::make_unique<ExrImageIO>();
         }
 
-        if ( ext == kFormatJPG || ext == kFormatJPEG )
+        if (  imageType == ImageFileType::JPG || imageType == ImageFileType::JPEG )
         {
-            //std::unique_ptr<ImageIOParams> params = std::make_unique<JpgIOParams>();
-            //return std::make_unique<JpgImageIO>(filename, std::move(params));
+            //return std::make_unique<JpgImageIO>();
         }
 
-        if ( ext == kFormatPNG )
+        if ( imageType == ImageFileType::PNG )
         {
-            //std::unique_ptr<ImageIOParams> params = std::make_unique<PngIOParams>();
-            //return std::make_unique<PngImageIO>(filename, std::move(params));
+            //return std::make_unique<PngImageIO>();
         }
 
         return nullptr;
     }
-    */
+    
 } // namespace dmxdenoiser
 

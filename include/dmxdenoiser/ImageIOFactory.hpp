@@ -10,7 +10,8 @@
 namespace dmxdenoiser::io
 {
     
-    std::unique_ptr<ImageIO> createImageIO(std::string_view filename);
+    std::unique_ptr<ImageIO> createImageIO(const std::string& filename);
+
 }
 
 #endif

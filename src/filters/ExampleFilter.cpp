@@ -18,19 +18,19 @@ namespace dmxdenoiser
         if (kernel_param)
             kernel = *kernel_param;
         else
-            throw std::runtime_error("ExampleFilter: Missing required parameter 'kernel'");
+            throw std::runtime_error("Missing required parameter 'kernel'");
 
         auto radius_param = params.getSingleParam<int>("radius");
         if (radius_param)
             radius = *radius_param;
         else
-            throw std::runtime_error("ExampleFilter: Missing required parameter 'radius'");
+            throw std::runtime_error("Missing required parameter 'radius'");
 
         auto sigma_param = params.getSingleParam<float>("sigma");
         if (sigma_param)
             sigma = *sigma_param;
         else
-            throw std::runtime_error("ExampleFilter: Missing required parameter 'sigma'");
+            throw std::runtime_error("Missing required parameter 'sigma'");
     };
 
     void ExampleFilter::apply(DMXImage& img) const

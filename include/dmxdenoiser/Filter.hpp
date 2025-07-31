@@ -2,6 +2,7 @@
 #define DMXDENOISER_FILTER_H
 
 #include <dmxdenoiser/DMXImage.hpp>
+#include <dmxdenoiser/FilterKernels.hpp>
 #include <dmxdenoiser/ParamDictionary.hpp>
 #include <dmxdenoiser/StringConversions.hpp>
 
