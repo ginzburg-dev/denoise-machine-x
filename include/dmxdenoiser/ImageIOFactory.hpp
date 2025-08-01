@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-namespace dmxdenoiser::io
+namespace dmxdenoiser
 {
     
     std::unique_ptr<ImageIO> createImageIO(const std::string& filename);

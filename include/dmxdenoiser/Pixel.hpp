@@ -16,6 +16,42 @@ namespace dmxdenoiser
 
         operator PixelRGBAView();
 
+        constexpr PixelRGBA& operator=(const PixelRGBA& p)
+        {
+            r = p.r;
+            g = p.g;
+            b = p.b;
+            a = p.a;
+            return *this;
+        }
+
+        constexpr PixelRGBA& operator+=(const PixelRGBA& p)
+        {
+            r += p.r;
+            g += p.g;
+            b += p.b;
+            a += p.a;
+            return *this;
+        }
+
+        constexpr PixelRGBA& operator-=(const PixelRGBA& p)
+        {
+            r -= p.r;
+            g -= p.g;
+            b -= p.b;
+            a -= p.a;
+            return *this;
+        }
+
+        constexpr PixelRGBA& operator*(float value)
+        {
+            r *= value;
+            g *= value;
+            b *= value;
+            a *= value;
+            return *this;
+        }
+
         friend constexpr bool operator==(const PixelRGBA& p1, const PixelRGBA& p2) 
         { 
             return  floatsEqual(p1.r, p2.r) &&
@@ -47,6 +83,15 @@ namespace dmxdenoiser
             g = pv.g;
             b = pv.b;
             a = pv.a;
+            return *this;
+        }
+
+        constexpr PixelRGBAView& operator=(const PixelRGBA& p)
+        {
+            r = p.r;
+            g = p.g;
+            b = p.b;
+            a = p.a;
             return *this;
         }
 

@@ -1,12 +1,11 @@
-#ifndef DMXDENOISER_AOV_H
-#define DMXDENOISER_AOV_H
+// Aov.hpp
+#pragma once
 
 #include <algorithm>
-#include <array>
 #include <string>
 #include <string_view>
 #include <map>
-#include <variant>
+#include <vector>
 
 namespace dmxdenoiser
 {
@@ -15,8 +14,12 @@ namespace dmxdenoiser
     /// @details
     /// These AOVs are mandatory for denoising operations.
     /// They typically include essential render passes like beauty, albedo, normal, depth, and position.
-    const std::array<std::string, 5> DEFAULT_AOVS = {
+    const std::vector<std::string> DEFAULT_AOVS = {
         "beauty", "albedo", "normal", "depth", "position" 
+    };
+
+    const std::vector<std::string> NOT_FILTERED_AOVS = {
+        "normal", "depth", "position"
     };
 
     /**
@@ -59,5 +62,3 @@ namespace dmxdenoiser
     }
 
 } // namespace dmxdenoiser
-
-#endif // DMXDENOISER_AOV_H

@@ -9,6 +9,7 @@
 
 namespace dmxdenoiser 
 {
+
     /// @brief 1D array of floats that represents a 2D filter kernel (matrix).
     struct Kernel2D
     {
@@ -24,9 +25,14 @@ namespace dmxdenoiser
         void set(std::vector<float> values)
         {
             m_data = std::move(values);
+
             double sq = std::sqrt(m_data.size());
             if (sq != std::floor(sq) || m_data.empty() )
                 throw std::invalid_argument("Kernel2D: data must be a non-empty perfect square.");
+
+            if (static_cast<std::size_t>(sq) % 2 == 0)
+                throw std::invalid_argument("Kernel2D: kernel size must be odd.");
+
             m_size = static_cast<std::size_t>(sq);
         }
 
@@ -57,24 +63,46 @@ namespace dmxdenoiser
         }
     };
 
-    /// @brief Returns a box filter kernel of size kernel x kernel.
-    /// @details Example (for kernel=3):
-    ///     1/9 * [ 1 1 1 ]
-    ///           [ 1 1 1 ]
-    ///           [ 1 1 1 ]
-    inline Kernel2D getBoxKernel(int kernel) 
+    namespace FilterKernels
     {
-        if (kernel <= 0)
-            throw std::invalid_argument("Kernel size must be greater than zero!");
+        /// @brief Returns a box filter kernel of size kernel x kernel.
+        /// @details Example (for kernel=3):
+        ///     1/9 * [ 1 1 1 ]
+        ///           [ 1 1 1 ]
+        ///           [ 1 1 1 ]
+        inline Kernel2D getBoxKernel(std::size_t kernel) 
+        {
+            if (kernel % 2 == 0)
+                throw std::invalid_argument("Kernel size must be odd.");
 
-        std::size_t size = kernel * kernel;
-        float value = 1.0f / static_cast<float>(size);
+            std::size_t size = kernel * kernel;
+            float value = 1.0f / static_cast<float>(size);
 
-        std::vector<float> boxKernel(size, value);
+            std::vector<float> boxKernel(size, value);
 
-        return Kernel2D{boxKernel};
-    }
+            return Kernel2D{boxKernel};
+        }
 
-    
+        /// @brief Returns the standard 3x3 Sobel kernel for horizontal edge detection.
+        inline Kernel2D getSobelKernelX()
+        {
+            return Kernel2D{std::vector<float>{
+                -1, 0, 1, 
+                -2, 0, 2, 
+                -1, 0, 1
+            }};
+        }
+
+        /// @brief Returns the standard 3x3 Sobel kernel for vertical edge detection.
+        inline Kernel2D getSobelKernelY() 
+        {
+            return Kernel2D{std::vector<float>{
+                -1, -2, -1, 
+                0, 0, 0, 
+                1, 2, 1
+            }};
+        }
+
+    } // namespace Kernel
 
 } // namespace dmxdenoiser

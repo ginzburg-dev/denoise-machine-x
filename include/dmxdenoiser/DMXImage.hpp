@@ -1,6 +1,7 @@
 // DMXImage.hpp
 #pragma once
 
+#include <dmxdenoiser/Aov.hpp>
 #include <dmxdenoiser/LayerDictionary.hpp>
 #include <dmxdenoiser/Pixel.hpp>
 
@@ -55,6 +56,7 @@ namespace dmxdenoiser
         const std::vector<float>& data() const { return m_pixels; }
 
         int getLayerIndex(std::string_view layer) const;
+        std::vector<int> getFilteringLayersIndices() const;
 
         std::size_t getPixelIndex(int x, int y, int frame, int layer) const;
         std::size_t getPixelIndex(int x, int y, int frame, std::string_view layer) const;

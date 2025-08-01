@@ -21,7 +21,10 @@ namespace dmxdenoiser
             throw std::runtime_error("Missing required parameter 'kernel'");
     };
 
-    void BoxFilter::apply(DMXImage& img) const
+    void BoxFilter::apply(
+            DMXImage& img, 
+            const std::vector<int>& frames, 
+            const std::vector<std::string>& layers) const
     {
         std::cout << "Filtering DMXImage... \n";
     };

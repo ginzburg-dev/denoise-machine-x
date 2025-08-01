@@ -6,6 +6,7 @@
 #include <dmxdenoiser/ParamDictionary.hpp>
 #include <dmxdenoiser/StringConversions.hpp>
 
+#include <span>
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -16,6 +17,11 @@ namespace dmxdenoiser
     /*Abstract Base*/
     struct Filter
     {
+        float strength = 1.0f; ///< Mixing factor, range [0.0, 1.0]. 0 = original, 1 = fully filtered
+        bool filterAlpha = false;
+        std::vector<int> frames{0};
+        std::vector<std::string> layers{};
+
         virtual const char* Name() const = 0;
         virtual void apply(DMXImage& img) const = 0;
         virtual void setParams(const ParamDictionary& params) = 0;

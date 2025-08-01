@@ -14,6 +14,12 @@ namespace dmxdenoiser
 
     void ExampleFilter::setParams(const ParamDictionary& params)
     {
+        auto strength_param = params.getSingleParam<float>("strength");
+        if (strength_param)
+            strength = *strength_param;
+        else
+            throw std::runtime_error("Missing required parameter 'strength'");
+
         auto kernel_param = params.getSingleParam<int>("kernel");
         if (kernel_param)
             kernel = *kernel_param;

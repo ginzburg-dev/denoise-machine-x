@@ -71,6 +71,19 @@ namespace dmxdenoiser
         return layerPtr->offset;
     };
 
+    std::vector<int> DMXImage::getFilteringLayersIndices() const
+    {
+        std::vector<int> layers{};
+        for(const auto& [name, layerInfo] : m_layers.data())
+        {
+            auto it = std::find(NOT_FILTERED_AOVS.begin(), NOT_FILTERED_AOVS.end(), name);
+            if (it == NOT_FILTERED_AOVS.end())
+                layers.push_back(layerInfo.offset);
+        }
+
+        return layers;
+    }
+
     std::size_t DMXImage::getPixelIndex(int x, int y, int frame, int layer) const
     {
         if (x < 0 || x >= m_width)
