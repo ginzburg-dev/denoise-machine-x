@@ -41,8 +41,6 @@ namespace dmxdenoiser
             kernel.set(*kernel_param);
         else
             throw std::runtime_error("Missing required parameter 'kernel'");
-
-
     };
 
     void ConvolutionFilter::apply(DMXImage& img) const
@@ -82,14 +80,12 @@ namespace dmxdenoiser
                             {
                                 int px = std::clamp(x + kx, 0, width - 1);
                                 int py = std::clamp(y + ky, 0, height - 1);
-                                sum += static_cast<PixelRGBA>(img.at(px, py, frame, layer)) * 
-                                    kernel(ky + offset, kx + offset);
+                                sum += kernel(ky + offset, kx + offset) * img.get(px, py, frame, layer);
                             }
+                        if (!filterAlpha)
+                            sum.a = img.at(x, y, frame, layer).a;
                         std::size_t pixelIdx =  ((frameIdx*layers.size() + layerIdx)*height + y)*width + x;
                         pixelBuffer[pixelIdx] = sum;
-                        if (!filterAlpha)
-                            pixelBuffer[pixelIdx].a = img.at(x, y, frame, layer).a;
-                            
                     }
             }
         }

@@ -61,8 +61,10 @@ namespace dmxdenoiser
         std::size_t getPixelIndex(int x, int y, int frame, int layer) const;
         std::size_t getPixelIndex(int x, int y, int frame, std::string_view layer) const;
 
-        PixelRGBAView at(int x, int y, int frame, int layer);
-        PixelRGBAView at(int x, int y, int frame, const std::string& layer);
+        PixelRGBAView at(int x, int y, int frame, int layer); ///< Returns PixelRGBAView for in-place editing (references to channels)
+        PixelRGBAView at(int x, int y, int frame, const std::string& layer); ///< Returns PixelRGBAView for in-place editing (references to channels)
+        PixelRGBA get(int x, int y, int frame, int layer) const; ///< Returns a copy of the pixel.
+        PixelRGBA get(int x, int y, int frame, const std::string& layer) const; ///< Returns a copy of the pixel.
 
         bool isInitialized() const { return m_initialized; }
         bool hasLayer(const std::string& layer) const { return m_layers.getLayer(layer); }

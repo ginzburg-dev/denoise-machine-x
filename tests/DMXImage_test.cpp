@@ -114,7 +114,8 @@ TEST(DMXImage, PixelAt)
 TEST(DMXImage, ToStringMethod)
 {
     DMXImage img{2, 2, 2, {"beauty", "albedo", "normal"}, 4};
-    std::string sRef{"DMXImage: \n    Dimensions: 2 x 2\n    Frames: 2\n    Channels: 4\n    Layers: beauty albedo normal "};
-    std::cout << img.ToString() << '\n';
-    //EXPECT_EQ(img.ToString(), sRef);
+    std::string str = img.ToString();
+    std::cout << str << '\n';
+    EXPECT_TRUE(str.find("DMXImage") != std::string::npos);
+    EXPECT_TRUE(str.find("2 x 2") != std::string::npos);
 }

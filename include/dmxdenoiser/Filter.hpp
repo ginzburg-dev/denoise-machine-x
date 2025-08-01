@@ -6,7 +6,6 @@
 #include <dmxdenoiser/ParamDictionary.hpp>
 #include <dmxdenoiser/StringConversions.hpp>
 
-#include <span>
 #include <string>
 #include <string_view>
 #include <unordered_map>

@@ -116,6 +116,18 @@ namespace dmxdenoiser
         return at(x, y, frame, layerIdx);
     }
     
+    PixelRGBA DMXImage::get(int x, int y, int frame, int layer) const 
+    {
+        std::size_t idx = getPixelIndex(x, y, frame, layer);
+        return { m_pixels[idx], m_pixels[idx + 1], m_pixels[idx + 2], m_pixels[idx + 3] };
+    }
+
+    PixelRGBA DMXImage::get(int x, int y, int frame, const std::string& layer) const
+    {
+        int layerIdx = this->getLayerIndex(layer);
+        return get(x, y, frame, layerIdx);
+    }
+
     std::string DMXImage::ToString() const
     {
         std::ostringstream oss;
