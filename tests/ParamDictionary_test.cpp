@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 
 #include <dmxdenoiser/ParamDictionary.hpp>
-#include <dmxdenoiser/FilterFactory.hpp>
 
 #include <string>
 #include <vector>

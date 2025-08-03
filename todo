@@ -1,1 +1,9 @@
-Pass custom filter kernel through denoiser filter cfg
+ImageIO: unit tests after refactor
+ImageInfo: ToString() add parameters to print
+ImageSequence: add multi-frame logic
+ParamDictionary: add constructors to read FilterMap filters = { {"BoxFilter", {{"kernel", 3}, {"strength", 0.5f}}} }; 
+Frames class:
+ParamDictionary unit tests: kernel
+ImageIO unit tests: frames
+ConvolutionFilter unit tests: params layers frames (SimpleConvolveAverages, SetFilteringLayersAndFrames)
+Kernel2D unit tests name

@@ -83,26 +83,110 @@ TEST(Pixel, PixelRGBAArithmetics)
     p += PixelRGBA{1.0f, 1.0f, 1.0f, 1.0f};
     EXPECT_TRUE((p == PixelRGBA{2.0f, 3.0f, 4.0f, 5.0f}));
 
+    p = {2.0f, 3.0f, 4.0f, 5.0f};
     p -= PixelRGBA{1.0f, 1.0f, 1.0f, 1.0f};
     EXPECT_TRUE((p == PixelRGBA{1.0f, 2.0f, 3.0f, 4.0f}));
 
+    p = {1.0f, 2.0f, 3.0f, 4.0f};
     p *= PixelRGBA{2.0f, 2.0f, 2.0f, 0.0f};
     EXPECT_TRUE((p == PixelRGBA{2.0f, 4.0f, 6.0f, 0.0f}));
 
+    p = {2.0f, 4.0f, 6.0f, 0.0f};
     p /= PixelRGBA{2.0f, 2.0f, 0.0f, 0.0f};
     EXPECT_TRUE((p == PixelRGBA{1.0f, 2.0f, Inf, Nan})); // INF and NAN comparison
 
-    p = PixelRGBA{1.0f, 2.0f, 3.0f, 4.0f};
-
+    p = {1.0f, 2.0f, 3.0f, 4.0f};
     p += 1.5f;
     EXPECT_TRUE((p == PixelRGBA{2.5f, 3.5f, 4.5f, 5.5f}));
 
+    p = {2.5f, 3.5f, 4.5f, 5.5f};
     p -= 1.5;
     EXPECT_TRUE((p == PixelRGBA{1.0f, 2.0f, 3.0f, 4.0f}));
 
+    p = {1.0f, 2.0f, 3.0f, 4.0f};
     p *= 2;
     EXPECT_TRUE((p == PixelRGBA{2.0f, 4.0f, 6.0f, 8.0f}));
 
+    p = {2.0f, 4.0f, 6.0f, 8.0f};
     p /= 2;
     EXPECT_TRUE((p == PixelRGBA{1.0f, 2.0f, 3.0f, 4.0f}));
+
+    p = -p;
+    EXPECT_TRUE((p == PixelRGBA{-1.0f, -2.0f, -3.0f, -4.0f}));
+
+    PixelRGBA p1 = {1.0f, 2.0f, 3.0f, 4.0f};
+    PixelRGBA p2 = {1.0f, 2.0f, 3.0f, 4.0f};
+    float value = 2.0f;
+
+    p = p1 + p2;
+    EXPECT_TRUE((p == PixelRGBA{2.0f, 4.0f, 6.0f, 8.0f}));
+
+    p = p1 + value;
+    EXPECT_TRUE((p == PixelRGBA{3.0f, 4.0f, 5.0f, 6.0f}));
+
+    p = p2;
+    p = value + p1;
+    EXPECT_TRUE((p == PixelRGBA{3.0f, 4.0f, 5.0f, 6.0f}));
+
+    p = p1 - p2;
+    EXPECT_TRUE((p == PixelRGBA{0.0f, 0.0f, 0.0f, 0.0f}));
+
+    p = p1 - value;
+    EXPECT_TRUE((p == PixelRGBA{-1.0f, 0.0f, 1.0f, 2.0f}));
+
+    p = value - p1;
+    EXPECT_TRUE((p == PixelRGBA{-1.0f, 0.0f, 1.0f, 2.0f}));
+
+    p = p1 * p2;
+    EXPECT_TRUE((p == PixelRGBA{1.0f, 4.0f, 9.0f, 16.0f}));
+
+    p = p1 * value;
+    EXPECT_TRUE((p == PixelRGBA{2.0f, 4.0f, 6.0f, 8.0f}));
+
+    p =  value * p1;
+    EXPECT_TRUE((p == PixelRGBA{2.0f, 4.0f, 6.0f, 8.0f}));
+
+    p = p1 / p2;
+    EXPECT_TRUE((p == PixelRGBA{1.0f, 1.0f, 1.0f, 1.0f}));
+
+    p = p1 / value;
+    EXPECT_TRUE((p == PixelRGBA{0.5f, 1.0f, 1.50f, 2.0f}));
+
+    p = p1 / 0.0f;
+    EXPECT_TRUE((p == PixelRGBA{Inf, Inf, Inf, Inf}));
+}
+
+TEST(Pixel, PixelRGBAViewWriteThrough)
+{
+    PixelRGBA p = {1.0f, 2.0f, 3.0f, 4.0f};
+    {
+        PixelRGBAView pv = p;
+        pv.r = 2.0f; pv.g = 2.0f; pv.b = 2.0f; pv.a = 2.0f; 
+    }
+    EXPECT_TRUE((p == PixelRGBA{2.0f, 2.0f, 2.0f, 2.0f}));
+}
+
+TEST(Pixel, PixelRGBAViewAssignAndWriteThrough)
+{
+    PixelRGBA p = {1.0f, 2.0f, 3.0f, 4.0f};
+    
+    PixelRGBAView pv = p;
+    pv = PixelRGBA{2.0f, 2.0f, 2.0f, 2.0f};
+    
+    EXPECT_TRUE((p == PixelRGBA{2.0f, 2.0f, 2.0f, 2.0f}));
+}
+
+TEST(Pixel, PixelRGBAViewToPixelRGBAConversion)
+{
+    PixelRGBA p = {2.2f, 4.4f, 6.6f, 1.0f};
+    PixelRGBAView v = p;
+    PixelRGBA copy = static_cast<PixelRGBA>(v);
+    EXPECT_TRUE(copy == p);
+}
+
+TEST(Pixel, PixelRGBANegation)
+{
+    PixelRGBA p = {1.0f, -2.0f, 3.0f, -4.0f};
+    PixelRGBA n = -p;
+    EXPECT_TRUE((n == PixelRGBA{-1.0f, 2.0f, -3.0f, 4.0f}));
 }

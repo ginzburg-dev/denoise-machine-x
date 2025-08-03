@@ -1,5 +1,7 @@
 #include <dmxdenoiser/ImageIO.hpp>
+#include <dmxdenoiser/ImageIOExr.hpp>
 #include <dmxdenoiser/ImageIOFactory.hpp>
+#include <dmxdenoiser/util/FileUtils.hpp>
 
 #include <algorithm>
 #include <string_view>
@@ -13,7 +15,7 @@ namespace dmxdenoiser
 
         if ( imageType == ImageFileType::EXR )
         {
-            return std::make_unique<ExrImageIO>();
+            return std::make_unique<ImageIOExr>();
         }
 
         if (  imageType == ImageFileType::JPG || imageType == ImageFileType::JPEG )

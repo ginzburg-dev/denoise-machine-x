@@ -4,6 +4,7 @@
 #include <cmath>
 #include <cstddef>
 #include <iomanip>
+#include <iostream>
 #include <sstream>
 #include <vector>
 
@@ -16,17 +17,20 @@ namespace dmxdenoiser
     struct Kernel2D
     {
         std::vector<float> m_data{};
+        std::string m_name{};
         std::size_t m_size{};
 
         Kernel2D() = default;
-        Kernel2D(std::vector<float> values)
+        Kernel2D(const Kernel2D&) = default;
+        Kernel2D(const std::string& name, std::vector<float> values)
         {
-            set(std::move(values));
+            set(name, std::move(values));
         }
 
-        void set(std::vector<float> values)
+        void set(const std::string& name, std::vector<float> values)
         {
             m_data = std::move(values);
+            m_name = name;
 
             double sq = std::sqrt(m_data.size());
             if (sq != std::floor(sq))
@@ -40,8 +44,10 @@ namespace dmxdenoiser
 
             m_size = static_cast<std::size_t>(sq);
         }
+        void set(const Kernel2D& k) { set(k.name(), k.m_data); }
 
         std::size_t size() const { return m_size; }
+        const std::string& name() const { return m_name; }
 
         float operator()(std::size_t y, std::size_t x) const 
         {
@@ -50,10 +56,16 @@ namespace dmxdenoiser
             return m_data[y*m_size + x];
         }
 
+        void clear() {
+            m_data.clear();
+            m_name = "";
+            m_size = 0;
+        }
+
         std::string ToString() const
         {
             std::ostringstream oss;
-            oss << "Kernel2D: " << m_size << " x " << m_size << "\n";
+            oss << "Kernel2D: " << name() << " " << m_size << " x " << m_size << "\n";
             for (int y = 0; y < m_size; ++y)
             {
                 oss << "    [";
@@ -68,5 +80,11 @@ namespace dmxdenoiser
             return oss.str();
         }
     };
+
+    inline std::ostream& operator<<(std::ostream& out, const Kernel2D& kernel)
+    {
+        out << kernel.ToString();
+        return out;
+    }
 
 } // namespace dmxdenoiser 

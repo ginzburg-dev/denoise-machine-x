@@ -12,35 +12,29 @@ namespace dmxdenoiser
     
     void ConvolutionFilter::setParams(const ParamDictionary& params)
     {
-        auto strength_param = params.getSingleParam<float>("strength");
-        if (strength_param)
-            strength = *strength_param;
-        else
-            throw std::runtime_error("Missing required parameter 'strength'");
-        
-        auto frames_param = params.getArrayParam<int>("frames");
-        if (frames_param)
-            frames = *frames_param;
-        else
-            throw std::runtime_error("Missing required parameter 'frames");
+        resetParams();
 
-        auto alpha_param = params.getSingleParam<bool>("filterAlpha");
-        if (alpha_param)
-            filterAlpha = *alpha_param;
-        else
-            throw std::runtime_error("Missing required parameter 'filterAlpha");
-
-        auto layers_param = params.getArrayParam<std::string>("layers");
-        if (layers_param)
-            layers = *layers_param;
-        else
-            throw std::runtime_error("Missing required parameter 'layers'");
-            
-        auto kernel_param = params.getArrayParam<float>("kernel");
+        auto kernel_param = params.getSingleParam<Kernel2D>("kernel");
         if (kernel_param)
             kernel.set(*kernel_param);
         else
             throw std::runtime_error("Missing required parameter 'kernel'");
+
+        auto strength_param = params.getSingleParam<float>("strength");
+        if (strength_param)
+            strength = *strength_param;
+        
+        auto frames_param = params.getArrayParam<int>("frames");
+        if (frames_param)
+            frames = *frames_param;
+
+        auto layers_param = params.getArrayParam<std::string>("layers");
+        if (layers_param)
+            layers = *layers_param;
+
+        auto alpha_param = params.getSingleParam<bool>("filterAlpha");
+        if (alpha_param)
+            filterAlpha = *alpha_param;
     };
 
     void ConvolutionFilter::apply(DMXImage& img) const
@@ -53,6 +47,11 @@ namespace dmxdenoiser
         return "ConvolutionFilter: " + kernel.ToString();
     };
 
+    void ConvolutionFilter::resetParams() {
+        Filter::resetParams();
+        kernel.clear();
+    }
+
     void ConvolutionFilter::convolveSimple(DMXImage& img) const
     {
         int width = img.width();
@@ -60,14 +59,36 @@ namespace dmxdenoiser
 
         int ksize = kernel.size();
         int offset = ksize/2;
+        
+        std::vector<int> framesIndices;
 
-        auto layerIndices = img.getFilteringLayersIndices();
-
-        std::vector<PixelRGBA> pixelBuffer(width * height * layerIndices.size() * frames.size());
-
-        for(int frameIdx = 0; frameIdx < frames.size(); ++frameIdx)
+        // If no specific frames were set, process all frames by default.
+        if (frames.empty())
         {
-            int frame = frames[frameIdx];
+            for (int i = 0; i < img.numFrames(); ++i)
+                framesIndices.push_back(i);
+        } else {
+            framesIndices = frames;
+        }
+
+        std::vector<int> layerIndices;
+
+        // If no specific layers were set, process by default.   
+        if (layers.empty()) {
+            layerIndices = img.getFilteringLayersIndices();
+        } else {
+            for (const auto& layer : layers)
+            {
+                if (img.hasLayer(layer))
+                    layerIndices.push_back(img.getLayerIndex(layer));
+            }
+        }
+
+        std::vector<PixelRGBA> pixelBuffer(width * height * layerIndices.size() * framesIndices.size());
+
+        for(int frameIdx = 0; frameIdx < framesIndices.size(); ++frameIdx)
+        {
+            int frame = framesIndices[frameIdx];
             for(int layerIdx = 0; layerIdx < layerIndices.size(); ++layerIdx)
             {
                 int layer = layerIndices[layerIdx];
@@ -84,22 +105,22 @@ namespace dmxdenoiser
                             }
                         if (!filterAlpha)
                             sum.a = img.at(x, y, frame, layer).a;
-                        std::size_t pixelIdx =  ((frameIdx*layers.size() + layerIdx)*height + y)*width + x;
+                        std::size_t pixelIdx =  ((frameIdx*layerIndices.size() + layerIdx)*height + y)*width + x;
                         pixelBuffer[pixelIdx] = sum;
                     }
             }
         }
 
-        for(int frameIdx = 0; frameIdx < frames.size(); ++frameIdx)
+        for(int frameIdx = 0; frameIdx < framesIndices.size(); ++frameIdx)
         {
-            int frame = frames[frameIdx];
+            int frame = framesIndices[frameIdx];
             for(int layerIdx = 0; layerIdx < layerIndices.size(); ++layerIdx)
             {
                 int layer = layerIndices[layerIdx];
                 for(int y = 0; y < height; ++y)
                     for(int x = 0; x < width; ++x)
                         {
-                            std::size_t pixelIdx = ((frameIdx*layers.size() + layerIdx)*height + y)*width + x;
+                            std::size_t pixelIdx = ((frameIdx*layerIndices.size() + layerIdx)*height + y)*width + x;
                             img.at(x, y, frame, layer) = pixelBuffer[pixelIdx];
                         }
             }

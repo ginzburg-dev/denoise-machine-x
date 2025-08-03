@@ -9,11 +9,13 @@
 namespace dmxdenoiser
 {
     /// @brief ConvolutionFilter that applies a custom kernel to an image.
+    /// @note Parameters: Kernel2D kernel, float strength, std::vector<int> frames,
+    /// std::vector<std::string> layers, bool filterAlpha
     struct ConvolutionFilter : public Filter
     {
         // Parameters
         Kernel2D kernel; ///< Custom convolution kernel (1D array representing 2D matrix)
-        
+
         // Required: unique filter name
         static constexpr const char* StaticClassName() { return "ConvolutionFilter"; }
         const char* Name() const override { return StaticClassName(); };
@@ -26,8 +28,10 @@ namespace dmxdenoiser
         void apply(DMXImage& img) const override;
 
         std::string ToString() const override;
+    
+    protected:
+        void resetParams() override;
 
-    private:
         void convolveSimple(DMXImage& img) const;
 
     };

@@ -1,5 +1,5 @@
-#ifndef DMXDENOISER_IO_IMAGEIO_FACTORY_H
-#define DMXDENOISER_IO_IMAGEIO_FACTORY_H
+// ImageIOFactory.hpp
+#pragma once
 
 #include <dmxdenoiser/ImageIO.hpp>
 
@@ -12,6 +12,4 @@ namespace dmxdenoiser
     
     std::unique_ptr<ImageIO> createImageIO(const std::string& filename);
 
-}
-
-#endif
+} // namespace dmxdenoiser
