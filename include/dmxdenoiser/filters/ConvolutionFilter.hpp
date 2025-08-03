@@ -8,9 +8,13 @@
 
 namespace dmxdenoiser
 {
-    /// @brief ConvolutionFilter that applies a custom kernel to an image.
-    /// @note Parameters: Kernel2D kernel, float strength, std::vector<int> frames,
-    /// std::vector<std::string> layers, bool filterAlpha
+    /// @brief ConvolutionFilter applies a 2D convolution kernel to image pixels.
+    /// @note Parameters expected in ParamDictionary:
+    ///   - "kernel": Kernel2D (2D kernel)
+    ///   - "strength": float (blend factor,  optional)     default: 1.0f
+    ///   - "frames": std::vector<int> (frames to filter, optional)     default: empty array <all frames>
+    ///   - "layers": std::vector<std::string> (layers to filter, optional)     default: empty array <all allowed layers>
+    ///   - "filterAlpha": bool (whether to filter alpha channel, optional)     default: false
     struct ConvolutionFilter : public Filter
     {
         // Parameters
@@ -31,9 +35,6 @@ namespace dmxdenoiser
     
     protected:
         void resetParams() override;
-
-        void convolveSimple(DMXImage& img) const;
-
     };
     
 

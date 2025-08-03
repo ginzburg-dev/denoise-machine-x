@@ -2,7 +2,7 @@
 #define DMXDENOISER_FILTER_H
 
 #include <dmxdenoiser/DMXImage.hpp>
-#include <dmxdenoiser/FilterKernels.hpp>
+#include <dmxdenoiser/Kernel2D.hpp>
 #include <dmxdenoiser/ParamDictionary.hpp>
 #include <dmxdenoiser/StringConversions.hpp>
 
@@ -22,9 +22,28 @@ namespace dmxdenoiser
         std::vector<std::string> layers{};
 
         virtual const char* Name() const = 0;
+
+        virtual void setParams(const ParamDictionary& params);
+
         virtual void apply(DMXImage& img) const = 0;
-        virtual void setParams(const ParamDictionary& params) = 0;
+
+        static void convolve2D(
+            DMXImage& inOut,
+            const Kernel2D& kernel,
+            std::vector<int> frames = {},
+            std::vector<std::string> layers = {},
+            bool filterAlpha = false);
+
+        static void convolve2D(
+            const DMXImage& input,
+            DMXImage& output,
+            const Kernel2D& kernel,
+            std::vector<int> frames = {},
+            std::vector<std::string> layers = {},
+            bool filterAlpha = false);
+
         virtual std::string ToString() const = 0; ///< String representation of the filter name and parameters for logging.
+        
         virtual ~Filter() = default;
 
     protected:

@@ -54,6 +54,12 @@ namespace dmxdenoiser
 
         std::vector<float>& data() { return m_pixels; }
         const std::vector<float>& data() const { return m_pixels; }
+        
+        // Copy data for a particular layers and frames
+        void copyFrom(const DMXImage& from, std::vector<std::string> layers, std::vector<int> frames);
+        void copyFrom(const DMXImage& from, std::string layer, std::vector<int> frames);
+        void copyFrom(const DMXImage& from, std::vector<std::string> layers, int frame);
+        void copyFrom(const DMXImage& from, std::string layer, int frame);
 
         int getLayerIndex(std::string_view layer) const;
         std::vector<int> getFilteringLayersIndices() const;
@@ -82,7 +88,7 @@ namespace dmxdenoiser
         int m_width{};
         int m_height{};
         int m_numFrames{};
-        int m_numChannels{};
+        int m_numChannels = DEFAULT_NUM_CHANNELS;
         LayerDictionary m_layers;
         std::vector<float> m_pixels;
 
