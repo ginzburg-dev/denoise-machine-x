@@ -15,6 +15,10 @@
             "normal": "N",
             "depth": "z"
         }
-        
+    },
+    "log": {
+        "level": "debug",
+        "outputFolder": "log"
     }
+        
 }

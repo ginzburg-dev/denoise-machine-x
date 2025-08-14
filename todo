@@ -1,10 +1,37 @@
-DMXImage: duplicate / copy layers from one image to another (for Filter::convolve2D())
-ImageIO: unit tests after refactor
-ImageIOExr: unit testing generated layers and frames
-ImageInfo: ToString() add parameters to print
-ImageSequence: add multi-frame logic (Frame logic)
-ParamDictionary: add constructors to read FilterMap filters = { {"BoxFilter", {{"kernel", 3}, {"strength", 0.5f}}} }; 
-ParamDictionary unit tests: added kernel
-ImageIO unit tests: frames
-ConvolutionFilter unit tests: params layers frames (SimpleConvolveAverages, SetFilteringLayersAndFrames)
-Kernel2D unit tests name
+InProgress: Logger
+DMXImage: Duplicate or copy layers from one image to another (for Filter::convolve2D())
+DMXImage: Frame count should be odd.
+DMXImage: frame map (to compute mv guidience)
+Logger: write to Log
+Kernel2D: split into separate cpp and hpp files
+ImageIO: Add unit tests after refactor
+ImageIOExr: Add unit tests for generated layers and frames
+ImageInfo: Update ToString() to print parameters
+ImageSequence: Add multi-frame logic (frame logic)
+ParamDictionary: default value instead throwing error
+ParamDictionary: Add constructors to read FilterMap
+(e.g., filters = { {"BoxFilter", {{"kernel", 3}, {"strength", 0.5f}}} };)
+ParamDictionary unit tests: Add kernel test
+ImageIO unit tests: Add frames tests
+ConvolutionFilter unit tests: Add params, layers, frames tests
+(e.g., SimpleConvolveAverages, SetFilteringLayersAndFrames)
+Kernel2D unit tests: Add tests for name method
+ToString() methods: Check format
+ImageIOExr - header ACES
+GUI / async display
+ML spatial
+simple temporalFilter
+noise analyzer
+MV estimator/generator based on MSE and mv guidence
+
+        O-------------------O
+        |                   |
+        |                   |
+        |       core        |  
+        |                   |
+        |                   |
+        O-------------------O
+        |      Filters      |
+        O-------------------O
+        |        CLI        |
+        O-------------------O

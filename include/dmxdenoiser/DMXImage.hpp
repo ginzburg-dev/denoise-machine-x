@@ -35,6 +35,10 @@ namespace dmxdenoiser
                 LayerDictionary layers, 
                 int numChannels = DEFAULT_NUM_CHANNELS);
         DMXImage(const DMXImageOptions& opt);
+        
+        DMXImage(const DMXImage&) = default;
+        DMXImage& operator=(const DMXImage&) = default;
+        
 
         void initialize(
             int width, 

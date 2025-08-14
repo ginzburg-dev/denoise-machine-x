@@ -5,7 +5,6 @@
 #include <iomanip>
 
 namespace dmxdenoiser{
-    namespace utils{
 
         inline std::string toLower(const std::string& s)
         {
@@ -37,5 +36,4 @@ namespace dmxdenoiser{
             return trimTrailingZeros(oss.str());
         }
         
-    }
-}
+} // namespace dmxdenoiser

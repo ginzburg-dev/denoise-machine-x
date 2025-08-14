@@ -1,4 +1,5 @@
 #include <dmxdenoiser/Aov.hpp>
+#include <dmxdenoiser/DMXImage.hpp>
 #include <dmxdenoiser/FilterFactory.hpp>
 #include <dmxdenoiser/FilterKernels.hpp>
 #include <dmxdenoiser/filters/ConvolutionFilter.hpp>
@@ -8,22 +9,21 @@
 #include <vector>
 
 namespace dmxdenoiser
-{   
-    
+{
+
     void ConvolutionFilter::setParams(const ParamDictionary& params)
     {
         resetParams();
 
-        auto kernel_param = params.getSingleParam<Kernel2D>("kernel");
-        if (kernel_param)
-            kernel.set(*kernel_param);
+        if (auto v = params.getSingleParam<Kernel2D>("kernel")) 
+            kernel.set(*v);
         else
             throw std::runtime_error("Missing required parameter 'kernel'");
     };
 
-    void ConvolutionFilter::apply(DMXImage& img) const
+    void ConvolutionFilter::applyImpl(const DMXImage& in, DMXImage& out) const
     {
-        convolve2D(img, kernel, frames, layers, filterAlpha);
+        convolve2D(in, out, kernel, frames, layers, filterAlpha);
     };
 
     std::string ConvolutionFilter::ToString() const
@@ -35,8 +35,6 @@ namespace dmxdenoiser
         Filter::resetParams();
         kernel.clear();
     }
-
-    
 
     REGISTER_FILTER(ConvolutionFilter)
 

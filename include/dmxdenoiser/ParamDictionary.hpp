@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <dmxdenoiser/Backend.hpp>
 #include <dmxdenoiser/Kernel2D.hpp>
 #include <dmxdenoiser/util/AlwaysFalse.hpp>
 
@@ -21,6 +22,7 @@ namespace dmxdenoiser
         std::map<std::string, std::vector<bool>> bools;
         std::map<std::string, std::vector<std::string>> strings;
         std::map<std::string, std::vector<Kernel2D>> kernels2d;
+        std::map<std::string, std::vector<BackendResource>> backendResources;
 
         // Set a single-value parameter
         void addInt(const std::string& name, int value) { ints[name] = { value }; }
@@ -28,6 +30,9 @@ namespace dmxdenoiser
         void addBool(const std::string& name, bool value) { bools[name] = { value }; }
         void addString(const std::string& name, const std::string& value) { strings[name] = { value }; }
         void addKernel2D(const std::string& name, const Kernel2D& value) { kernels2d[name] = { value }; }
+        void addBackendResource(const std::string& name, const BackendResource& value) {
+            backendResources[name] = { value }; 
+        }
         
         // Set a vector-value parameter
         void addIntArray(const std::string& name, std::vector<int> value) { ints[name] = value; }
@@ -35,6 +40,9 @@ namespace dmxdenoiser
         void addBoolArray(const std::string& name, std::vector<bool> value) { bools[name] = value; }
         void addStringArray(const std::string& name, std::vector<std::string> value) { strings[name] = value; }
         void addKernel2DArray(const std::string& name, std::vector<Kernel2D> value) { kernels2d[name] = value; }
+        void addBackendResourceArray(const std::string& name, std::vector<BackendResource> value) {
+            backendResources[name] = value; 
+        }
 
         // Get a single-value parameter
         template<typename T>
@@ -58,6 +66,10 @@ namespace dmxdenoiser
             } else if constexpr (std::is_same_v<T, Kernel2D>) {
                 auto it = kernels2d.find(name);
                 if (it != kernels2d.end() && !it->second.empty())
+                    return it->second[0];
+            } else if constexpr (std::is_same_v<T, BackendResource>) {
+                auto it = backendResources.find(name);
+                if (it != backendResources.end() && !it->second.empty())
                     return it->second[0];
             } else {
                 static_assert(always_false<T>::value, "Type not supported!");
@@ -87,6 +99,10 @@ namespace dmxdenoiser
             } else if constexpr (std::is_same_v<T, Kernel2D>) {
                 auto it = kernels2d.find(name);
                 if (it != kernels2d.end())
+                    return it->second;
+            } else if constexpr (std::is_same_v<T, BackendResource>) {
+                auto it = backendResources.find(name);
+                if (it != backendResources.end())
                     return it->second;
             } else {
                 static_assert(!std::is_same_v<T, T>, "Type not supported!");
@@ -168,6 +184,21 @@ namespace dmxdenoiser
                     oss << '\n';
                 } 
             }
+
+            for (const auto& param : backendResources)
+            {
+                auto values = param.second;
+                if (!values.empty())
+                {
+                    oss << "    " << param.first << " (backendResource) = ";
+                    for (int i = 0; i < values.size(); ++i)
+                    {
+                        oss << values[i] << ' ';
+                    }
+                    oss << '\n';
+                } 
+            }
+
             return oss.str();
         }
     };

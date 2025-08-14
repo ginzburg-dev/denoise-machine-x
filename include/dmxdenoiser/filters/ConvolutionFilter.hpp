@@ -6,6 +6,8 @@
 #include <dmxdenoiser/Filter.hpp>
 #include <dmxdenoiser/FilterKernels.hpp>
 
+#include <memory>
+
 namespace dmxdenoiser
 {
     /// @brief ConvolutionFilter applies a 2D convolution kernel to image pixels.
@@ -25,17 +27,30 @@ namespace dmxdenoiser
         const char* Name() const override { return StaticClassName(); };
 
         ConvolutionFilter() = default;
-        ConvolutionFilter(const ParamDictionary& params) { setParams(params); };
+        explicit ConvolutionFilter(const ParamDictionary& params) { setParams(params); };
+
+        ConvolutionFilter(ConvolutionFilter&&) noexcept;
+        ConvolutionFilter& operator=(ConvolutionFilter&&) noexcept;
+
+        ConvolutionFilter(const ConvolutionFilter&) = delete;
+        ConvolutionFilter& operator=(const ConvolutionFilter&) = delete;
+
         ~ConvolutionFilter() override = default;
 
         void setParams(const ParamDictionary& params) override;
-        void apply(DMXImage& img) const override;
 
         std::string ToString() const override;
     
     protected:
+        struct Impl{
+            virtual void apply(DMXImage& img) const = 0;
+            virtual ~Impl() = default;
+        };
+        std::unique_ptr<Impl> impl_;
+
+        void applyImpl(const DMXImage& in, DMXImage& out) const override;
+
         void resetParams() override;
     };
-    
 
 } // namespace dmxdenoiser

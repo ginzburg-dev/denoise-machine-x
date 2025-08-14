@@ -1,14 +1,17 @@
 #ifndef DMXDENOISER_FILTER_H
 #define DMXDENOISER_FILTER_H
 
+#include <dmxdenoiser/Backend.hpp>
 #include <dmxdenoiser/DMXImage.hpp>
 #include <dmxdenoiser/Kernel2D.hpp>
 #include <dmxdenoiser/ParamDictionary.hpp>
 #include <dmxdenoiser/StringConversions.hpp>
 
 #include <map>
+#include <memory>
 #include <string>
 #include <string_view>
+#include <vector>
 
 namespace dmxdenoiser
 {
@@ -20,20 +23,29 @@ namespace dmxdenoiser
         bool filterAlpha = false;
         std::vector<int> frames{};
         std::vector<std::string> layers{};
+        
+        Backend backend = Backend::CPU;
+        BackendResource backendResource{};
 
         virtual const char* Name() const = 0;
 
-        virtual void setParams(const ParamDictionary& params);
+        virtual void setParams(const ParamDictionary& params) = 0;
 
-        virtual void apply(DMXImage& img) const = 0;
+        void apply(const DMXImage& in, DMXImage& out) const { applyImpl(in, out); }
+        void apply(DMXImage& inOut) const { 
+            DMXImage tmp{ inOut };
+            applyImpl(inOut, tmp);
+            inOut = std::move(tmp);
+        }
 
+        /*
         static void convolve2D(
             DMXImage& inOut,
             const Kernel2D& kernel,
             std::vector<int> frames = {},
             std::vector<std::string> layers = {},
             bool filterAlpha = false);
-
+        */
         static void convolve2D(
             const DMXImage& input,
             DMXImage& output,
@@ -44,17 +56,13 @@ namespace dmxdenoiser
 
         virtual std::string ToString() const = 0; ///< String representation of the filter name and parameters for logging.
         
-        virtual ~Filter() = default;
+        virtual ~Filter();
 
     protected:
-        virtual void resetParams(){
-            strength = 1.0f;
-            filterAlpha = false;
-            frames.clear();
-            layers.clear();
-        };
+        virtual void applyImpl(const DMXImage& in, DMXImage& out) const = 0;
+        virtual void resetParams();
     };
-
+    
     /**
     * @brief Maps filter names to their parameter dictionaries.
     *
