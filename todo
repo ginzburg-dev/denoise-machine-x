@@ -1,4 +1,8 @@
-InProgress: Logger
+
+ParamDictionary: Add constructors to read FilterMap
+(e.g., filters = { {"BoxFilter", {{"kernel", 3}, {"strength", 0.5f}}} };)
+ParamDictionary unit tests: Add kernel test
+ConvolutionFilter: add CPU, METAL and GPU backend implementations
 DMXImage: Duplicate or copy layers from one image to another (for Filter::convolve2D())
 DMXImage: Frame count should be odd.
 DMXImage: frame map (to compute mv guidience)
@@ -8,10 +12,6 @@ ImageIO: Add unit tests after refactor
 ImageIOExr: Add unit tests for generated layers and frames
 ImageInfo: Update ToString() to print parameters
 ImageSequence: Add multi-frame logic (frame logic)
-ParamDictionary: default value instead throwing error
-ParamDictionary: Add constructors to read FilterMap
-(e.g., filters = { {"BoxFilter", {{"kernel", 3}, {"strength", 0.5f}}} };)
-ParamDictionary unit tests: Add kernel test
 ImageIO unit tests: Add frames tests
 ConvolutionFilter unit tests: Add params, layers, frames tests
 (e.g., SimpleConvolveAverages, SetFilteringLayersAndFrames)
@@ -35,3 +35,7 @@ MV estimator/generator based on MSE and mv guidence
         O-------------------O
         |        CLI        |
         O-------------------O
+
+
+Addressed:
+ParamDictionary: default value instead throwing error - addressed. No needed

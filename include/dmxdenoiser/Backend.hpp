@@ -13,6 +13,7 @@ namespace dmxdenoiser
 
     enum class Backend
     {
+        AUTO,
         CPU,
         CUDA,
         METAL,
@@ -55,6 +56,7 @@ namespace dmxdenoiser
     /// Helper to parse "cpu"/"cuda"/"metal" etc.
     inline Backend parseBackend(const std::string& backend)
     {
+        if (toLower(backend) == "auto") return Backend::AUTO;
         if (toLower(backend) == "cpu") return Backend::CPU;
         if (toLower(backend) == "cuda") return Backend::CUDA;
         if (toLower(backend) == "metal") return Backend::METAL;

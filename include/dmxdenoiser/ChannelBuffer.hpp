@@ -1,6 +1,7 @@
 // ChannelBuffer.hpp
 #pragma once
 
+#include <dmxdenoiser/DMXImage.hpp>
 #include <dmxdenoiser/PixelType.hpp>
 
 #include <cstddef>
@@ -76,5 +77,16 @@ namespace dmxdenoiser
         std::vector<ChannelBuffer>* getLayerBuffers(const std::string& name);
         ChannelBuffer* getBuffer(const std::string& layerName, const std::string& channelName);
     };
+
+    void copyChannelBuffersToDMXImage(
+        const std::vector<ChannelBuffer>& buff,
+        std::string_view layer, 
+        int frame, 
+        DMXImage& img);
+
+    std::vector<ChannelBuffer> copyDMXImageToChannelBuffers(
+        const DMXImage& img,
+        const std::vector<std::string>& layers
+        );
     
 } // namespace dmxdenoiser

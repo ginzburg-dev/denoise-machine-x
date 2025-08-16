@@ -1,4 +1,5 @@
 #include <dmxdenoiser/ChannelInfo.hpp>
+#include <dmxdenoiser/ChannelBuffer.hpp>
 #include <dmxdenoiser/ImageFileType.hpp>
 #include <dmxdenoiser/ImageIOExr.hpp>
 #include <dmxdenoiser/DMXImage.hpp>

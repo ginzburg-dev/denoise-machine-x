@@ -13,7 +13,7 @@ namespace dmxdenoiser
     {
 
         /// @brief Returns a box filter kernel of size kernel x kernel.
-        /// @details Example (for kernel=3):
+        /// Example (for kernel=3):
         ///     1/9 * [ 1 1 1 ]
         ///           [ 1 1 1 ]
         ///           [ 1 1 1 ]

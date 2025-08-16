@@ -48,15 +48,4 @@ namespace dmxdenoiser
         virtual ~ImageIO() = default;
     };
 
-    void copyChannelBuffersToDMXImage(
-        const std::vector<ChannelBuffer>& buff,
-        std::string_view layer, 
-        int frame, 
-        DMXImage& img);
-
-    std::vector<ChannelBuffer> copyDMXImageToChannelBuffers(
-        const DMXImage& img,
-        const std::vector<std::string>& layers
-        );
-
 } // namespace dmxdenoiser
