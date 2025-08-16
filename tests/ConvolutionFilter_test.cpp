@@ -42,6 +42,11 @@ void applyFilterToImageFile(
     io->write(outputFileName, img, {{"beauty"}});
 }
 
+TEST(ConvolutionFilter, NoKernelParameterSet)
+{
+    
+}
+
 TEST(ConvolutionFilter, SimpleConvolveAverages)
 {
     std::size_t imageSize = 3;

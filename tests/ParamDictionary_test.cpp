@@ -1,5 +1,9 @@
 #include <gtest/gtest.h>
 
+#include <dmxdenoiser/Backend.hpp>
+#include <dmxdenoiser/FilterKernels.hpp>
+#include <dmxdenoiser/Kernel2D.hpp>
+#include <dmxdenoiser/Logger.hpp>
 #include <dmxdenoiser/ParamDictionary.hpp>
 
 #include <string>
@@ -39,6 +43,15 @@ TEST(ParamDictionary, SetAndGetStringSingleValue){
     std::string value = "SampleString";
     params.addString("sample", value);
     auto sample_param = params.getSingleParam<std::string>("sample");
+    ASSERT_TRUE(sample_param.has_value());
+    EXPECT_EQ(sample_param.value(), value);
+}
+
+TEST(ParamDictionary, SetAndGetKernel2DSingleValue){
+    ParamDictionary params;
+    Kernel2D value = FilterKernels::getGaussianKernel(3, 1);
+    params.addKernel2D("sample", value);
+    auto sample_param = params.getSingleParam<Kernel2D>("sample");
     ASSERT_TRUE(sample_param.has_value());
     EXPECT_EQ(sample_param.value(), value);
 }
@@ -93,6 +106,16 @@ TEST(ParamDictionary, SetAndGetStringArrayValue){
     EXPECT_EQ(sample_param.value(), value);
 }
 
+TEST(ParamDictionary, SetAndGetKernel2DArrayValue){
+    ParamDictionary params;
+    std::vector<Kernel2D> value = { FilterKernels::getGaussianKernel(3, 1), FilterKernels::getBoxKernel(3) };
+    params.addKernel2DArray("sample", value);
+    auto sample_param = params.getArrayParam<Kernel2D>("sample");
+    ASSERT_TRUE(sample_param.has_value());
+    EXPECT_EQ(sample_param.value(), value);
+}
+
+
 TEST(ParamDictionary, GetMissingStringArrayParamReturnsNullopt){
     ParamDictionary params;
     std::vector<std::string> value = { "First", "Second" };
@@ -127,4 +150,24 @@ TEST(ParamDictionary, OverwriteIntParam){
     auto val = params.getSingleParam<int>("x");
     ASSERT_TRUE(val.has_value());
     EXPECT_EQ(val.value(), 2);
+}
+
+TEST(ParamDictionary, ToString){
+    ParamDictionary params;
+    params.addInt("int_var", 1);
+    params.addFloat("float_var", 2.0f);
+    params.addBool("bool_var", true);
+    params.addString("string_var", "String data");
+    params.addKernel2D("kernel_var", FilterKernels::getGaussianKernel(3, 1));
+    params.addBackendResource("backend_res_var", BackendResource{});
+
+    params.addIntArray("int_array_var", {0, 2});
+    params.addFloatArray("float_array_var", {3.0f, 4.0f});
+    params.addBoolArray("bool_array_var", {false, true});
+    params.addStringArray("string_array_var", {"String data1", "String data2"});
+    params.addKernel2DArray("kernel_array_var", { FilterKernels::getBoxKernel(7), FilterKernels::getBoxKernel(5)});
+    params.addBackendResourceArray("backend_res_array_var", { BackendResource{}, BackendResource{}});
+    
+    DMX_LOG_INIT(LogLevel::Debug, &std::clog, "../tests/test_files/dmxdenoiser_paramDictionary_test.log");
+    DMX_LOG_INFO("ParamDictionary", params.ToString());
 }

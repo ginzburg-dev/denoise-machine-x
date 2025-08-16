@@ -38,7 +38,7 @@ namespace dmxdenoiser
         }
         
         void init(LogLevel minLevel, std::ostream* os = nullptr, const std::string& filePath = "") {
-            std::lock_guard<std::mutex> mutex{m_mutex};
+            std::lock_guard<std::mutex> lock{m_mutex};
             m_minLevel = static_cast<int>(minLevel);
             m_filePath = filePath;
             m_out = os;
@@ -84,7 +84,7 @@ namespace dmxdenoiser
             if (m_fileStream.is_open()) { out_one(m_fileStream); m_fileStream.flush(); }
         }
 
-        ~Logger() { m_fileStream.close(); }
+        ~Logger() noexcept { m_fileStream.close(); }
 
     private:
         std::string m_filePath{};
@@ -103,7 +103,11 @@ namespace dmxdenoiser
 
 } // namespace dmxdenoiser
 
-#define DMX_LOG_DEBUG(tag, ...) dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Debug, (tag), ##__VA_ARGS__);
-#define DMX_LOG_INFO(tag, ...) dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Info, (tag), ##__VA_ARGS__);
-#define DMX_LOG_WARNING(tag, ...) dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Warning, (tag), ##__VA_ARGS__);
-#define DMX_LOG_ERROR(tag, ...) dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Error, (tag), ##__VA_ARGS__);
+// Initialize logger
+#define DMX_LOG_INIT(LOGLEVEL, OSTREAMPTR, FILENAME) \
+    dmxdenoiser::Logger::instance().init((LOGLEVEL), (OSTREAMPTR), (FILENAME))
+
+#define DMX_LOG_DEBUG(tag, ...) dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Debug, (tag), ##__VA_ARGS__)
+#define DMX_LOG_INFO(tag, ...) dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Info, (tag), ##__VA_ARGS__)
+#define DMX_LOG_WARNING(tag, ...) dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Warning, (tag), ##__VA_ARGS__)
+#define DMX_LOG_ERROR(tag, ...) dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Error, (tag), ##__VA_ARGS__)

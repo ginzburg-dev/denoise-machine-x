@@ -1,6 +1,8 @@
 // Kernel2D.hpp
 #pragma once
 
+#include <dmxdenoiser/util/FloatsEqual.hpp>
+
 #include <cmath>
 #include <cstddef>
 #include <iomanip>
@@ -62,13 +64,18 @@ namespace dmxdenoiser
             m_size = 0;
         }
 
-        std::string ToString() const
+        std::string ToString(std::size_t indent=0) const
         {
             std::ostringstream oss;
-            oss << "Kernel2D: " << name() << " " << m_size << " x " << m_size << "\n";
+
+            std::string sIndent = "";
+            for (size_t i = 0; i < indent; ++i)
+                sIndent += " ";
+            
+            oss << sIndent << "Kernel2D: " << name() << " " << m_size << " x " << m_size << "\n";
             for (int y = 0; y < m_size; ++y)
             {
-                oss << "    [";
+                oss << sIndent << "    [";
                 for (int x = 0; x < m_size; ++x)
                 {
                     oss << std::fixed << std::setprecision(4) << (*this)(y, x);
@@ -85,6 +92,14 @@ namespace dmxdenoiser
     {
         out << kernel.ToString();
         return out;
+    }
+
+    inline bool operator==(const Kernel2D& lhs, const Kernel2D& rhs)
+    {
+        if(lhs.size() != rhs.size()) return false;
+        for(std::size_t i = 0; i < lhs.size(); ++i)
+            if (!floatsEqual(lhs.m_data[i], rhs.m_data[i])) return false;
+        return true;
     }
 
 } // namespace dmxdenoiser 

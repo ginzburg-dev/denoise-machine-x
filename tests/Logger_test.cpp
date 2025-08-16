@@ -13,7 +13,7 @@ using namespace dmxdenoiser;
 class LoggerTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        std::string path = "../tests/test_files/dmxdenoiser.log";
+        std::string path = "../tests/test_files/dmxdenoiser_logger_test.log";
         dmxdenoiser::Logger::instance().init(dmxdenoiser::LogLevel::Debug, &std::cout, path);
     }
 };
@@ -32,7 +32,7 @@ TEST(Logger, VardicFuncTemplates)
 
 TEST(Logger, LoggerInit)
 {
-    std::string logFilePath = "../tests/test_files/dmxdenoiser.log";
+    std::string logFilePath = "../tests/test_files/dmxdenoiser_logger_test.log";
     bool success = std::filesystem::remove(logFilePath); // Remove log file
     Logger::instance().init(LogLevel::Debug, &std::clog, logFilePath);
     std::string tag = "ConvolutionFilter";
@@ -51,9 +51,30 @@ TEST(Logger, LoggerInit)
     EXPECT_NE(line.find(msg), std::string::npos);
 }
 
+TEST(Logger, LoggerInitWithDefinition)
+{
+    std::string logFilePath = "../tests/test_files/dmxdenoiser_logger_test.log";
+    bool success = std::filesystem::remove(logFilePath); // Remove log file
+    DMX_LOG_INIT(LogLevel::Debug, &std::clog, logFilePath);
+    std::string tag = "ConvolutionFilter";
+    std::string msg = "Filter kernel error";
+    Logger::instance().Log(LogLevel::Error, tag, msg);
+
+    // Check log file
+    ASSERT_TRUE(std::filesystem::exists(logFilePath));
+    ASSERT_GT(std::filesystem::file_size(logFilePath), 0u);
+    std::ifstream ifile{logFilePath};
+    ASSERT_TRUE(ifile.good());
+    std::string line{};
+    ASSERT_TRUE(static_cast<bool>(std::getline(ifile, line)));
+    EXPECT_NE(line.find("ERROR"), std::string::npos);
+    EXPECT_NE(line.find(tag), std::string::npos);
+    EXPECT_NE(line.find(msg), std::string::npos);
+}
+
 TEST(Logger, LoggerDefinition)
 {
-    std::string logFilePath = "../tests/test_files/dmxdenoiser.log";
+    std::string logFilePath = "../tests/test_files/dmxdenoiser_logger_test.log";
     bool success = std::filesystem::remove(logFilePath); // Remove log file
 
     Logger::instance().init(LogLevel::Debug, &std::clog, logFilePath);

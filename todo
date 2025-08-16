@@ -1,7 +1,3 @@
-
-ParamDictionary: Add constructors to read FilterMap
-(e.g., filters = { {"BoxFilter", {{"kernel", 3}, {"strength", 0.5f}}} };)
-ParamDictionary unit tests: Add kernel test
 ConvolutionFilter: add CPU, METAL and GPU backend implementations
 DMXImage: Duplicate or copy layers from one image to another (for Filter::convolve2D())
 DMXImage: Frame count should be odd.

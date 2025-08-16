@@ -33,17 +33,21 @@ namespace dmxdenoiser
         void* metalDevice = nullptr;
         void* metalCommandQueue = nullptr;
 
-        std::string ToString() const;
+        std::string ToString(std::size_t indent=0) const;
     };
 
-    inline std::string BackendResource::ToString() const
+    inline std::string BackendResource::ToString(std::size_t indent) const
     {
         std::ostringstream oss;
-        oss << "BackendResource:\n";
-        oss << "    threadPool: " << static_cast<const void*>(threadPool) << '\n';
-        oss << "    cudaDevice: " << cudaDevice << '\n';
-        oss << "    metalDevice: " << static_cast<const void*>(metalDevice) << '\n';
-        oss << "    metalCommandQueue: " << static_cast<const void*>(metalCommandQueue) << '\n';
+        std::string sIndent = "";
+            for (size_t i = 0; i < indent; ++i)
+                sIndent += " ";
+
+        oss << sIndent << "BackendResource:\n";
+        oss << sIndent << "    threadPool: " << static_cast<const void*>(threadPool) << '\n';
+        oss << sIndent << "    cudaDevice: " << cudaDevice << '\n';
+        oss << sIndent << "    metalDevice: " << static_cast<const void*>(metalDevice) << '\n';
+        oss << sIndent << "    metalCommandQueue: " << static_cast<const void*>(metalCommandQueue) << '\n';
         return oss.str();
     }
 

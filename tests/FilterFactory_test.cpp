@@ -17,8 +17,33 @@ TEST(FilterFactory, CanCreateRegisteredFilter){
     std::cout << exampleFilterString << '\n';
 }
 
+TEST(FilterFactory, CanCreateRegisteredFilterWithDefinition){
+    auto  exampleFilter = DMX_CREATE_FILTER("ConvolutionFilter");
+    ASSERT_NE(exampleFilter, nullptr);
+    std::string exampleFilterString = exampleFilter->ToString();
+    EXPECT_TRUE(exampleFilterString.find("ConvolutionFilter:") != std::string::npos);
+    std::cout << exampleFilterString << '\n';
+}
+
 TEST(FilterFactory, ThrowOnUnknownFilter){
+    std::string logFilePath = "../tests/test_files/dmxdenoiser_filterFactory_test.log";
+    bool success = std::filesystem::remove(logFilePath); // Remove log file
+    DMX_LOG_INIT(LogLevel::Debug, &std::clog, logFilePath);
+
     EXPECT_THROW({FilterFactory::instance().create("Unknown");}, std::runtime_error);
+
+    // Check log file
+    std::string tag{"FilterFactory"};
+    std::string msg{"Filter not registered:"};
+    ASSERT_TRUE(std::filesystem::exists(logFilePath));
+    ASSERT_GT(std::filesystem::file_size(logFilePath), 0u);
+    std::ifstream ifile{logFilePath};
+    ASSERT_TRUE(ifile.good());
+    std::string line{};
+    ASSERT_TRUE(static_cast<bool>(std::getline(ifile, line)));
+    EXPECT_NE(line.find("ERROR"), std::string::npos);
+    EXPECT_NE(line.find(tag), std::string::npos);
+    EXPECT_NE(line.find(msg), std::string::npos);
 }
 
 TEST(FilterFactory, ReturnUniquePtrEachTime){

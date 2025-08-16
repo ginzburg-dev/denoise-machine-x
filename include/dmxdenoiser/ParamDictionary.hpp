@@ -123,9 +123,9 @@ namespace dmxdenoiser
                     oss << "    " << param.first << " (int) = [ ";
                     for (int i = 0; i < values.size(); ++i)
                     {
-                        oss << values[i] << ' ';
+                        oss << values[i] << (i != values.size()-1 ? ", " : " ");
                     }
-                    oss << " ]\n";
+                    oss << "]\n";
                 } 
             }
 
@@ -137,9 +137,9 @@ namespace dmxdenoiser
                     oss << "    " << param.first << " (float) = [ ";
                     for (int i = 0; i < values.size(); ++i)
                     {
-                        oss << values[i] << ' ';
+                        oss << values[i] << (i != values.size()-1 ? ", " : " ");
                     }
-                    oss << " ]\n";
+                    oss << "]\n";
                 } 
             }
 
@@ -151,9 +151,9 @@ namespace dmxdenoiser
                     oss << "    " << param.first << " (bool) = [ ";
                     for (int i = 0; i < values.size(); ++i)
                     {
-                        oss << values[i] << ' ';
+                        oss << values[i] << (i != values.size()-1 ? ", " : " ");
                     }
-                    oss << " ]\n";
+                    oss << "]\n";
                 } 
             }
 
@@ -165,9 +165,9 @@ namespace dmxdenoiser
                     oss << "    " << param.first << " (string) = [ ";
                     for (int i = 0; i < values.size(); ++i)
                     {
-                        oss << values[i] << ' ';
+                        oss << values[i] << (i != values.size()-1 ? ", " : " ");
                     }
-                    oss << " ]\n";
+                    oss << "]\n";
                 } 
             }
 
@@ -176,10 +176,10 @@ namespace dmxdenoiser
                 auto values = param.second;
                 if (!values.empty())
                 {
-                    oss << "    " << param.first << " (kernel) = ";
+                    oss << "    " << param.first << " (kernel) = \n";
                     for (int i = 0; i < values.size(); ++i)
                     {
-                        oss << values[i] << ' ';
+                        oss << values[i].ToString(8);
                     }
                     oss << '\n';
                 } 
@@ -190,10 +190,10 @@ namespace dmxdenoiser
                 auto values = param.second;
                 if (!values.empty())
                 {
-                    oss << "    " << param.first << " (backendResource) = ";
+                    oss << "    " << param.first << " (backendResource) = \n";
                     for (int i = 0; i < values.size(); ++i)
                     {
-                        oss << values[i] << ' ';
+                        oss << values[i].ToString(8);
                     }
                     oss << '\n';
                 } 

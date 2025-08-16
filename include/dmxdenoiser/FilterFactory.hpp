@@ -2,9 +2,13 @@
 #define DMXDENOISER_FILTER_FACTORY_H
 
 #include <dmxdenoiser/Filter.hpp>
+#include <dmxdenoiser/Logger.hpp>
 
 #include <functional>
 #include <memory>
+#include <mutex>
+#include <string>
+#include <string_view>
 #include <unordered_map>
 
 /// Macro to automatically register a filter class with the global FilterFactory.
@@ -53,13 +57,18 @@ namespace dmxdenoiser
         /// Create filter by name
         std::unique_ptr<Filter> create(const std::string& name) const
         {
+            std::lock_guard<std::mutex> lock(m_mutex);
             auto it = m_creators.find(name);
             if (it != m_creators.end())
+            {
                 return it->second();
-            throw std::runtime_error("Filter not registered:" + name);
+            }
+            DMX_LOG_ERROR("FilterFactory", "Filter not registered: " + name);
+            throw std::runtime_error("Filter not registered: " + name);
         }
 
     private:
+        mutable std::mutex m_mutex;
         std::unordered_map<std::string, Creator> m_creators;
 
         /// Singleton: prevent copying
@@ -69,5 +78,7 @@ namespace dmxdenoiser
     };
 
 } // namespace dmxdenoiser
+
+#define DMX_CREATE_FILTER(NAME) FilterFactory::instance().create(NAME)
 
 #endif // DMXDENOISER_FILTER_FACTORY_H
