@@ -78,24 +78,4 @@ namespace dmxdenoiser
         }
     }
 
-    void Filter::setParams(const ParamDictionary& params)
-    {
-        resetParams();
-
-        if (auto v = params.getSingleParam<float>("strength")) strength = *v;
-        if (auto v = params.getArrayParam<int>("frames")) frames = *v;
-        if (auto v = params.getArrayParam<std::string>("layers")) layers = *v;
-        if (auto v = params.getSingleParam<bool>("filterAlpha")) filterAlpha = *v;
-        if (auto v = params.getSingleParam<std::string>("backend")) backend = parseBackend(*v);
-        if (auto v = params.getSingleParam<BackendResource>("backendResource")) backendResource = *v;
-    };
-
-    void Filter::resetParams() {
-            strength = 1.0f; filterAlpha = false;
-            frames.clear(); layers.clear();
-            backend = Backend::CPU; backendResource = {};
-    };
-
-    Filter::~Filter() = default;
-
 } // namespace dmxdenoiser

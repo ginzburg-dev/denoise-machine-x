@@ -128,14 +128,18 @@ namespace dmxdenoiser
         return get(x, y, frame, layerIdx);
     }
 
-    std::string DMXImage::ToString() const
+    std::string DMXImage::ToString(std::size_t indent) const
     {
+        std::string sIndent = "";
+            for (size_t i = 0; i < indent; ++i)
+                sIndent += " ";
+
         std::ostringstream oss;
-        oss << "DMXImage: \n";
-        oss << "    Dimensions: " << m_width << " x " << m_height << "\n";
-        oss << "    Frames: " << m_numFrames << "\n";
-        oss << "    Channels: " << m_numChannels << "\n";
-        oss << "    Layers: ";
+        oss << sIndent << "DMXImage: \n";
+        oss << sIndent << "    Dimensions: " << m_width << " x " << m_height << "\n";
+        oss << sIndent << "    Frames: " << m_numFrames << "\n";
+        oss << sIndent << "    Channels: " << m_numChannels << "\n";
+        oss << sIndent << "    Layers: ";
         for (const auto& [name, __] : m_layers.data())
             oss << name << ' ';
         return oss.str();

@@ -10,6 +10,13 @@
 
 namespace dmxdenoiser
 {
+
+    struct ConvolutionFilterParams : public FilterParams 
+    {
+        Kernel2D kernel; ///< Custom convolution kernel (1D array representing 2D matrix)
+        virtual std::unique_ptr<FilterParams> clone() const override;
+    };
+
     /// @brief ConvolutionFilter applies a 2D convolution kernel to image pixels.
     /// @note Parameters expected in ParamDictionary:
     ///   - "kernel": Kernel2D (2D kernel)
@@ -19,15 +26,15 @@ namespace dmxdenoiser
     ///   - "filterAlpha": bool (whether to filter alpha channel, optional)     default: false
     struct ConvolutionFilter : public Filter
     {
-        // Parameters
-        Kernel2D kernel; ///< Custom convolution kernel (1D array representing 2D matrix)
-
         // Required: unique filter name
         static constexpr const char* StaticClassName() { return "ConvolutionFilter"; }
-        const char* Name() const override { return StaticClassName(); };
+        const char* Name() const override { return StaticClassName(); }
 
-        ConvolutionFilter() = default;
-        explicit ConvolutionFilter(const ParamDictionary& params) { setParams(params); };
+        ConvolutionFilter();
+        explicit ConvolutionFilter(const ParamDictionary& paramDict) 
+            : ConvolutionFilter() { 
+            setParams(paramDict); 
+        }
 
         ConvolutionFilter(ConvolutionFilter&&) noexcept;
         ConvolutionFilter& operator=(ConvolutionFilter&&) noexcept;
@@ -35,21 +42,16 @@ namespace dmxdenoiser
         ConvolutionFilter(const ConvolutionFilter&) = delete;
         ConvolutionFilter& operator=(const ConvolutionFilter&) = delete;
 
-        ~ConvolutionFilter() override = default;
-
         void setParams(const ParamDictionary& params) override;
-
+        ConvolutionFilterParams& params() override;
+        const ConvolutionFilterParams& params() const override;
+        
         std::string ToString() const override;
+
+        ~ConvolutionFilter() override;
     
-    protected:
-        struct Impl{
-            virtual void apply(DMXImage& img) const = 0;
-            virtual ~Impl() = default;
-        };
-        std::unique_ptr<Impl> impl_;
-
+    private:
         void applyImpl(const DMXImage& in, DMXImage& out) const override;
-
         void resetParams() override;
     };
 

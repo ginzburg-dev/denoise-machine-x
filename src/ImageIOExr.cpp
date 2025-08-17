@@ -218,6 +218,6 @@ namespace dmxdenoiser
         return info;
     }
     
-    ImageIOExr::~ImageIOExr(){}
+    ImageIOExr::~ImageIOExr() {}
 
 } // namespace dmxdenoiser

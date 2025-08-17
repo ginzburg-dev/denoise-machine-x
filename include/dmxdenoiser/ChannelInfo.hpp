@@ -25,12 +25,17 @@ namespace dmxdenoiser
             : name{name_}, pixelType{pixelType_}
         {}
 
-        std::string ToString() const
+        std::string ToString(std::size_t indent=0) const
         {
             std::ostringstream oss;
-            oss << "ChannelInfo: \n";
-            oss << "    Name: " << name << '\n';
-            oss << "    PixelType: " << pixelType;
+
+            std::string sIndent = "";
+            for (size_t i = 0; i < indent; ++i)
+                sIndent += " ";
+
+            oss << sIndent << "ChannelInfo: \n";
+            oss << sIndent << "    Name: " << name << '\n';
+            oss << sIndent << "    PixelType: " << pixelType;
             return oss.str();
         }
     };

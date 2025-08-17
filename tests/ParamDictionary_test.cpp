@@ -168,6 +168,8 @@ TEST(ParamDictionary, ToString){
     params.addKernel2DArray("kernel_array_var", { FilterKernels::getBoxKernel(7), FilterKernels::getBoxKernel(5)});
     params.addBackendResourceArray("backend_res_array_var", { BackendResource{}, BackendResource{}});
     
-    DMX_LOG_INIT(LogLevel::Debug, &std::clog, "../tests/test_files/dmxdenoiser_paramDictionary_test.log");
+    std::string logFilePath = "../tests/test_files/dmxdenoiser_paramDictionary_test.log";
+    bool success = std::filesystem::remove(logFilePath); // Remove log file
+    DMX_LOG_INIT(LogLevel::Debug, &std::clog, logFilePath);
     DMX_LOG_INFO("ParamDictionary", params.ToString());
 }

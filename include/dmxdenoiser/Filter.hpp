@@ -17,20 +17,25 @@ namespace dmxdenoiser
 {
 
     /*Abstract Base*/
-    struct Filter
-    {
+    struct FilterParams {
         float strength = 1.0f; ///< Mixing factor, range [0.0, 1.0]. 0 = original, 1 = fully filtered
         bool filterAlpha = false;
         std::vector<int> frames{};
         std::vector<std::string> layers{};
-        
         Backend backend = Backend::CPU;
         BackendResource backendResource{};
 
+        virtual ~FilterParams() = default;
+        virtual std::unique_ptr<FilterParams> clone() const = 0;
+    };
+
+    /*Abstract Base*/
+    struct Filter
+    {
         virtual const char* Name() const = 0;
-
-        virtual void setParams(const ParamDictionary& params) = 0;
-
+        virtual void setParams(const ParamDictionary& paramDict) = 0;
+        virtual FilterParams& params() = 0;
+        virtual const FilterParams& params() const = 0;
         void apply(const DMXImage& in, DMXImage& out) const { applyImpl(in, out); }
         void apply(DMXImage& inOut) const { 
             DMXImage tmp{ inOut };
@@ -38,14 +43,6 @@ namespace dmxdenoiser
             inOut = std::move(tmp);
         }
 
-        /*
-        static void convolve2D(
-            DMXImage& inOut,
-            const Kernel2D& kernel,
-            std::vector<int> frames = {},
-            std::vector<std::string> layers = {},
-            bool filterAlpha = false);
-        */
         static void convolve2D(
             const DMXImage& input,
             DMXImage& output,
@@ -54,13 +51,16 @@ namespace dmxdenoiser
             std::vector<std::string> layers = {},
             bool filterAlpha = false);
 
-        virtual std::string ToString() const = 0; ///< String representation of the filter name and parameters for logging.
+        // String representation of the filter name and parameters for logging.
+        virtual std::string ToString() const = 0; 
         
-        virtual ~Filter();
+        virtual ~Filter() = default;
 
     protected:
-        virtual void applyImpl(const DMXImage& in, DMXImage& out) const = 0;
-        virtual void resetParams();
+        std::unique_ptr<FilterParams> m_params;
+        // Apply implementation of the filter
+        virtual void applyImpl(const DMXImage& in, DMXImage& out) const = 0; 
+        virtual void resetParams() = 0;
     };
     
     /**

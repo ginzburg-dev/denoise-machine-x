@@ -80,7 +80,7 @@ namespace dmxdenoiser
         bool hasLayer(const std::string& layer) const { return m_layers.getLayer(layer); }
         bool hasValidLayerDictionary() const { return m_layers.size() != 0; }
         
-        std::string ToString() const;
+        std::string ToString(std::size_t indent=0) const;
 
         void clear();
 

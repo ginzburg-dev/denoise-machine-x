@@ -7,18 +7,43 @@
 
 #include <optional>
 #include <iostream>
+#include <memory>
 #include <vector>
+
 
 namespace dmxdenoiser
 {
 
-    void ConvolutionFilter::setParams(const ParamDictionary& params)
+    std::unique_ptr<FilterParams> ConvolutionFilterParams::clone() const {
+        return std::make_unique<ConvolutionFilterParams>(*this);
+    };
+    
+    ConvolutionFilter::ConvolutionFilter() {
+        m_params = std::make_unique<ConvolutionFilterParams>();
+    }
+
+    ConvolutionFilterParams& ConvolutionFilter::params() {
+        return static_cast<ConvolutionFilterParams&>(*m_params);
+    }
+
+    const ConvolutionFilterParams& ConvolutionFilter::params() const {
+        return static_cast<const ConvolutionFilterParams&>(*m_params);
+    }
+
+    void ConvolutionFilter::setParams(const ParamDictionary& paramDict)
     {
         resetParams();
 
-        if (auto v = params.getSingleParam<Kernel2D>("kernel"))
+        if (auto v = paramDict.getSingleParam<float>("strength")) params().strength = *v;
+        if (auto v = paramDict.getArrayParam<int>("frames")) params().frames = *v;
+        if (auto v = paramDict.getArrayParam<std::string>("layers")) params().layers = *v;
+        if (auto v = paramDict.getSingleParam<bool>("filterAlpha")) params().filterAlpha = *v;
+        if (auto v = paramDict.getSingleParam<std::string>("backend")) params().backend = parseBackend(*v);
+        if (auto v = paramDict.getSingleParam<BackendResource>("backendResource")) params().backendResource = *v;
+
+        if (auto v = paramDict.getSingleParam<Kernel2D>("kernel"))
         {
-            kernel.set(*v);
+            params().kernel.set(*v);
             DMX_LOG_INFO("ConvolutionFilter", "Kernel parameter set sucessfully.");
         }
         else
@@ -30,18 +55,26 @@ namespace dmxdenoiser
 
     void ConvolutionFilter::applyImpl(const DMXImage& in, DMXImage& out) const
     {
-        convolve2D(in, out, kernel, frames, layers, filterAlpha);
+        if (params().backend == Backend::CPU)
+        {
+            convolve2D(in, out, params().kernel, params().frames, params().layers, params().filterAlpha);
+        }
     };
 
     std::string ConvolutionFilter::ToString() const
     {
-        return "ConvolutionFilter: " + kernel.ToString();
+        // IN PROGRESS
+        return "ConvolutionFilter: \n" + params().kernel.ToString(4);
     };
 
     void ConvolutionFilter::resetParams() {
-        Filter::resetParams();
-        kernel.clear();
+        params().strength = 1.0f; params().filterAlpha = false;
+        params().frames.clear(); params().layers.clear();
+        params().backend = Backend::CPU; params().backendResource = {};
+        params().kernel.clear();
     }
+
+    ConvolutionFilter::~ConvolutionFilter() = default;
 
     REGISTER_FILTER(ConvolutionFilter)
 
