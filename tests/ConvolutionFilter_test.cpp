@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include <dmxdenoiser/Backend.hpp>
 #include <dmxdenoiser/DMXImage.hpp>
 #include <dmxdenoiser/FilterKernels.hpp>
 #include <dmxdenoiser/FilterFactory.hpp>
@@ -19,7 +20,8 @@ using namespace dmxdenoiser;
 void applyFilterToImageFile(
     const std::string& filename, 
     const std::string& outputFileName,
-    const Kernel2D& kernel)
+    const Kernel2D& kernel,
+    Backend backend=Backend::CPU)
 {
     AovDictionary aovs = { {"beauty", "default"} };
     std::unique_ptr<ImageIO> io = createImageIO(filename);
@@ -33,6 +35,7 @@ void applyFilterToImageFile(
 
     ParamDictionary params;
     params.addKernel2D("kernel", kernel);
+    params.addBackend("backend", backend);
 
     EXPECT_NO_THROW(convoFilter->setParams(params));
 
@@ -42,9 +45,92 @@ void applyFilterToImageFile(
     io->write(outputFileName, img, {{"beauty"}});
 }
 
-TEST(ConvolutionFilter, NoKernelParameterSet)
+TEST(ConvolutionFilter, ParametersNotSet)
 {
+    std::string logFilePath = "../tests/test_files/dmxdenoiser_convolutionFilter_ParamNotSet_test.log";
+    bool success = std::filesystem::remove(logFilePath); // Remove log file
+    DMX_LOG_INIT(LogLevel::Error, &std::clog, logFilePath);
+
+    ParamDictionary params;
+    //params.addKernel2D("kernel", kernel);
+    //params.addBackend("backend", backend);
+    auto convoFilter = DMX_CREATE_FILTER("ConvolutionFilter");
+    DMXImage img{};
+    EXPECT_THROW(convoFilter->apply(img), std::runtime_error);
+
+    // Check log
+    std::string tag{"ConvolutionFilter"};
+    std::string msg{"Kernel is empty, size={}x{}"};
+    ASSERT_TRUE(std::filesystem::exists(logFilePath));
+    ASSERT_GT(std::filesystem::file_size(logFilePath), 0u);
+    std::ifstream ifile{logFilePath};
+    ASSERT_TRUE(ifile.good());
+    std::string line{};
+    ASSERT_TRUE(static_cast<bool>(std::getline(ifile, line)));
+    EXPECT_NE(line.find("ERROR"), std::string::npos);
+    EXPECT_NE(line.find(tag), std::string::npos);
+    EXPECT_NE(line.find(msg), std::string::npos);
+}
+
+TEST(ConvolutionFilter, ParametersNotSetInfoLog)
+{
+    std::string logFilePath = "../tests/test_files/dmxdenoiser_convolutionFilter_test.log";
+    bool success = std::filesystem::remove(logFilePath); // Remove log file
+    DMX_LOG_INIT(LogLevel::Debug, &std::clog, logFilePath);
+
+    ParamDictionary params;
+    params.addKernel2D("kernel", FilterKernels::getBoxKernel(3));
+    //params.addBackend("backend", backend);
+    auto convoFilter = DMX_CREATE_FILTER("ConvolutionFilter");
+    DMXImage img(10, 10, 1, LayerDictionary{"beauty"});
+    EXPECT_NO_THROW(convoFilter->setParams(params));
+    EXPECT_NO_THROW(convoFilter->apply(img));
+
+    // Check log
     
+    std::string tag{"ConvolutionFilter"};
+    std::string msg{"Kernel is empty, size={}x{}"};
+    ASSERT_TRUE(std::filesystem::exists(logFilePath));
+    ASSERT_GT(std::filesystem::file_size(logFilePath), 0u);
+    std::ifstream ifile{logFilePath};
+    ASSERT_TRUE(ifile.good());
+    std::string logText{};
+    std::string line{};
+    while(std::getline(ifile, line))
+        logText += line;
+    EXPECT_NE(logText.find("INFO"), std::string::npos);
+    EXPECT_NE(logText.find("'strength'"), std::string::npos);
+    EXPECT_NE(logText.find("'frames'"), std::string::npos);
+    EXPECT_NE(logText.find("'layers'"), std::string::npos);
+    EXPECT_NE(logText.find("'filterAlpha'"), std::string::npos);
+    EXPECT_NE(logText.find("'backend'"), std::string::npos);
+    EXPECT_NE(logText.find("'backendResource'"), std::string::npos);
+}
+
+TEST(ConvolutionFilter, KernelParameterNotSet)
+{
+    std::string logFilePath = "../tests/test_files/dmxdenoiser_convolutionFilter_ParamNotSet_test.log";
+    bool success = std::filesystem::remove(logFilePath); // Remove log file
+    DMX_LOG_INIT(LogLevel::Error, &std::clog, logFilePath);
+
+    ParamDictionary params;
+    //params.addKernel2D("kernel", kernel);
+    params.addBackend("backend", Backend::METAL);
+    auto convoFilter = DMX_CREATE_FILTER("ConvolutionFilter");
+    EXPECT_THROW(convoFilter->setParams(params), std::runtime_error);
+
+    // Check log
+    std::string tag{"ConvolutionFilter"};
+    std::string msg{"Missing required parameter 'kernel'"};
+    ASSERT_TRUE(std::filesystem::exists(logFilePath));
+    ASSERT_GT(std::filesystem::file_size(logFilePath), 0u);
+    std::ifstream ifile{logFilePath};
+    ASSERT_TRUE(ifile.good());
+    std::string line{};
+    ASSERT_TRUE(static_cast<bool>(std::getline(ifile, line)));
+    EXPECT_NE(line.find("ERROR"), std::string::npos);
+    EXPECT_NE(line.find(tag), std::string::npos);
+    EXPECT_NE(line.find(msg), std::string::npos);
 }
 
 TEST(ConvolutionFilter, SimpleConvolveAverages)
@@ -185,4 +271,12 @@ TEST(ConvolutionFilter, ApplySobelFilterKernelToTheImage)
 
     applyFilterToImageFile(filename, "../tests/test_files/rabbit_pixel_art_convo_sobel_x_3x3.exr", kernelX);
     applyFilterToImageFile(filename, "../tests/test_files/rabbit_pixel_art_convo_sobel_y_3x3.exr", kernelY);
+}
+
+TEST(ConvolutionFilter, ApplyBoxFilterKernelToTheImageGPU)
+{
+    std::string filename = "../examples/rabbit_pixel_art.exr";
+    std::string outputFileName = "../tests/test_files/rabbit_pixel_art_convo_box_3x3_gpu.exr";
+    auto boxKernel = FilterKernels::getBoxKernel(3);
+    applyFilterToImageFile(filename, outputFileName, boxKernel, Backend::GPU);
 }

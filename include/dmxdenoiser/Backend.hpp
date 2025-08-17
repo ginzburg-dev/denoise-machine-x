@@ -15,7 +15,7 @@ namespace dmxdenoiser
     {
         AUTO,
         CPU,
-        CUDA,
+        GPU,
         METAL,
         // Add more as needed
     };
@@ -35,6 +35,22 @@ namespace dmxdenoiser
 
         std::string ToString(std::size_t indent=0) const;
     };
+
+    inline std::string ToString(Backend backend, std::size_t indent=0)
+    {
+        std::ostringstream oss;
+        std::string sIndent = "";
+            for (size_t i = 0; i < indent; ++i)
+                sIndent += " ";
+        switch(backend)
+        {
+            case Backend::AUTO: return sIndent + "Auto";
+            case Backend::CPU: return sIndent + "Cpu";
+            case Backend::GPU: return sIndent + "Gpu";
+            case Backend::METAL: return sIndent + "Metal";
+            default: return "Unknown backend";
+        }
+    }
 
     inline std::string BackendResource::ToString(std::size_t indent) const
     {
@@ -62,7 +78,7 @@ namespace dmxdenoiser
     {
         if (toLower(backend) == "auto") return Backend::AUTO;
         if (toLower(backend) == "cpu") return Backend::CPU;
-        if (toLower(backend) == "cuda") return Backend::CUDA;
+        if (toLower(backend) == "gpu") return Backend::GPU;
         if (toLower(backend) == "metal") return Backend::METAL;
         return Backend::CPU;
     }

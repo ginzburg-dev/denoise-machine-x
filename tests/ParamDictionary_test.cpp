@@ -56,6 +56,24 @@ TEST(ParamDictionary, SetAndGetKernel2DSingleValue){
     EXPECT_EQ(sample_param.value(), value);
 }
 
+TEST(ParamDictionary, SetAndGetBackendSingleValue){
+    ParamDictionary params;
+    Backend value = Backend::GPU;
+    params.addBackend("sample", value);
+    auto sample_param = params.getSingleParam<Backend>("sample");
+    ASSERT_TRUE(sample_param.has_value());
+    EXPECT_EQ(sample_param.value(), value);
+}
+
+TEST(ParamDictionary, SetAndGetBackendResourceSingleValue){
+    ParamDictionary params;
+    BackendResource value = BackendResource{};
+    params.addBackendResource("sample", value);
+    auto sample_param = params.getSingleParam<BackendResource>("sample");
+    ASSERT_TRUE(sample_param.has_value());
+    EXPECT_EQ(sizeof(sample_param.value()), sizeof(value));
+}
+
 TEST(ParamDictionary, GetMissingParamReturnsNullopt){
     ParamDictionary params;
     params.addInt("sample", 7);
@@ -115,6 +133,23 @@ TEST(ParamDictionary, SetAndGetKernel2DArrayValue){
     EXPECT_EQ(sample_param.value(), value);
 }
 
+TEST(ParamDictionary, SetAndGetBackendArrayValue){
+    ParamDictionary params;
+    std::vector<Backend> value = { Backend::GPU, Backend::METAL };
+    params.addBackendArray("sample", value);
+    auto sample_param = params.getArrayParam<Backend>("sample");
+    ASSERT_TRUE(sample_param.has_value());
+    EXPECT_EQ(sample_param.value(), value);
+}
+
+TEST(ParamDictionary, SetAndGetBackendResourceArrayValue){
+    ParamDictionary params;
+    std::vector<BackendResource> value = { BackendResource{}, BackendResource{} };
+    params.addBackendResourceArray("sample", value);
+    auto sample_param = params.getArrayParam<BackendResource>("sample");
+    ASSERT_TRUE(sample_param.has_value());
+    EXPECT_EQ(sizeof(sample_param.value()), sizeof(value));
+}
 
 TEST(ParamDictionary, GetMissingStringArrayParamReturnsNullopt){
     ParamDictionary params;
@@ -159,14 +194,16 @@ TEST(ParamDictionary, ToString){
     params.addBool("bool_var", true);
     params.addString("string_var", "String data");
     params.addKernel2D("kernel_var", FilterKernels::getGaussianKernel(3, 1));
+    params.addBackend("backend_var", Backend::GPU);
     params.addBackendResource("backend_res_var", BackendResource{});
 
     params.addIntArray("int_array_var", {0, 2});
     params.addFloatArray("float_array_var", {3.0f, 4.0f});
     params.addBoolArray("bool_array_var", {false, true});
     params.addStringArray("string_array_var", {"String data1", "String data2"});
-    params.addKernel2DArray("kernel_array_var", { FilterKernels::getBoxKernel(7), FilterKernels::getBoxKernel(5)});
-    params.addBackendResourceArray("backend_res_array_var", { BackendResource{}, BackendResource{}});
+    params.addKernel2DArray("kernel_array_var", {FilterKernels::getBoxKernel(7), FilterKernels::getBoxKernel(5)});
+    params.addBackendArray("backend_array_var", {Backend::GPU, Backend::METAL});
+    params.addBackendResourceArray("backend_res_array_var", {BackendResource{}, BackendResource{}});
     
     std::string logFilePath = "../tests/test_files/dmxdenoiser_paramDictionary_test.log";
     bool success = std::filesystem::remove(logFilePath); // Remove log file

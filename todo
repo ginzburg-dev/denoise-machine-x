@@ -1,7 +1,6 @@
-ConvolutionFilter: each filter has its own unique parameter type std::unique_ptr<ConvolutionFilterParams> m_params;
-Move function definitions from headers to cpp files where possible
 ConvolutionFilter: add CPU, METAL and GPU backend implementations
 ConvolutionFilter: ToString()
+Move function definitions from headers to cpp files where possible
 DMXImage: Duplicate or copy layers from one image to another (for Filter::convolve2D())
 DMXImage: Frame count should be odd.
 DMXImage: frame map (to compute mv guidience)

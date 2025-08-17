@@ -11,12 +11,6 @@
 namespace dmxdenoiser
 {
 
-    struct ConvolutionFilterParams : public FilterParams 
-    {
-        Kernel2D kernel; ///< Custom convolution kernel (1D array representing 2D matrix)
-        virtual std::unique_ptr<FilterParams> clone() const override;
-    };
-
     /// @brief ConvolutionFilter applies a 2D convolution kernel to image pixels.
     /// @note Parameters expected in ParamDictionary:
     ///   - "kernel": Kernel2D (2D kernel)
@@ -26,15 +20,15 @@ namespace dmxdenoiser
     ///   - "filterAlpha": bool (whether to filter alpha channel, optional)     default: false
     struct ConvolutionFilter : public Filter
     {
+        // Parameters
+        Kernel2D m_kernel;
+
         // Required: unique filter name
         static constexpr const char* StaticClassName() { return "ConvolutionFilter"; }
         const char* Name() const override { return StaticClassName(); }
 
-        ConvolutionFilter();
-        explicit ConvolutionFilter(const ParamDictionary& paramDict) 
-            : ConvolutionFilter() { 
-            setParams(paramDict); 
-        }
+        ConvolutionFilter() = default;
+        explicit ConvolutionFilter(const ParamDictionary& params) {  setParams(params); }
 
         ConvolutionFilter(ConvolutionFilter&&) noexcept;
         ConvolutionFilter& operator=(ConvolutionFilter&&) noexcept;
@@ -43,16 +37,14 @@ namespace dmxdenoiser
         ConvolutionFilter& operator=(const ConvolutionFilter&) = delete;
 
         void setParams(const ParamDictionary& params) override;
-        ConvolutionFilterParams& params() override;
-        const ConvolutionFilterParams& params() const override;
-        
+
         std::string ToString() const override;
 
-        ~ConvolutionFilter() override;
-    
+    protected:
+        void resetParams() override { Filter::resetParams(); m_kernel.clear(); };
+
     private:
-        void applyImpl(const DMXImage& in, DMXImage& out) const override;
-        void resetParams() override;
+        void applyFilter(const DMXImage& in, DMXImage& out) const override;
     };
 
 } // namespace dmxdenoiser

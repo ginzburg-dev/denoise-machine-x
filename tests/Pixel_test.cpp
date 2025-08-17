@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <dmxdenoiser/Pixel.hpp>
-#include <dmxdenoiser/util/FloatsEqual.hpp>
+#include <dmxdenoiser/util/FloatUtils.hpp>
 
 #include <limits>
 
@@ -189,4 +189,23 @@ TEST(Pixel, PixelRGBANegation)
     PixelRGBA p = {1.0f, -2.0f, 3.0f, -4.0f};
     PixelRGBA n = -p;
     EXPECT_TRUE((n == PixelRGBA{-1.0f, 2.0f, -3.0f, 4.0f}));
+}
+
+
+TEST(Pixel, PixelsBlend)
+{
+    PixelRGBA p1 = {1.0f, 1.0f, 1.0f, 1.0f};
+    PixelRGBA p2 = {2.0f, 2.0f, 2.0f, 2.0f};
+
+    // Blend pixels with alphaBlend on 
+    EXPECT_TRUE((blendPixels(p1, p2, 0, 1) == PixelRGBA{1.0f, 1.0f, 1.0f, 1.0f}));
+    EXPECT_TRUE((blendPixels(p1, p2, 1, 1) == PixelRGBA{2.0f, 2.0f, 2.0f, 2.0f}));
+
+    // Blend pixels with alphaBlend off
+    EXPECT_TRUE((blendPixels(p1, p2, 0, 0) == PixelRGBA{1.0f, 1.0f, 1.0f, 1.0f}));
+    EXPECT_TRUE((blendPixels(p1, p2, 1, 0) == PixelRGBA{2.0f, 2.0f, 2.0f, 1.0f}));
+
+    // Bound checking
+    EXPECT_TRUE((blendPixels(p1, p2, -100, 0) == PixelRGBA{1.0f, 1.0f, 1.0f, 1.0f}));
+    EXPECT_TRUE((blendPixels(p1, p2, 100, 0) == PixelRGBA{2.0f, 2.0f, 2.0f, 1.0f}));
 }

@@ -1,7 +1,7 @@
 // Kernel2D.hpp
 #pragma once
 
-#include <dmxdenoiser/util/FloatsEqual.hpp>
+#include <dmxdenoiser/util/FloatUtils.hpp>
 
 #include <cmath>
 #include <cstddef>

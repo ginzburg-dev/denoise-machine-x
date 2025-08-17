@@ -22,6 +22,7 @@ namespace dmxdenoiser
         std::map<std::string, std::vector<bool>> bools;
         std::map<std::string, std::vector<std::string>> strings;
         std::map<std::string, std::vector<Kernel2D>> kernels2d;
+        std::map<std::string, std::vector<Backend>> backends;
         std::map<std::string, std::vector<BackendResource>> backendResources;
 
         // Set a single-value parameter
@@ -30,6 +31,7 @@ namespace dmxdenoiser
         void addBool(const std::string& name, bool value) { bools[name] = { value }; }
         void addString(const std::string& name, const std::string& value) { strings[name] = { value }; }
         void addKernel2D(const std::string& name, const Kernel2D& value) { kernels2d[name] = { value }; }
+        void addBackend(const std::string& name, const Backend& value) { backends[name] = { value }; }
         void addBackendResource(const std::string& name, const BackendResource& value) {
             backendResources[name] = { value }; 
         }
@@ -40,6 +42,7 @@ namespace dmxdenoiser
         void addBoolArray(const std::string& name, std::vector<bool> value) { bools[name] = value; }
         void addStringArray(const std::string& name, std::vector<std::string> value) { strings[name] = value; }
         void addKernel2DArray(const std::string& name, std::vector<Kernel2D> value) { kernels2d[name] = value; }
+        void addBackendArray(const std::string& name, const std::vector<Backend>& value) { backends[name] = value; }
         void addBackendResourceArray(const std::string& name, std::vector<BackendResource> value) {
             backendResources[name] = value; 
         }
@@ -66,6 +69,10 @@ namespace dmxdenoiser
             } else if constexpr (std::is_same_v<T, Kernel2D>) {
                 auto it = kernels2d.find(name);
                 if (it != kernels2d.end() && !it->second.empty())
+                    return it->second[0];
+            } else if constexpr (std::is_same_v<T, Backend>) {
+                auto it = backends.find(name);
+                if (it != backends.end() && !it->second.empty())
                     return it->second[0];
             } else if constexpr (std::is_same_v<T, BackendResource>) {
                 auto it = backendResources.find(name);
@@ -99,6 +106,10 @@ namespace dmxdenoiser
             } else if constexpr (std::is_same_v<T, Kernel2D>) {
                 auto it = kernels2d.find(name);
                 if (it != kernels2d.end())
+                    return it->second;
+            } else if constexpr (std::is_same_v<T, Backend>) {
+                auto it = backends.find(name);
+                if (it != backends.end())
                     return it->second;
             } else if constexpr (std::is_same_v<T, BackendResource>) {
                 auto it = backendResources.find(name);
@@ -176,12 +187,26 @@ namespace dmxdenoiser
                 auto values = param.second;
                 if (!values.empty())
                 {
-                    oss << "    " << param.first << " (kernel) = \n";
+                    oss << "    " << param.first << " (Kerne2D) = \n";
                     for (int i = 0; i < values.size(); ++i)
                     {
-                        oss << values[i].ToString(8);
+                        oss << values[i].ToString(8) << (i != values.size()-1 ? ", " : " ");
                     }
                     oss << '\n';
+                } 
+            }
+
+            for (const auto& param : backends)
+            {
+                auto values = param.second;
+                if (!values.empty())
+                {
+                    oss << "    " << param.first << " (Backend) = [ ";
+                    for (int i = 0; i < values.size(); ++i)
+                    {
+                        oss << dmxdenoiser::ToString(values[i]) << (i != values.size()-1 ? ", " : " ");
+                    }
+                    oss << "]\n";
                 } 
             }
 
@@ -190,7 +215,7 @@ namespace dmxdenoiser
                 auto values = param.second;
                 if (!values.empty())
                 {
-                    oss << "    " << param.first << " (backendResource) = \n";
+                    oss << "    " << param.first << " (BackendResource) = \n";
                     for (int i = 0; i < values.size(); ++i)
                     {
                         oss << values[i].ToString(8);

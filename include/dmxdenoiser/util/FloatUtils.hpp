@@ -1,6 +1,7 @@
-// FloatsEqual.hpp
+// FloatUtils.hpp
 #pragma once
 
+#include <algorithm> // for std::clamp()
 #include <cmath>
 #include <limits>
 
@@ -15,5 +16,11 @@ namespace dmxdenoiser
             return true; // Both are +Inf or both are -Inf
         return std::fabs(a - b) < epsilon;
     }
+
+    // Blend two floats 
+    constexpr inline float floatsBlend(float a, float b, float t) noexcept { 
+        t = std::clamp(t, 0.0f, 1.0f);
+        return a + (b - a) * t;
+    } 
 
 } // namespace dmxdenoiser

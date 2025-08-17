@@ -65,12 +65,13 @@ TEST(FilterFactory, CanOverrideFilterRegistration){
             SpectralFilter() = default;
             ~SpectralFilter() override = default;
             void setParams(const ParamDictionary& params) override {};
-            FilterParams& params() override { return *m_params; };
-            const FilterParams& params() const override { return *m_params; };
             std::string ToString() const override { return "SpectralFilter"; };
+
         protected:
-            void applyImpl(const DMXImage& in, DMXImage& out) const override {};
             void resetParams() override {};
+
+        private:
+            void applyFilter(const DMXImage& in, DMXImage& out) const override {};
         };
         return std::make_unique<SpectralFilter>();
     });

@@ -1,7 +1,7 @@
 // Pixel.hpp
 #pragma once
 
-#include <dmxdenoiser/util/FloatsEqual.hpp>
+#include <dmxdenoiser/util/FloatUtils.hpp>
 
 namespace dmxdenoiser
 {
@@ -116,5 +116,15 @@ namespace dmxdenoiser
 
     inline bool operator!=(const PixelRGBA& p, const PixelRGBAView& pv) { return  !(p == pv); }
     inline bool operator!=(const PixelRGBAView& pv, const PixelRGBA& p) { return  p != pv; }
+
+    inline PixelRGBA blendPixels(const PixelRGBA& a, const PixelRGBA& b, float t, bool alphaBlend=false) noexcept {
+        PixelRGBA p{ 
+            floatsBlend(a.r, b.r, t), 
+            floatsBlend(a.g, b.g, t),
+            floatsBlend(a.b, b.b, t),
+            alphaBlend ? floatsBlend(a.a, b.a, t) : a.a
+        };
+        return p;
+    }
 
 } // namespace dmxdenoiser
