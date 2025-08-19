@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "AssertLogContains.hpp"
 #include <dmxdenoiser/Logger.hpp>
 
 #include <cstdio>
@@ -40,15 +41,7 @@ TEST(Logger, LoggerInit)
     Logger::instance().Log(LogLevel::Error, tag, msg);
 
     // Check log file
-    ASSERT_TRUE(std::filesystem::exists(logFilePath));
-    ASSERT_GT(std::filesystem::file_size(logFilePath), 0u);
-    std::ifstream ifile{logFilePath};
-    ASSERT_TRUE(ifile.good());
-    std::string line{};
-    ASSERT_TRUE(static_cast<bool>(std::getline(ifile, line)));
-    EXPECT_NE(line.find("ERROR"), std::string::npos);
-    EXPECT_NE(line.find(tag), std::string::npos);
-    EXPECT_NE(line.find(msg), std::string::npos);
+    assertLogContains(logFilePath, "ERROR", tag, msg);
 }
 
 TEST(Logger, LoggerInitWithDefinition)
@@ -61,15 +54,7 @@ TEST(Logger, LoggerInitWithDefinition)
     Logger::instance().Log(LogLevel::Error, tag, msg);
 
     // Check log file
-    ASSERT_TRUE(std::filesystem::exists(logFilePath));
-    ASSERT_GT(std::filesystem::file_size(logFilePath), 0u);
-    std::ifstream ifile{logFilePath};
-    ASSERT_TRUE(ifile.good());
-    std::string line{};
-    ASSERT_TRUE(static_cast<bool>(std::getline(ifile, line)));
-    EXPECT_NE(line.find("ERROR"), std::string::npos);
-    EXPECT_NE(line.find(tag), std::string::npos);
-    EXPECT_NE(line.find(msg), std::string::npos);
+    assertLogContains(logFilePath, "ERROR", tag, msg);
 }
 
 TEST(Logger, LoggerDefinition)
@@ -82,39 +67,12 @@ TEST(Logger, LoggerDefinition)
     std::string tag = "Filter";
     std::string msg = "Strength=";
     float strength = 10.0f;
+    
     DMX_LOG_DEBUG(tag, msg, strength);
     DMX_LOG_INFO(tag, msg, strength);
     DMX_LOG_WARNING(tag, msg, strength);
     DMX_LOG_ERROR(tag, msg, strength);
 
     // Check log file
-    ASSERT_TRUE(std::filesystem::exists(logFilePath));
-    ASSERT_GT(std::filesystem::file_size(logFilePath), 0u);
-    std::ifstream ifile{logFilePath};
-    ASSERT_TRUE(ifile.good());
-    std::string line{};
-
-    // DEBUG
-    ASSERT_TRUE(static_cast<bool>(std::getline(ifile, line)));
-    EXPECT_NE(line.find("DEBUG"), std::string::npos);
-    EXPECT_NE(line.find(tag), std::string::npos);
-    EXPECT_NE(line.find(msg), std::string::npos);
-
-    // INFO
-    ASSERT_TRUE(static_cast<bool>(std::getline(ifile, line)));
-    EXPECT_NE(line.find("INFO"), std::string::npos);
-    EXPECT_NE(line.find(tag), std::string::npos);
-    EXPECT_NE(line.find(msg), std::string::npos);
-
-    // WARNING
-    ASSERT_TRUE(static_cast<bool>(std::getline(ifile, line)));
-    EXPECT_NE(line.find("WARNING"), std::string::npos);
-    EXPECT_NE(line.find(tag), std::string::npos);
-    EXPECT_NE(line.find(msg), std::string::npos);
-
-    // ERROR
-    ASSERT_TRUE(static_cast<bool>(std::getline(ifile, line)));
-    EXPECT_NE(line.find("ERROR"), std::string::npos);
-    EXPECT_NE(line.find(tag), std::string::npos);
-    EXPECT_NE(line.find(msg), std::string::npos);
+    assertLogContains(logFilePath, "ERROR", "DEBUG", "INFO", "WARNING", tag, msg, "10");
 }

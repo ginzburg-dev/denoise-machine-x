@@ -1,3 +1,4 @@
+ThreadPool: ParallelFor, rethrow exception
 ConvolutionFilter: add CPU, METAL and GPU backend implementations
 ConvolutionFilter: ToString()
 Move function definitions from headers to cpp files where possible

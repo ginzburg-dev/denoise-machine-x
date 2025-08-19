@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "AssertLogContains.hpp"
 #include <dmxdenoiser/Filter.hpp>
 #include <dmxdenoiser/FilterFactory.hpp>
 
@@ -35,15 +36,7 @@ TEST(FilterFactory, ThrowOnUnknownFilter){
     // Check log file
     std::string tag{"FilterFactory"};
     std::string msg{"Filter not registered:"};
-    ASSERT_TRUE(std::filesystem::exists(logFilePath));
-    ASSERT_GT(std::filesystem::file_size(logFilePath), 0u);
-    std::ifstream ifile{logFilePath};
-    ASSERT_TRUE(ifile.good());
-    std::string line{};
-    ASSERT_TRUE(static_cast<bool>(std::getline(ifile, line)));
-    EXPECT_NE(line.find("ERROR"), std::string::npos);
-    EXPECT_NE(line.find(tag), std::string::npos);
-    EXPECT_NE(line.find(msg), std::string::npos);
+    assertLogContains(logFilePath, "ERROR", tag, msg);
 }
 
 TEST(FilterFactory, ReturnUniquePtrEachTime){

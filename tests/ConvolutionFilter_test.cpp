@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "AssertLogContains.hpp"
 #include <dmxdenoiser/Backend.hpp>
 #include <dmxdenoiser/DMXImage.hpp>
 #include <dmxdenoiser/FilterKernels.hpp>
@@ -61,15 +62,7 @@ TEST(ConvolutionFilter, ParametersNotSet)
     // Check log
     std::string tag{"ConvolutionFilter"};
     std::string msg{"Kernel is empty, size={}x{}"};
-    ASSERT_TRUE(std::filesystem::exists(logFilePath));
-    ASSERT_GT(std::filesystem::file_size(logFilePath), 0u);
-    std::ifstream ifile{logFilePath};
-    ASSERT_TRUE(ifile.good());
-    std::string line{};
-    ASSERT_TRUE(static_cast<bool>(std::getline(ifile, line)));
-    EXPECT_NE(line.find("ERROR"), std::string::npos);
-    EXPECT_NE(line.find(tag), std::string::npos);
-    EXPECT_NE(line.find(msg), std::string::npos);
+    assertLogContains(logFilePath, "ERROR", tag, msg);
 }
 
 TEST(ConvolutionFilter, ParametersNotSetInfoLog)
@@ -87,24 +80,8 @@ TEST(ConvolutionFilter, ParametersNotSetInfoLog)
     EXPECT_NO_THROW(convoFilter->apply(img));
 
     // Check log
-    
-    std::string tag{"ConvolutionFilter"};
-    std::string msg{"Kernel is empty, size={}x{}"};
-    ASSERT_TRUE(std::filesystem::exists(logFilePath));
-    ASSERT_GT(std::filesystem::file_size(logFilePath), 0u);
-    std::ifstream ifile{logFilePath};
-    ASSERT_TRUE(ifile.good());
-    std::string logText{};
-    std::string line{};
-    while(std::getline(ifile, line))
-        logText += line;
-    EXPECT_NE(logText.find("INFO"), std::string::npos);
-    EXPECT_NE(logText.find("'strength'"), std::string::npos);
-    EXPECT_NE(logText.find("'frames'"), std::string::npos);
-    EXPECT_NE(logText.find("'layers'"), std::string::npos);
-    EXPECT_NE(logText.find("'filterAlpha'"), std::string::npos);
-    EXPECT_NE(logText.find("'backend'"), std::string::npos);
-    EXPECT_NE(logText.find("'backendResource'"), std::string::npos);
+    assertLogContains(logFilePath, "INFO", "'strength'", "'strength'",
+        "'layers'", "'filterAlpha'", "'backend'", "'backendResource'");
 }
 
 TEST(ConvolutionFilter, KernelParameterNotSet)
@@ -122,15 +99,7 @@ TEST(ConvolutionFilter, KernelParameterNotSet)
     // Check log
     std::string tag{"ConvolutionFilter"};
     std::string msg{"Missing required parameter 'kernel'"};
-    ASSERT_TRUE(std::filesystem::exists(logFilePath));
-    ASSERT_GT(std::filesystem::file_size(logFilePath), 0u);
-    std::ifstream ifile{logFilePath};
-    ASSERT_TRUE(ifile.good());
-    std::string line{};
-    ASSERT_TRUE(static_cast<bool>(std::getline(ifile, line)));
-    EXPECT_NE(line.find("ERROR"), std::string::npos);
-    EXPECT_NE(line.find(tag), std::string::npos);
-    EXPECT_NE(line.find(msg), std::string::npos);
+    assertLogContains(logFilePath, "ERROR", tag, msg);
 }
 
 TEST(ConvolutionFilter, SimpleConvolveAverages)

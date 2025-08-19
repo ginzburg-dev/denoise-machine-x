@@ -61,9 +61,6 @@ namespace dmxdenoiser
         
         // Copy data for a particular layers and frames
         void copyFrom(const DMXImage& from, std::vector<std::string> layers, std::vector<int> frames);
-        void copyFrom(const DMXImage& from, std::string layer, std::vector<int> frames);
-        void copyFrom(const DMXImage& from, std::vector<std::string> layers, int frame);
-        void copyFrom(const DMXImage& from, std::string layer, int frame);
 
         int getLayerIndex(std::string_view layer) const;
         std::vector<int> getFilteringLayersIndices() const;

@@ -119,8 +119,6 @@ namespace dmxdenoiser
                                 sum += kernel(ky + offset, kx + offset) * input.get(px, py, frame, layer);
                             }
                         sum = blendPixels(orig, sum, strength, filterAlpha);
-                        // if (!filterAlpha)
-                        //    sum.a = orig.a;
                         output.at(x, y, frame, layer) = sum;
                     }
             }

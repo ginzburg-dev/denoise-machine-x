@@ -1,0 +1,10 @@
+[2025-08-19 05:26:45]: [DEBUG] [ThreadPool] ThreadPool created with 4 threads.
+[2025-08-19 05:26:45]: [DEBUG] [ThreadPool] ThreadPool created with 7 threads.
+[2025-08-19 05:26:45]: [DEBUG] [ThreadPool] Task 0 is starting on 0x16b52f000 thread.
+[2025-08-19 05:26:45]: [DEBUG] [ThreadPool] Task 1 is starting on 0x16b38b000 thread.
+[2025-08-19 05:26:45]: [DEBUG] [ThreadPool] Task 2 is starting on 0x16b417000 thread.
+[2025-08-19 05:26:45]: [DEBUG] [ThreadPool] Task 0 sucessfully completed.
+[2025-08-19 05:26:45]: [DEBUG] [ThreadPool] Task 3 is starting on 0x16b4a3000 thread.
+[2025-08-19 05:26:45]: [DEBUG] [ThreadPool] Task 1 sucessfully completed.
+[2025-08-19 05:26:45]: [DEBUG] [ThreadPool] Task 2 sucessfully completed.
+[2025-08-19 05:26:45]: [DEBUG] [ThreadPool] Task 3 sucessfully completed.

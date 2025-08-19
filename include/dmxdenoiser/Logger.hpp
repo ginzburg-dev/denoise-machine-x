@@ -68,7 +68,7 @@ namespace dmxdenoiser
             // Build message text once (handles empty varargs too), with neat spacing
             std::ostringstream msg;
             const char* sep = "";
-            (((msg << std::forward<Args>(args) << sep), sep = " "), ...);
+            (((msg << std::forward<Args>(args) << sep), sep = ""), ...);
             const std::string line = msg.str();
 
             std::lock_guard<std::mutex> lock(m_mutex);
