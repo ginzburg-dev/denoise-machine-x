@@ -1,6 +1,7 @@
-[2025-08-20 05:13:58]: [INFO] [ConvolutionFilter::setParams()] 'strength' parameter not set, using default: 1
-[2025-08-20 05:13:58]: [INFO] [ConvolutionFilter::setParams()] 'frames' parameter not set, using default: {}
-[2025-08-20 05:13:58]: [INFO] [ConvolutionFilter::setParams()] 'layers' parameter not set, using default: {}
-[2025-08-20 05:13:58]: [INFO] [ConvolutionFilter::setParams()] 'filterAlpha' parameter not set, using default: 0
-[2025-08-20 05:13:58]: [INFO] [ConvolutionFilter::setParams()] 'backend' parameter not set, using default: Cpu
-[2025-08-20 05:13:58]: [INFO] [ConvolutionFilter::setParams()] 'backendResource' parameter not set, using default: {}
+[2025-08-20 23:15:32]: [INFO] [Logger] Logging system initialized
+[2025-08-20 23:15:32]: [INFO] [ConvolutionFilter] setParams(): 'strength' parameter not set, using default: 1
+[2025-08-20 23:15:32]: [INFO] [ConvolutionFilter] setParams(): 'frames' parameter not set, using default: {}
+[2025-08-20 23:15:32]: [INFO] [ConvolutionFilter] setParams(): 'layers' parameter not set, using default: {}
+[2025-08-20 23:15:32]: [INFO] [ConvolutionFilter] setParams(): 'filterAlpha' parameter not set, using default: 0
+[2025-08-20 23:15:32]: [INFO] [ConvolutionFilter] convolveCPU(): no ThreadPool available; runing single-threaded
+[2025-08-20 23:15:32]: [DEBUG] [Parallel] parallelFor(): no ThreadPool avilable; runing single-threaded

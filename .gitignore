@@ -1,6 +1,15 @@
 .DS_Store
 Thumbs.db
+/_deps/
+/CMakeFiles/
 /build/
+/build-debug/
+/build-release/
+/Testing/
 *.dSYM
 /.vscode/
 /.VSCodeCounter/
+
+CTestTestfile.cmake
+Makefile
+cmake_install.cmake

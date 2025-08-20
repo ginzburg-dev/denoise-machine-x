@@ -1,6 +1,9 @@
 // Logger.hpp
 #pragma once
 
+#include <dmxdenoiser/Config.hpp>
+#include <dmxdenoiser/util/FileUtils.hpp>
+
 #include <ctime>
 #include <chrono>
 #include <fstream>
@@ -15,18 +18,19 @@
 namespace dmxdenoiser
 {
 
-    enum class LogLevel { Debug, Info, Warning, Error, Off };
+    enum class LogLevel { Trace, Debug, Info, Warning, Error, Critical};
 
     inline constexpr std::string_view ToString(LogLevel level) {
         switch (level) {
+            case LogLevel::Trace: return "TRACE";
             case LogLevel::Debug: return "DEBUG";
             case LogLevel::Info: return "INFO";
             case LogLevel::Warning: return "WARNING";
             case LogLevel::Error: return "ERROR";
-            case LogLevel::Off:   return "OFF";
-            default: return "?";
+            case LogLevel::Critical: return "CRITICAL";
+            default: return "Unknown log level";
         }
-        return "?";
+        return "Unknown log level";
     }
 
     class Logger
@@ -105,9 +109,22 @@ namespace dmxdenoiser
 
 // Initialize logger
 #define DMX_LOG_INIT(LOGLEVEL, OSTREAMPTR, FILENAME) \
-    dmxdenoiser::Logger::instance().init((LOGLEVEL), (OSTREAMPTR), (FILENAME))
+    dmxdenoiser::Logger::instance().init((LOGLEVEL), (OSTREAMPTR), (FILENAME)); \
+    dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Info, "Logger", "Logging system initialized")
 
-#define DMX_LOG_DEBUG(tag, ...) dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Debug, (tag), ##__VA_ARGS__)
+#if DMX_DEBUG_BUILD
+    #define DMX_LOG_TRACE(tag, ...) dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Trace, (tag), ##__VA_ARGS__)
+#else
+    #define DMX_LOG_TRACE(tag, ...) ((void)0)
+#endif
+
+#if DMX_DEBUG_BUILD
+    #define DMX_LOG_DEBUG(tag, ...) dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Debug, (tag), ##__VA_ARGS__)
+#else
+    #define DMX_LOG_DEBUG(tag, ...) ((void)0)
+#endif
+
 #define DMX_LOG_INFO(tag, ...) dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Info, (tag), ##__VA_ARGS__)
 #define DMX_LOG_WARNING(tag, ...) dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Warning, (tag), ##__VA_ARGS__)
 #define DMX_LOG_ERROR(tag, ...) dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Error, (tag), ##__VA_ARGS__)
+#define DMX_LOG_CRITICAL(tag, ...) dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Critical, (tag), ##__VA_ARGS__)

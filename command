@@ -10,3 +10,18 @@
     --aluxary
     --output filtered.####.exr
 
+
+grep CMAKE_BUILD_TYPE build-release/CMakeCache.txt
+# should print: CMAKE_BUILD_TYPE:STRING=Release
+
+rm -f CMakeCache.txt CMakeFiles 2>/dev/null || true
+
+# Debug tree
+Debug build & run tests:
+cmake -S . -B build/debug   -DCMAKE_BUILD_TYPE=Debug
+(cmake --build build-debug -j 8 && cd build-debug && ctest --output-on-failure --verbose -j 8 && cd .. && cd ..)
+
+# Release tree
+Release build & run tests:
+cmake -S . -B build-release -DCMAKE_BUILD_TYPE=Release
+(cmake --build build-release -j 8 && cd build-release && ctest --output-on-failure --verbose -j 8 && cd .. && cd ..)

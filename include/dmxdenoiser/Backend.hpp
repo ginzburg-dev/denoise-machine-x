@@ -2,6 +2,7 @@
 #pragma once
 
 #include <dmxdenoiser/StringConversions.hpp>
+#include <dmxdenoiser/ThreadPool.hpp>
 
 #include <iostream>
 #include <string>
@@ -23,7 +24,7 @@ namespace dmxdenoiser
     struct BackendResource
     {
         // CPU
-        void* threadPool = nullptr;
+        ThreadPool* threadPool = nullptr;
 
         // CUDA
         int cudaDevice = 0;

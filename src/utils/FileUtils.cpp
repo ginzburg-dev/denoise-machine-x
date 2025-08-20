@@ -17,4 +17,11 @@ namespace dmxdenoiser
         return ext;
     }
 
+    std::string getFileBaseName(std::string_view filename) {
+        auto pos = filename.find_last_of("/\\");
+        if (pos == std::string_view::npos)
+            return {};
+        return std::string(filename.substr(pos+1));
+    }
+
 } // namespace dmxdenoiser

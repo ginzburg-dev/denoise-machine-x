@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <condition_variable>
+#include <cstddef>
 #include <functional>
 #include <future>
 #include <iostream>
@@ -31,8 +32,8 @@ namespace dmxdenoiser
         ThreadPool(const ThreadPool&&) = delete;
         ThreadPool& operator=(const ThreadPool&&) = delete;
 
-        static int maxThreads();
-        int runningThreads() const;
+        static unsigned int maxThreads();
+        std::size_t runningThreads() const;
 
         template<class F, class... Args>
         auto enqueue(F&& f, Args&&... args) 
@@ -48,12 +49,12 @@ namespace dmxdenoiser
         bool m_stop{false};
     };
 
-    int ThreadPool::maxThreads() {
+    inline unsigned int ThreadPool::maxThreads() {
         int hc = std::thread::hardware_concurrency();
         return (hc > 1) ? hc - 1 : 1;
     }
 
-    inline int ThreadPool::runningThreads() const {
+    inline std::size_t ThreadPool::runningThreads() const {
         return m_workers.size();
     }
 
@@ -83,7 +84,7 @@ namespace dmxdenoiser
                 }
             );
         }
-        DMX_LOG_DEBUG("ThreadPool", "ThreadPool ", this, " created with ", threads, " threads.");
+        DMX_LOG_INFO("ThreadPool", "ThreadPool ", this, " created with ", threads, " threads.");
     }
 
     template<class F, class... Args>
@@ -98,8 +99,8 @@ namespace dmxdenoiser
             std::unique_lock<std::mutex> lock(m_mutex);
             if (m_stop)
             {
-                DMX_LOG_ERROR("ThreadPool::enqueue()", "Enqueue on stopped ThreadPool ", this, " .");
-                throw std::runtime_error("Enqueue on stopped ThreadPool.");
+                DMX_LOG_ERROR("ThreadPool", "enqueue(): Enqueue on stopped ThreadPool ", this, " .");
+                throw std::runtime_error("enqueue(): Enqueue on stopped ThreadPool.");
             }
             m_tasks.emplace([task](){ (*task)(); });
         }
@@ -117,7 +118,7 @@ namespace dmxdenoiser
         for(std::thread& worker : m_workers)
             worker.join();
         
-        DMX_LOG_DEBUG("ThreadPool", "ThreadPool ", this, " stopped.");
+        DMX_LOG_INFO("ThreadPool", "ThreadPool ", this, " stopped.");
     }
 
 } // namespace dmxdenoiser

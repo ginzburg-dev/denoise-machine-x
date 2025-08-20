@@ -24,7 +24,7 @@ namespace dmxdenoiser
         std::vector<int> m_frames;
         std::vector<std::string> m_layers;
         Backend m_backend = Backend::CPU;
-        BackendResource m_backendResource{};
+        BackendResource m_backendResource;
 
         virtual const char* Name() const = 0;
         virtual void setParams(const ParamDictionary& params) = 0;

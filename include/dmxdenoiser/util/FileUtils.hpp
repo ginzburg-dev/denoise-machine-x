@@ -9,4 +9,7 @@ namespace dmxdenoiser
 
     std::string getFileExtension(std::string_view filename);
 
+    std::string getFileBaseName(std::string_view filename);
+
+
 } // namespace dmxdenoiser

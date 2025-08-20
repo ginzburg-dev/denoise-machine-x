@@ -45,6 +45,9 @@ namespace dmxdenoiser
 
     private:
         void applyFilter(const DMXImage& in, DMXImage& out) const override;
+        void convolveCPU(const DMXImage& input, DMXImage& output) const;
+        void convolveGPU(const DMXImage& input, DMXImage& output) const;
+        void convolveMETAL(const DMXImage& input, DMXImage& output) const;
     };
 
 } // namespace dmxdenoiser

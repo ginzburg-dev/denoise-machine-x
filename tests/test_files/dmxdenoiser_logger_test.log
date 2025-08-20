@@ -1,4 +1,6 @@
-[2025-08-20 05:13:59]: [DEBUG] [Filter] Strength=10
-[2025-08-20 05:13:59]: [INFO] [Filter] Strength=10
-[2025-08-20 05:13:59]: [WARNING] [Filter] Strength=10
-[2025-08-20 05:13:59]: [ERROR] [Filter] Strength=10
+[2025-08-20 23:15:33]: [TRACE] [Filter] Strength=10
+[2025-08-20 23:15:33]: [DEBUG] [Filter] Strength=10
+[2025-08-20 23:15:33]: [INFO] [Filter] Strength=10
+[2025-08-20 23:15:33]: [WARNING] [Filter] Strength=10
+[2025-08-20 23:15:33]: [ERROR] [Filter] Strength=10
+[2025-08-20 23:15:33]: [CRITICAL] [Filter] Strength=10

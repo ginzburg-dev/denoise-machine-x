@@ -7,21 +7,34 @@
 #include <dmxdenoiser/FilterFactory.hpp>
 #include <dmxdenoiser/filters/ConvolutionFilter.hpp>
 #include <dmxdenoiser/ParamDictionary.hpp>
+#include <dmxdenoiser/ThreadPool.hpp>
 #include <dmxdenoiser/ImageIOExr.hpp>
 #include <dmxdenoiser/ImageIOFactory.hpp>
 
+#include <chrono>
 #include <iostream>
 #include <map>
 #include <string>
 #include <string_view>
 #include <memory>
+#include <thread>
 
 using namespace dmxdenoiser;
+
+class ConvolutionFilterTest : public ::testing::Test {
+    protected:
+        std::string logFilePath = "../tests/test_files/dmxdenoiser_convolutionFilter_test.log";
+        void SetUp() override {
+            bool success = std::filesystem::remove(logFilePath); // Remove log file
+            DMX_LOG_INIT(LogLevel::Debug, &std::clog, logFilePath);
+        }
+};
 
 void applyFilterToImageFile(
     const std::string& filename, 
     const std::string& outputFileName,
     const Kernel2D& kernel,
+    ThreadPool* pool = nullptr,
     Backend backend=Backend::CPU)
 {
     AovDictionary aovs = { {"beauty", "default"} };
@@ -37,7 +50,9 @@ void applyFilterToImageFile(
     ParamDictionary params;
     params.addKernel2D("kernel", kernel);
     params.addBackend("backend", backend);
-
+    BackendResource res;
+    res.threadPool = pool;
+    params.addBackendResource("backendResource", res);
     EXPECT_NO_THROW(convoFilter->setParams(params));
 
     EXPECT_NO_THROW(convoFilter->apply(img));
@@ -46,12 +61,8 @@ void applyFilterToImageFile(
     io->write(outputFileName, img, {{"beauty"}});
 }
 
-TEST(ConvolutionFilter, ParametersNotSet)
+TEST_F(ConvolutionFilterTest, ParametersNotSet)
 {
-    std::string logFilePath = "../tests/test_files/dmxdenoiser_convolutionFilter_ParamNotSet_test.log";
-    bool success = std::filesystem::remove(logFilePath); // Remove log file
-    DMX_LOG_INIT(LogLevel::Error, &std::clog, logFilePath);
-
     ParamDictionary params;
     //params.addKernel2D("kernel", kernel);
     //params.addBackend("backend", backend);
@@ -65,12 +76,8 @@ TEST(ConvolutionFilter, ParametersNotSet)
     assertLogContains(logFilePath, "ERROR", tag, msg);
 }
 
-TEST(ConvolutionFilter, ParametersNotSetInfoLog)
+TEST_F(ConvolutionFilterTest, ParametersNotSetInfoLog)
 {
-    std::string logFilePath = "../tests/test_files/dmxdenoiser_convolutionFilter_test.log";
-    bool success = std::filesystem::remove(logFilePath); // Remove log file
-    DMX_LOG_INIT(LogLevel::Debug, &std::clog, logFilePath);
-
     ParamDictionary params;
     params.addKernel2D("kernel", FilterKernels::getBoxKernel(3));
     //params.addBackend("backend", backend);
@@ -84,25 +91,7 @@ TEST(ConvolutionFilter, ParametersNotSetInfoLog)
         "'layers'", "'filterAlpha'", "'backend'", "'backendResource'");
 }
 
-TEST(ConvolutionFilter, KernelParameterNotSet)
-{
-    std::string logFilePath = "../tests/test_files/dmxdenoiser_convolutionFilter_ParamNotSet_test.log";
-    bool success = std::filesystem::remove(logFilePath); // Remove log file
-    DMX_LOG_INIT(LogLevel::Error, &std::clog, logFilePath);
-
-    ParamDictionary params;
-    //params.addKernel2D("kernel", kernel);
-    params.addBackend("backend", Backend::METAL);
-    auto convoFilter = DMX_CREATE_FILTER("ConvolutionFilter");
-    EXPECT_THROW(convoFilter->setParams(params), std::runtime_error);
-
-    // Check log
-    std::string tag{"ConvolutionFilter"};
-    std::string msg{"Missing required parameter 'kernel'"};
-    assertLogContains(logFilePath, "ERROR", tag, msg);
-}
-
-TEST(ConvolutionFilter, SimpleConvolveAverages)
+TEST_F(ConvolutionFilterTest, SimpleConvolveAverages)
 {
     std::size_t imageSize = 3;
     AovDictionary aovs = { {"beauty", "default"} };
@@ -141,7 +130,7 @@ TEST(ConvolutionFilter, SimpleConvolveAverages)
     */
 }
 
-TEST(ConvolutionFilter, SetFilteringLayersAndFrames)
+TEST_F(ConvolutionFilterTest, SetFilteringLayersAndFrames)
 {
     std::size_t size = 3;
     AovDictionary aovs = { {"beauty", "default"} };
@@ -177,7 +166,7 @@ TEST(ConvolutionFilter, SetFilteringLayersAndFrames)
         }
 }
 
-TEST(ConvolutionFilter, SimpleGaussianKernel)
+TEST_F(ConvolutionFilterTest, SimpleGaussianKernel)
 {
     std::size_t size = 3;
     AovDictionary aovs = { {"beauty", "default"} };
@@ -214,7 +203,7 @@ TEST(ConvolutionFilter, SimpleGaussianKernel)
         }
 }
 
-TEST(ConvolutionFilter, ApplyBoxFilterKernelToTheImage)
+TEST_F(ConvolutionFilterTest, ApplyBoxFilterKernelToTheImage)
 {
     std::string filename = "../examples/rabbit_pixel_art.exr";
     std::string outputFileName = "../tests/test_files/rabbit_pixel_art_convo_box_3x3.exr";
@@ -222,7 +211,7 @@ TEST(ConvolutionFilter, ApplyBoxFilterKernelToTheImage)
     applyFilterToImageFile(filename, outputFileName, boxKernel);
 }
 
-TEST(ConvolutionFilter, ApplyGaussianFilterKernelToTheImage)
+TEST_F(ConvolutionFilterTest, ApplyGaussianFilterKernelToTheImage)
 {
     std::string filename = "../examples/rabbit_pixel_art.exr";
     std::string outputFileName = "../tests/test_files/rabbit_pixel_art_convo_gaussan_sigma2_3x3.exr";
@@ -231,7 +220,7 @@ TEST(ConvolutionFilter, ApplyGaussianFilterKernelToTheImage)
     applyFilterToImageFile(filename, outputFileName, gaussianKernel);
 }
 
-TEST(ConvolutionFilter, ApplySobelFilterKernelToTheImage)
+TEST_F(ConvolutionFilterTest, ApplySobelFilterKernelToTheImage)
 {
     std::string filename = "../examples/rabbit_pixel_art.exr";
     
@@ -242,10 +231,30 @@ TEST(ConvolutionFilter, ApplySobelFilterKernelToTheImage)
     applyFilterToImageFile(filename, "../tests/test_files/rabbit_pixel_art_convo_sobel_y_3x3.exr", kernelY);
 }
 
-TEST(ConvolutionFilter, ApplyBoxFilterKernelToTheImageGPU)
+TEST_F(ConvolutionFilterTest, ApplyBoxFilterKernelToTheImageGPU)
 {
     std::string filename = "../examples/rabbit_pixel_art.exr";
     std::string outputFileName = "../tests/test_files/rabbit_pixel_art_convo_box_3x3_gpu.exr";
     auto boxKernel = FilterKernels::getBoxKernel(3);
-    applyFilterToImageFile(filename, outputFileName, boxKernel, Backend::GPU);
+    applyFilterToImageFile(filename, outputFileName, boxKernel, nullptr, Backend::GPU);
+}
+
+TEST_F(ConvolutionFilterTest, ApplyGaussianFilterKernelToTheImageParallel)
+{
+    ThreadPool threadPool(0);
+
+    std::string filename = "../examples/rabbit_pixel_art.exr";
+    std::string outputFileName = "../tests/test_files/rabbit_pixel_art_parallel_convo_gaussan_sigma2_3x3.exr";
+    float sigma = 2.0f;
+    auto gaussianKernel = FilterKernels::getGaussianKernel(3, sigma);
+    applyFilterToImageFile(filename, outputFileName, gaussianKernel, &threadPool);
+}
+
+TEST_F(ConvolutionFilterTest, ApplyGaussianFilterKernelToTheImageParallelSingleThread)
+{
+    std::string filename = "../examples/rabbit_pixel_art.exr";
+    std::string outputFileName = "../tests/test_files/rabbit_pixel_art_parallel_single_convo_gaussan_sigma2_3x3.exr";
+    float sigma = 2.0f;
+    auto gaussianKernel = FilterKernels::getGaussianKernel(3, sigma);
+    applyFilterToImageFile(filename, outputFileName, gaussianKernel);
 }

@@ -1,4 +1,7 @@
-ThreadPool: ParallelFor, rethrow exception
+Logger: trace debug
+Cmake: level of verbosity
+Parallel: estimate time of parallel - Debug
+ThreadPool: ToString, Backend res -> threadPool - >> to string
 ConvolutionFilter: add CPU, METAL and GPU backend implementations
 ConvolutionFilter: ToString()
 Move function definitions from headers to cpp files where possible
