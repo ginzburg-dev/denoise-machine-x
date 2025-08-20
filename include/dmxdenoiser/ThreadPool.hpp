@@ -1,12 +1,4 @@
 // ThreadPool.hpp
-//
-// Note: This thread pool is intentionally **not implemented as a singleton**.
-// It is designed so that multiple thread pools can exist simultaneously,
-// allowing you to separate fast and slow tasks into different pools.
-//
-// This separation enables better resource allocation and can improve performance
-// for fast tasks, as slow-running jobs cannot block the fast queue.
-
 #pragma once
 
 #include <dmxdenoiser/Logger.hpp>
@@ -18,10 +10,13 @@
 #include <iostream>
 #include <memory>
 #include <mutex>
+#include <string>
+#include <string_view>
 #include <queue>
 #include <type_traits> // for std::invoke_result_t
 #include <thread>
 #include <vector>
+#include <unordered_map>
 
 namespace dmxdenoiser 
 {
@@ -49,6 +44,7 @@ namespace dmxdenoiser
 
         std::mutex m_mutex;
         std::condition_variable m_cv;
+
         bool m_stop{false};
     };
 
@@ -61,7 +57,8 @@ namespace dmxdenoiser
         return m_workers.size();
     }
 
-    inline ThreadPool::ThreadPool(int threads) {
+    inline ThreadPool::ThreadPool(int threads)
+    {
         threads = threads > 0 ? 
             ( threads <= this->maxThreads() ? threads : this->maxThreads() ) : this->maxThreads();
 
@@ -86,6 +83,7 @@ namespace dmxdenoiser
                 }
             );
         }
+        DMX_LOG_DEBUG("ThreadPool", "ThreadPool ", this, " created with ", threads, " threads.");
     }
 
     template<class F, class... Args>
@@ -100,7 +98,7 @@ namespace dmxdenoiser
             std::unique_lock<std::mutex> lock(m_mutex);
             if (m_stop)
             {
-                DMX_LOG_ERROR("ThreadPool::enqueue()", "Enqueue on stopped ThreadPool.");
+                DMX_LOG_ERROR("ThreadPool::enqueue()", "Enqueue on stopped ThreadPool ", this, " .");
                 throw std::runtime_error("Enqueue on stopped ThreadPool.");
             }
             m_tasks.emplace([task](){ (*task)(); });
@@ -118,6 +116,8 @@ namespace dmxdenoiser
         m_cv.notify_all();
         for(std::thread& worker : m_workers)
             worker.join();
+        
+        DMX_LOG_DEBUG("ThreadPool", "ThreadPool ", this, " stopped.");
     }
 
 } // namespace dmxdenoiser

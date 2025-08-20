@@ -1,10 +1,12 @@
-[2025-08-19 05:33:50]: [DEBUG] [ThreadPool] ThreadPool created with 4 threads.
-[2025-08-19 05:33:50]: [DEBUG] [ThreadPool] ThreadPool created with 7 threads.
-[2025-08-19 05:33:50]: [DEBUG] [ThreadPool] Task 0 is starting on 0x16f817000 thread.
-[2025-08-19 05:33:50]: [DEBUG] [ThreadPool] Task 1 is starting on 0x16f78b000 thread.
-[2025-08-19 05:33:50]: [DEBUG] [ThreadPool] Task 2 is starting on 0x16f92f000 thread.
-[2025-08-19 05:33:50]: [DEBUG] [ThreadPool] Task 3 is starting on 0x16f8a3000 thread.
-[2025-08-19 05:33:50]: [DEBUG] [ThreadPool] Task 0 sucessfully completed.
-[2025-08-19 05:33:50]: [DEBUG] [ThreadPool] Task 1 sucessfully completed.
-[2025-08-19 05:33:50]: [DEBUG] [ThreadPool] Task 2 sucessfully completed.
-[2025-08-19 05:33:50]: [DEBUG] [ThreadPool] Task 3 sucessfully completed.
+[2025-08-20 05:13:59]: [DEBUG] [ThreadPool] ThreadPool 0x16efdab88 created with 4 threads.
+[2025-08-20 05:13:59]: [DEBUG] [ThreadPool] ThreadPool 0x16efdab88 stopped.
+[2025-08-20 05:13:59]: [DEBUG] [ThreadPool] ThreadPool 0x16efdab88 created with 7 threads.
+[2025-08-20 05:13:59]: [DEBUG] [ThreadPool] Task 0 is starting on 0x16f0ef000 thread.
+[2025-08-20 05:13:59]: [DEBUG] [ThreadPool] Task 1 is starting on 0x16f17b000 thread.
+[2025-08-20 05:13:59]: [DEBUG] [ThreadPool] Task 2 is starting on 0x16f063000 thread.
+[2025-08-20 05:13:59]: [DEBUG] [ThreadPool] Task 3 is starting on 0x16f207000 thread.
+[2025-08-20 05:13:59]: [DEBUG] [ThreadPool] Task 0 sucessfully completed.
+[2025-08-20 05:13:59]: [DEBUG] [ThreadPool] Task 1 sucessfully completed.
+[2025-08-20 05:13:59]: [DEBUG] [ThreadPool] Task 2 sucessfully completed.
+[2025-08-20 05:13:59]: [DEBUG] [ThreadPool] Task 3 sucessfully completed.
+[2025-08-20 05:13:59]: [DEBUG] [ThreadPool] ThreadPool 0x16efdab88 stopped.

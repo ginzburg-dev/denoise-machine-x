@@ -1,0 +1,15 @@
+[2025-08-20 05:13:59]: [DEBUG] [ThreadPool] ThreadPool 0x16ced6b88 created with 7 threads.
+[2025-08-20 05:13:59]: [DEBUG] [TEST(Parallel, ParallelForSimple)] Thread 0x16cfeb000 completed task.
+[2025-08-20 05:13:59]: [DEBUG] [TEST(Parallel, ParallelForSimple)] Thread 0x16cf5f000 completed task.
+[2025-08-20 05:13:59]: [DEBUG] [TEST(Parallel, ParallelForSimple)] Thread 0x16d077000 completed task.
+[2025-08-20 05:13:59]: [DEBUG] [TEST(Parallel, ParallelForSimple)] Thread 0x16d18f000 completed task.
+[2025-08-20 05:13:59]: [DEBUG] [TEST(Parallel, ParallelForSimple)] Thread 0x16d103000 completed task.
+[2025-08-20 05:13:59]: [DEBUG] [TEST(Parallel, ParallelForSimple)] Thread 0x16d2a7000 completed task.
+[2025-08-20 05:13:59]: [DEBUG] [TEST(Parallel, ParallelForSimple)] Thread 0x16d21b000 completed task.
+[2025-08-20 05:13:59]: [DEBUG] [TEST(Parallel, ParallelForSimple)] Thread 0x16d077000 completed task.
+[2025-08-20 05:13:59]: [DEBUG] [TEST(Parallel, ParallelForSimple)] Thread 0x16cf5f000 completed task.
+[2025-08-20 05:13:59]: [DEBUG] [TEST(Parallel, ParallelForSimple)] Thread 0x16cfeb000 completed task.
+[2025-08-20 05:13:59]: [DEBUG] [ThreadPool] ThreadPool 0x16ced6b88 stopped.
+[2025-08-20 05:13:59]: [DEBUG] [ThreadPool] ThreadPool 0x16ced6b88 created with 7 threads.
+[2025-08-20 05:13:59]: [ERROR] [parallelFor()] Some error.
+[2025-08-20 05:13:59]: [DEBUG] [ThreadPool] ThreadPool 0x16ced6b88 stopped.
