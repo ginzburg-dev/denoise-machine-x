@@ -1,3 +1,11 @@
-[2025-08-21 17:56:09]: [INFO] [Logger] Logging system initialized
-[2025-08-21 17:56:09]: [INFO] [ThreadPool] ThreadPool 0x16d28ed70 created with 7 threads.
-[2025-08-21 17:56:09]: [INFO] [ThreadPool] ThreadPool 0x16d28ed70 stopped.
+[2025-08-21 18:05:33]: [INFO] [Logger] Logging system initialized
+[2025-08-21 18:05:33]: [INFO] [ThreadPool] ThreadPool 0x16b80abf8 created with 7 threads.
+[2025-08-21 18:05:33]: [TRACE] [ThreadPool] Task 1 is starting on 0x16b91f000 thread.
+[2025-08-21 18:05:33]: [TRACE] [ThreadPool] Task 1 sucessfully completed.
+[2025-08-21 18:05:33]: [TRACE] [ThreadPool] Task 2 is starting on 0x16b9ab000 thread.
+[2025-08-21 18:05:33]: [TRACE] [ThreadPool] Task 0 is starting on 0x16b893000 thread.
+[2025-08-21 18:05:33]: [TRACE] [ThreadPool] Task 2 sucessfully completed.
+[2025-08-21 18:05:33]: [TRACE] [ThreadPool] Task 3 is starting on 0x16b91f000 thread.
+[2025-08-21 18:05:33]: [TRACE] [ThreadPool] Task 0 sucessfully completed.
+[2025-08-21 18:05:33]: [TRACE] [ThreadPool] Task 3 sucessfully completed.
+[2025-08-21 18:05:33]: [INFO] [ThreadPool] ThreadPool 0x16b80abf8 stopped.
