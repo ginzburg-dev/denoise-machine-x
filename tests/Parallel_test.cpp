@@ -82,7 +82,7 @@ TEST_F(ParallelTest, ParallelForError) {
         EXPECT_NE(std::string(e.what()).find("Some error."), std::string::npos);
     }
 
-    assertLogContains(logFilePath, "ERROR", "parallelFor()", "Some error.");
+    assertLogContains(logFilePath, "ERROR", "Some error.");
 }
 
 TEST_F(ParallelTest, ParallelForChunkStep2N300){
@@ -122,7 +122,7 @@ TEST_F(ParallelTest, ParallelForChunkStepInfN2345){
     const std::uint64_t UMAX = static_cast<std::uint64_t>(std::numeric_limits<unsigned int>::max());
     const std::uint64_t denom = std::min<std::uint64_t>(N64, UMAX);
     
-    DMX_LOG_DEBUG("ParallelTest",
+    DMX_LOG_TRACE("ParallelTest",
         "ParallelForChunkStepInfN2345: N / min(N, UINT_MAX) = ", N64 / denom);
 
     assertLogDoesNotContain(logFilePath, "ERROR");

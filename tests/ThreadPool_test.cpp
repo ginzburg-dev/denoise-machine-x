@@ -89,9 +89,9 @@ TEST_F(ThreadPoolTest, RunSimpleTasksMaxThreads){
     static int taskN = 0;
     auto func = [](){
         int currentTask{ taskN++ };
-        DMX_LOG_DEBUG("ThreadPool", "Task ", currentTask, " is starting on ", std::this_thread::get_id(), " thread."); // Thread safe 
+        DMX_LOG_TRACE("ThreadPool", "Task ", currentTask, " is starting on ", std::this_thread::get_id(), " thread."); // Thread safe 
         // Processing task...
-        DMX_LOG_DEBUG("ThreadPool", "Task ", currentTask, " sucessfully completed."); // Thread safe
+        DMX_LOG_TRACE("ThreadPool", "Task ", currentTask, " sucessfully completed."); // Thread safe
     };
     std::vector<std::future<void>> futures;
     for(int i = 0; i < 4; ++i)

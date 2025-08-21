@@ -1,6 +1,3 @@
-[2025-08-20 23:15:32]: [INFO] [Logger] Logging system initialized
-[2025-08-20 23:15:32]: [INFO] [ThreadPool] ThreadPool 0x1374040b0 created with 2 threads.
-[2025-08-20 23:15:32]: [DEBUG] [Parallel] parallelFor(): pool->runningThreads()=2
-[2025-08-20 23:15:32]: [DEBUG] [Parallel] parallelFor(): chunk_size=4294967295
-[2025-08-20 23:15:32]: [DEBUG] [ParallelTest] ParallelForChunkStepInfN2345: N / min(N, UINT_MAX) = 1
-[2025-08-20 23:15:32]: [INFO] [ThreadPool] ThreadPool 0x1374040b0 stopped.
+[2025-08-21 17:56:08]: [INFO] [Logger] Logging system initialized
+[2025-08-21 17:56:08]: [INFO] [ThreadPool] ThreadPool 0x14bf041d0 created with 2 threads.
+[2025-08-21 17:56:08]: [INFO] [ThreadPool] ThreadPool 0x14bf041d0 stopped.

@@ -1,5 +1,8 @@
-Logger: trace debug
+BuildInfo: data from cmake
+Git actions: debug / release
+All code: place Trace Debag in the code
 Cmake: level of verbosity
+Release?
 Parallel: estimate time of parallel - Debug
 ThreadPool: ToString, Backend res -> threadPool - >> to string
 ConvolutionFilter: add CPU, METAL and GPU backend implementations
@@ -25,6 +28,7 @@ ML spatial
 simple temporalFilter
 noise analyzer
 MV estimator/generator based on MSE and mv guidence
+PSNR/SSIM basic metrics
 
         O-------------------O
         |                   |

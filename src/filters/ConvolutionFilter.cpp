@@ -11,7 +11,6 @@
 #include <memory>
 #include <vector>
 
-
 namespace dmxdenoiser
 {
 
@@ -37,7 +36,8 @@ namespace dmxdenoiser
         if (auto v = params.getSingleParam<bool>("filterAlpha")) 
             m_filterAlpha = *v;
         else
-            DMX_LOG_INFO("ConvolutionFilter", "setParams(): 'filterAlpha' parameter not set, using default: ", m_filterAlpha);
+            DMX_LOG_INFO("ConvolutionFilter", 
+                "setParams(): 'filterAlpha' parameter not set, using default: ", m_filterAlpha);
 
         if (auto v = params.getSingleParam<Backend>("backend")) 
             m_backend = *v;
@@ -48,8 +48,8 @@ namespace dmxdenoiser
         if (auto v = params.getSingleParam<BackendResource>("backendResource")) 
             m_backendResource = *v;
         else
-            DMX_LOG_INFO("ConvolutionFilter", 
-                "setParams(): 'backendResource' parameter not set, using default: {}");
+            DMX_LOG_INFO("ConvolutionFilter", "setParams(): 'backendResource' parameter not set, using default: {}");
+        
         if (auto v = params.getSingleParam<Kernel2D>("kernel")) { 
             m_kernel.set(*v);
         }
