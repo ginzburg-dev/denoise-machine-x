@@ -45,10 +45,10 @@ namespace dmxdenoiser
                 sIndent += " ";
         switch(backend)
         {
-            case Backend::AUTO: return sIndent + "Auto";
-            case Backend::CPU: return sIndent + "Cpu";
-            case Backend::GPU: return sIndent + "Gpu";
-            case Backend::METAL: return sIndent + "Metal";
+            case Backend::AUTO: return sIndent + "AUTO";
+            case Backend::CPU: return sIndent + "CPU";
+            case Backend::GPU: return sIndent + "GPU";
+            case Backend::METAL: return sIndent + "METAL";
             default: return "Unknown backend";
         }
     }
