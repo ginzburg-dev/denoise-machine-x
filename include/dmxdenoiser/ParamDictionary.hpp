@@ -121,11 +121,11 @@ namespace dmxdenoiser
             return std::nullopt;
         }
 
-        std::string ToString() const
+        std::string ToString(bool verbose = false, std::string title = "\nParameters:") const
         {
             std::ostringstream oss;
 
-            oss << "ParamDictionary:    \n";
+            oss << title << "\n";
             for (const auto& param : ints)
             {
                 auto values = param.second;
@@ -162,7 +162,7 @@ namespace dmxdenoiser
                     oss << "    " << param.first << " (bool) = [ ";
                     for (int i = 0; i < values.size(); ++i)
                     {
-                        oss << values[i] << (i != values.size()-1 ? ", " : " ");
+                        oss << std::boolalpha << values[i] << (i != values.size()-1 ? ", " : " ");
                     }
                     oss << "]\n";
                 } 
@@ -190,7 +190,7 @@ namespace dmxdenoiser
                     oss << "    " << param.first << " (Kerne2D) = \n";
                     for (int i = 0; i < values.size(); ++i)
                     {
-                        oss << values[i].ToString(8) << (i != values.size()-1 ? ", " : " ");
+                        oss << values[i].ToString(8, verbose) << (i != values.size()-1 ? ", " : " ");
                     }
                     oss << '\n';
                 } 

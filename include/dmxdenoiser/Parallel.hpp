@@ -22,7 +22,7 @@ namespace dmxdenoiser
     void parallelFor(std::int64_t start, std::int64_t end, 
                     F&& func, ThreadPool* pool = nullptr, std::int64_t chunkSize = 0) 
     {
-        DMX_LOG_DEBUG("Parallel", "parallelFor(int64_t, int64_t) invoked with parameters: start = ", 
+        DMX_LOG_TRACE("Parallel", "parallelFor(int64_t, int64_t) invoked with parameters: start = ", 
             start, ", end = ",  end, ", threadPool = ", (pool == nullptr) ? "none" : "provided", ", chunkSize = ", chunkSize);
         std::atomic<bool> errorOccured{false};
         std::exception_ptr firstException = nullptr;
@@ -88,7 +88,7 @@ namespace dmxdenoiser
     inline void parallelFor(std::int64_t start, std::int64_t end, 
                             F&& func, ThreadPool* pool = nullptr, std::int64_t chunkSize = 0) 
     {
-        DMX_LOG_DEBUG("Parallel", "parallelFor(int64_t) invoked with parameters: start = ", 
+        DMX_LOG_TRACE("Parallel", "parallelFor(int64_t) invoked with parameters: start = ", 
             start, ", end = ",  end, ", threadPool = ", (pool == nullptr) ? "none" : "provided", ", chunkSize = ", chunkSize);
 
         parallelFor(start, end, [f = std::forward<F>(func)](std::int64_t s, std::int64_t e) mutable {

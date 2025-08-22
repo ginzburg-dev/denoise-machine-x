@@ -1,3 +1,4 @@
+Debug level
 BuildInfo: data from cmake
 Git actions: debug / release
 All code: place Trace Debag in the code

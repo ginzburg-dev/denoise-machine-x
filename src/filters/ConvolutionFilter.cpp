@@ -1,5 +1,6 @@
 #include <dmxdenoiser/Aov.hpp>
 #include <dmxdenoiser/DMXImage.hpp>
+#include <dmxdenoiser/StringConversions.hpp>
 #include <dmxdenoiser/FilterFactory.hpp>
 #include <dmxdenoiser/FilterKernels.hpp>
 #include <dmxdenoiser/filters/ConvolutionFilter.hpp>
@@ -9,6 +10,8 @@
 #include <optional>
 #include <iostream>
 #include <memory>
+#include <string>
+#include <string_view>
 #include <vector>
 
 namespace dmxdenoiser
@@ -18,46 +21,85 @@ namespace dmxdenoiser
     {
         resetParams();
 
-        if (auto v = params.getSingleParam<float>("strength"))
+        std::string paramsInfo{};
+
+        if (auto v = params.getSingleParam<float>("strength")) {
             m_strength = *v;
-        else 
-            DMX_LOG_INFO("ConvolutionFilter", "setParams(): 'strength' parameter not set, using default: ", m_strength);
-        
-        if (auto v = params.getArrayParam<int>("frames")) 
-            m_frames = *v;
+            paramsInfo += "     strength (set) = " + std::to_string(m_strength) + "\n";
+        }
         else
-            DMX_LOG_INFO("ConvolutionFilter", "setParams(): 'frames' parameter not set, using default: {}");
+        {
+            paramsInfo += "     strength (default) = " + std::to_string(m_strength) + "\n";
+            DMX_LOG_TRACE("ConvolutionFilter", "setParams(): 'strength' parameter not set, using default: ", m_strength);
+        }
+        
+        if (auto v = params.getArrayParam<int>("frames"))
+        {
+            m_frames = *v;
+            paramsInfo += "     frames (set) = " + joinVector(m_frames) + "\n";
+        }
+        else
+        {
+            paramsInfo += "     frames (default) = " + joinVector(m_frames) + "\n";
+            DMX_LOG_TRACE("ConvolutionFilter", "setParams(): 'frames' parameter not set, using 'default' value");
+        }
         
         if (auto v = params.getArrayParam<std::string>("layers")) 
+        {
             m_layers = *v;
+            paramsInfo += "     layers (set) = " + joinVector(m_layers) + "\n";
+        }
         else
-            DMX_LOG_INFO("ConvolutionFilter", "setParams(): 'layers' parameter not set, using default: {}");
+        {
+            paramsInfo += "     layers (default)  = " + joinVector(m_layers) + "\n";
+            DMX_LOG_TRACE("ConvolutionFilter", "setParams(): 'layers' parameter not set, using default: {}");
+        }
 
-        if (auto v = params.getSingleParam<bool>("filterAlpha")) 
+        if (auto v = params.getSingleParam<bool>("filterAlpha"))
+        {
             m_filterAlpha = *v;
+            paramsInfo += "     filterAlpha (set) = " + std::string(m_filterAlpha ? "true" : "false") + "\n";
+        }
         else
-            DMX_LOG_INFO("ConvolutionFilter", 
+        {
+            paramsInfo += "     filterAlpha (default) = " + std::string(m_filterAlpha ? "true" : "false") + "\n";
+            DMX_LOG_TRACE("ConvolutionFilter", 
                 "setParams(): 'filterAlpha' parameter not set, using default: ", m_filterAlpha);
+        }
 
-        if (auto v = params.getSingleParam<Backend>("backend")) 
+        if (auto v = params.getSingleParam<Backend>("backend"))
+        {
             m_backend = *v;
+            paramsInfo += "     backend (set) = " + dmxdenoiser::ToString(m_backend) + "\n";
+        }
         else
-            DMX_LOG_INFO("ConvolutionFilter", 
+        {
+            paramsInfo += "     backend (default) = " + dmxdenoiser::ToString(m_backend) + "\n";
+            DMX_LOG_TRACE("ConvolutionFilter", 
                 "setParams(): 'backend' parameter not set, using default: ", dmxdenoiser::ToString(m_backend));
+        }
 
-        if (auto v = params.getSingleParam<BackendResource>("backendResource")) 
+        if (auto v = params.getSingleParam<BackendResource>("backendResource"))
+        {
             m_backendResource = *v;
+            paramsInfo += "     backendResource (set) = \n" + m_backendResource.ToString(10) + "\n";
+        }
         else
-            DMX_LOG_INFO("ConvolutionFilter", "setParams(): 'backendResource' parameter not set, using default: {}");
+        {
+            paramsInfo += "     backendResource (default) = \n" + m_backendResource.ToString(10) + "\n";
+            DMX_LOG_TRACE("ConvolutionFilter", "setParams(): 'backendResource' parameter not set, using default: {}");
+        }
         
         if (auto v = params.getSingleParam<Kernel2D>("kernel")) { 
             m_kernel.set(*v);
+            paramsInfo += "     kernel (set) = " + m_kernel.ToString() + "\n";
         }
         else
         {
             DMX_LOG_ERROR("ConvolutionFilter", "setParams(): Missing required parameter 'kernel'");
             throw std::runtime_error("ConvolutionFilter::setParams(): Missing required parameter 'kernel'");
         }
+        DMX_LOG_INFO("ConvolutionFilter", "Setup filter settings:\nParameters:\n", paramsInfo);
     };
 
     void ConvolutionFilter::convolveCPU(const DMXImage& input, DMXImage& output) const
@@ -65,6 +107,7 @@ namespace dmxdenoiser
         ThreadPool* pool = m_backendResource.threadPool;
         if(!pool)
             DMX_LOG_INFO("ConvolutionFilter", "convolveCPU(): no ThreadPool available; runing single-threaded");
+
         int width = input.width();
         int height = input.height();
         int ksize = m_kernel.size();
@@ -114,23 +157,6 @@ namespace dmxdenoiser
                         output.at(x, y, frame, layer) = sum;
                     }
                 }, pool);
-                /*
-                for(int y = 0; y < height; ++y)
-                    for(int x = 0; x < width; ++x)
-                    {
-                        PixelRGBA orig = input.get(x, y, frame, layer);
-                        PixelRGBA sum = {0.0f, 0.0f, 0.0f, 0.0f};
-                        for(int ky = -offset; ky <= offset; ++ky)
-                            for(int kx = -offset; kx <= offset; ++kx)
-                            {
-                                int px = std::clamp(x + kx, 0, width - 1);
-                                int py = std::clamp(y + ky, 0, height - 1);
-                                sum += kernel(ky + offset, kx + offset) * input.get(px, py, frame, layer);
-                            }
-                        sum = blendPixels(orig, sum, strength, filterAlpha);
-                        output.at(x, y, frame, layer) = sum;
-                    }
-                */
             }
         }
     }

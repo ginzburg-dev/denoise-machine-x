@@ -64,7 +64,7 @@ namespace dmxdenoiser
             m_size = 0;
         }
 
-        std::string ToString(std::size_t indent=0) const
+        std::string ToString(std::size_t indent=0, bool showWeights = false) const
         {
             std::ostringstream oss;
 
@@ -73,26 +73,23 @@ namespace dmxdenoiser
                 sIndent += " ";
             
             oss << sIndent << "Kernel2D: " << name() << " " << m_size << " x " << m_size << "\n";
-            for (int y = 0; y < m_size; ++y)
+            if (showWeights) // If true, show all weights matrix
             {
-                oss << sIndent << "    [";
-                for (int x = 0; x < m_size; ++x)
+                for (int y = 0; y < m_size; ++y)
                 {
-                    oss << std::fixed << std::setprecision(4) << (*this)(y, x);
-                    if (x != m_size - 1)
-                        oss << " ";
+                    oss << sIndent << "    [";
+                    for (int x = 0; x < m_size; ++x)
+                    {
+                        oss << std::fixed << std::setprecision(4) << (*this)(y, x);
+                        if (x != m_size - 1)
+                            oss << " ";
+                    }
+                    oss << "]";
                 }
-                oss << "]\n";
             }
             return oss.str();
         }
     };
-
-    inline std::ostream& operator<<(std::ostream& out, const Kernel2D& kernel)
-    {
-        out << kernel.ToString();
-        return out;
-    }
 
     inline bool operator==(const Kernel2D& lhs, const Kernel2D& rhs)
     {

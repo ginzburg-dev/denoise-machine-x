@@ -1,54 +1,37 @@
-[2025-08-21 18:05:33]: [INFO] [Logger] Logging system initialized
-[2025-08-21 18:05:33]: [INFO] [ParamDictionary] ParamDictionary:    
+[2025-08-22 05:34:03]: [INFO] [Logger] Logging system initialized
+[2025-08-22 05:34:03]: [INFO] [ParamDictionary] 
+Parameters:
     int_array_var (int) = [ 0, 2 ]
     int_var (int) = [ 1 ]
     float_array_var (float) = [ 3, 4 ]
     float_var (float) = [ 2 ]
-    bool_array_var (bool) = [ 0, 1 ]
-    bool_var (bool) = [ 1 ]
+    bool_array_var (bool) = [ false, true ]
+    bool_var (bool) = [ true ]
     string_array_var (string) = [ String data1, String data2 ]
     string_var (string) = [ String data ]
     kernel_array_var (Kerne2D) = 
         Kernel2D: Box 7 x 7
-            [0.0204 0.0204 0.0204 0.0204 0.0204 0.0204 0.0204]
-            [0.0204 0.0204 0.0204 0.0204 0.0204 0.0204 0.0204]
-            [0.0204 0.0204 0.0204 0.0204 0.0204 0.0204 0.0204]
-            [0.0204 0.0204 0.0204 0.0204 0.0204 0.0204 0.0204]
-            [0.0204 0.0204 0.0204 0.0204 0.0204 0.0204 0.0204]
-            [0.0204 0.0204 0.0204 0.0204 0.0204 0.0204 0.0204]
-            [0.0204 0.0204 0.0204 0.0204 0.0204 0.0204 0.0204]
 ,         Kernel2D: Box 5 x 5
-            [0.0400 0.0400 0.0400 0.0400 0.0400]
-            [0.0400 0.0400 0.0400 0.0400 0.0400]
-            [0.0400 0.0400 0.0400 0.0400 0.0400]
-            [0.0400 0.0400 0.0400 0.0400 0.0400]
-            [0.0400 0.0400 0.0400 0.0400 0.0400]
  
     kernel_var (Kerne2D) = 
         Kernel2D: Gaussian 3 x 3
-            [0.0751 0.1238 0.0751]
-            [0.1238 0.2042 0.1238]
-            [0.0751 0.1238 0.0751]
  
     backend_array_var (Backend) = [ Gpu, Metal ]
     backend_var (Backend) = [ Gpu ]
     backend_res_array_var (BackendResource) = 
         BackendResource:
-            threadPool: 0x0
-            cudaDevice: 0
-            metalDevice: 0x0
-            metalCommandQueue: 0x0
-        BackendResource:
-            threadPool: 0x0
-            cudaDevice: 0
-            metalDevice: 0x0
-            metalCommandQueue: 0x0
-
+             threadPool: 0x0
+             cudaDevice: 0
+             metalDevice: 0x0
+             metalCommandQueue: 0x0        BackendResource:
+             threadPool: 0x0
+             cudaDevice: 0
+             metalDevice: 0x0
+             metalCommandQueue: 0x0
     backend_res_var (BackendResource) = 
         BackendResource:
-            threadPool: 0x0
-            cudaDevice: 0
-            metalDevice: 0x0
-            metalCommandQueue: 0x0
-
+             threadPool: 0x0
+             cudaDevice: 0
+             metalDevice: 0x0
+             metalCommandQueue: 0x0
 

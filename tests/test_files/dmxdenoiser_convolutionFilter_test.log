@@ -1,9 +1,25 @@
-[2025-08-21 18:05:32]: [INFO] [Logger] Logging system initialized
-[2025-08-21 18:05:32]: [INFO] [ConvolutionFilter] setParams(): 'strength' parameter not set, using default: 1
-[2025-08-21 18:05:32]: [INFO] [ConvolutionFilter] setParams(): 'frames' parameter not set, using default: {}
-[2025-08-21 18:05:32]: [INFO] [ConvolutionFilter] setParams(): 'layers' parameter not set, using default: {}
-[2025-08-21 18:05:32]: [INFO] [ConvolutionFilter] setParams(): 'filterAlpha' parameter not set, using default: 0
-[2025-08-21 18:05:32]: [INFO] [ConvolutionFilter] convolveCPU(): no ThreadPool available; runing single-threaded
-[2025-08-21 18:05:32]: [DEBUG] [Parallel] parallelFor(int64_t) invoked with parameters: start = 0, end = 64, threadPool = none, chunkSize = 0
-[2025-08-21 18:05:32]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t) invoked with parameters: start = 0, end = 64, threadPool = none, chunkSize = 0
-[2025-08-21 18:05:32]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded
+[2025-08-22 05:34:04]: [INFO] [Logger] Logging system initialized
+[2025-08-22 05:34:04]: [TRACE] [ConvolutionFilter] setParams(): 'strength' parameter not set, using default: 1
+[2025-08-22 05:34:04]: [TRACE] [ConvolutionFilter] setParams(): 'frames' parameter not set, using 'default' value
+[2025-08-22 05:34:04]: [TRACE] [ConvolutionFilter] setParams(): 'layers' parameter not set, using default: {}
+[2025-08-22 05:34:04]: [TRACE] [ConvolutionFilter] setParams(): 'filterAlpha' parameter not set, using default: 0
+[2025-08-22 05:34:04]: [INFO] [ConvolutionFilter] Setup filter settings:
+Parameters:
+     strength (default) = 1.000000
+     frames (default) = [empty]
+     layers (default)  = [empty]
+     filterAlpha (default) = false
+     backend (set) = Cpu
+     backendResource (set) = 
+          BackendResource:
+               threadPool: 0x0
+               cudaDevice: 0
+               metalDevice: 0x0
+               metalCommandQueue: 0x0
+     kernel (set) = Kernel2D: Gaussian 3 x 3
+
+
+[2025-08-22 05:34:04]: [INFO] [ConvolutionFilter] convolveCPU(): no ThreadPool available; runing single-threaded
+[2025-08-22 05:34:04]: [TRACE] [Parallel] parallelFor(int64_t) invoked with parameters: start = 0, end = 64, threadPool = none, chunkSize = 0
+[2025-08-22 05:34:04]: [TRACE] [Parallel] parallelFor(int64_t, int64_t) invoked with parameters: start = 0, end = 64, threadPool = none, chunkSize = 0
+[2025-08-22 05:34:04]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded

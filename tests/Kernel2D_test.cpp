@@ -77,7 +77,7 @@ TEST(Kernel2D, ToString)
     std::string name = "UniqueKernelName";
     std::vector<float> data(9, 2.0f);
     Kernel2D kernel(name, data);
-    std::string str = kernel.ToString();
+    std::string str = kernel.ToString(0, true);
     std::cout << str << '\n';
     EXPECT_TRUE(str.find("UniqueKernelName") != std::string::npos);
     EXPECT_TRUE(str.find("3 x 3") != std::string::npos);

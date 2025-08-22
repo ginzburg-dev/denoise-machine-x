@@ -26,7 +26,7 @@ class ConvolutionFilterTest : public ::testing::Test {
         std::string logFilePath = "../tests/test_files/dmxdenoiser_convolutionFilter_test.log";
         void SetUp() override {
             bool success = std::filesystem::remove(logFilePath); // Remove log file
-            DMX_LOG_INIT(LogLevel::Debug, &std::clog, logFilePath);
+            DMX_LOG_INIT(LogLevel::Trace, &std::clog, logFilePath);
         }
 };
 
@@ -87,7 +87,7 @@ TEST_F(ConvolutionFilterTest, ParametersNotSetInfoLog)
     EXPECT_NO_THROW(convoFilter->apply(img));
 
     // Check log
-    assertLogContains(logFilePath, "INFO", "'strength'", "'strength'",
+    assertLogContains(logFilePath, "'strength'", "'strength'",
         "'layers'", "'filterAlpha'", "'backend'", "'backendResource'");
 }
 
