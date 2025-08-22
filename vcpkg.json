@@ -1,0 +1,9 @@
+{
+  "name": "denoise-machine-x",
+  "version-string": "0.1.0",
+  "dependencies": [
+    "openexr",
+    "zlib",
+    "imath"
+  ]
+}
