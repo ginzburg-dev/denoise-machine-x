@@ -77,7 +77,7 @@ namespace dmxdenoiser{
                 } else if constexpr (has_ToString_external_v<T>) {
                     oss << ToString(v[i]);
                 } else  if constexpr (std::is_same_v<T, char>) { // char
-                    oss << std::to_string(1, v[i]);
+                    oss << std::string(1, v[i]);
                 } else  if constexpr (std::is_same_v<T, bool>) { // bool
                     oss << (v[i] ? "true" : "false");
                 } else  if constexpr (std::is_convertible_v<T, std::string_view>) { // std::string_view
