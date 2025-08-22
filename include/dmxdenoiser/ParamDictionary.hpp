@@ -7,6 +7,7 @@
 #include <dmxdenoiser/util/AlwaysFalse.hpp>
 
 #include <map>
+#include <initializer_list>
 #include <optional>
 #include <sstream>
 #include <string>
@@ -38,13 +39,34 @@ namespace dmxdenoiser
         
         // Set a vector-value parameter
         void addIntArray(const std::string& name, std::vector<int> value) { ints[name] = value; }
+        void addIntArray(const std::string& name, std::initializer_list<int> value) { 
+            ints[name] = std::vector<int>(value.begin(), value.end()); 
+        }
         void addFloatArray(const std::string& name, std::vector<float> value) { floats[name] = value; }
+        void addFloatArray(const std::string& name, std::initializer_list<float> value) { 
+            floats[name] = std::vector<float>(value.begin(), value.end()); 
+        }
         void addBoolArray(const std::string& name, std::vector<bool> value) { bools[name] = value; }
+        void addBoolArray(const std::string& name, std::initializer_list<bool> value) { 
+            bools[name] = std::vector<bool>(value.begin(), value.end()); 
+        }
         void addStringArray(const std::string& name, std::vector<std::string> value) { strings[name] = value; }
+        void addStringArray(const std::string& name, std::initializer_list<std::string> value) { 
+            strings[name] = std::vector<std::string>(value.begin(), value.end()); 
+        }
         void addKernel2DArray(const std::string& name, std::vector<Kernel2D> value) { kernels2d[name] = value; }
+        void addKernel2DArray(const std::string& name, std::initializer_list<Kernel2D> value) { 
+            kernels2d[name] = std::vector<Kernel2D>(value.begin(), value.end()); 
+        }
         void addBackendArray(const std::string& name, const std::vector<Backend>& value) { backends[name] = value; }
+        void addBackendArray(const std::string& name, std::initializer_list<Backend> value) { 
+            backends[name] = std::vector<Backend>(value.begin(), value.end()); 
+        }
         void addBackendResourceArray(const std::string& name, std::vector<BackendResource> value) {
             backendResources[name] = value; 
+        }
+        void addBackendResourceArray(const std::string& name, std::initializer_list<BackendResource> value) { 
+            backendResources[name] = std::vector<BackendResource>(value.begin(), value.end()); 
         }
 
         // Get a single-value parameter
