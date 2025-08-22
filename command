@@ -31,3 +31,13 @@ cmake -S . -B build/debug   -DCMAKE_BUILD_TYPE=Debug
 Release build & run tests:
 cmake -S . -B build-release -DCMAKE_BUILD_TYPE=Release
 (cmake --build build-release -j 8 && cd build-release && ctest --output-on-failure --verbose -j 8 && cd .. && cd ..)
+
+# Windows
+# 1. cleanup:
+if (Test-Path build) { Remove-Item build -Recurse -Force }
+if (Test-Path CMakeCache.txt) { Remove-Item CMakeCache.txt }
+if (Test-Path CMakeFiles) { Remove-Item CMakeFiles -Recurse -Force }
+
+cmake -S . -B build -G "Visual Studio 17 2022" -A x64 `
+  -DCMAKE_TOOLCHAIN_FILE="$PWD\vcpkg\scripts\buildsystems\vcpkg.cmake"
+cmake --build build -j 8 --config Release
