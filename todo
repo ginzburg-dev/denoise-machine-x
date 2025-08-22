@@ -1,4 +1,6 @@
-Debug level
+ConvolutionFilter: set parameters log -> out 'all' instead of 'empty' in layers and frames
+Backend: Upper case
+Config: debug level - verbosity
 BuildInfo: data from cmake
 Git actions: debug / release
 All code: place Trace Debag in the code

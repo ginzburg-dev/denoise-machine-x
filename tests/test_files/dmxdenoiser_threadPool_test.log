@@ -1,11 +1,11 @@
-[2025-08-22 05:34:04]: [INFO] [Logger] Logging system initialized
-[2025-08-22 05:34:04]: [INFO] [ThreadPool] ThreadPool 0x16dcaebf8 created with 7 threads.
-[2025-08-22 05:34:04]: [TRACE] [ThreadPool] Task 3 is starting on 0x16dedb000 thread.
-[2025-08-22 05:34:04]: [TRACE] [ThreadPool] Task 0 is starting on 0x16ddc3000 thread.
-[2025-08-22 05:34:04]: [TRACE] [ThreadPool] Task 1 is starting on 0x16dd37000 thread.
-[2025-08-22 05:34:04]: [TRACE] [ThreadPool] Task 3 sucessfully completed.
-[2025-08-22 05:34:04]: [TRACE] [ThreadPool] Task 2 is starting on 0x16de4f000 thread.
-[2025-08-22 05:34:04]: [TRACE] [ThreadPool] Task 2 sucessfully completed.
-[2025-08-22 05:34:04]: [TRACE] [ThreadPool] Task 1 sucessfully completed.
-[2025-08-22 05:34:04]: [TRACE] [ThreadPool] Task 0 sucessfully completed.
-[2025-08-22 05:34:04]: [INFO] [ThreadPool] ThreadPool 0x16dcaebf8 stopped.
+[2025-08-22 23:05:01]: [INFO] [Logger] Logging system initialized
+[2025-08-22 23:05:01]: [INFO] [ThreadPool] ThreadPool 0x16d216bf8 created with 7 threads.
+[2025-08-22 23:05:01]: [TRACE] [ThreadPool] Task 0 is starting on 0x16d29f000 thread.
+[2025-08-22 23:05:01]: [TRACE] [ThreadPool] Task 3 is starting on 0x16d443000 thread.
+[2025-08-22 23:05:01]: [TRACE] [ThreadPool] Task 0 sucessfully completed.
+[2025-08-22 23:05:01]: [TRACE] [ThreadPool] Task 1 is starting on 0x16d32b000 thread.
+[2025-08-22 23:05:01]: [TRACE] [ThreadPool] Task 2 is starting on 0x16d3b7000 thread.
+[2025-08-22 23:05:01]: [TRACE] [ThreadPool] Task 2 sucessfully completed.
+[2025-08-22 23:05:01]: [TRACE] [ThreadPool] Task 1 sucessfully completed.
+[2025-08-22 23:05:01]: [TRACE] [ThreadPool] Task 3 sucessfully completed.
+[2025-08-22 23:05:01]: [INFO] [ThreadPool] ThreadPool 0x16d216bf8 stopped.
