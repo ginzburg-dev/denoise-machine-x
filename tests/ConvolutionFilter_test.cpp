@@ -72,7 +72,7 @@ TEST_F(ConvolutionFilterTest, ParametersNotSet)
 
     // Check log
     std::string tag{"ConvolutionFilter"};
-    std::string msg{"Kernel is empty, size={}x{}"};
+    std::string msg{"Kernel is empty, size=0x0"};
     assertLogContains(logFilePath, "ERROR", tag, msg);
 }
 
@@ -90,6 +90,23 @@ TEST_F(ConvolutionFilterTest, ParametersNotSetInfoLog)
     assertLogContains(logFilePath, "'strength'", "'strength'",
         "'layers'", "'filterAlpha'", "'backend'", "'backendResource'");
 }
+
+TEST_F(ConvolutionFilterTest, ParametersSetFramesLayersInfoLog)
+{
+    ParamDictionary params;
+    params.addKernel2D("kernel", FilterKernels::getBoxKernel(3));
+    params.addStringArray("layers", {"beauty", "diffuse", "specular", "unknown"});
+    params.addIntArray("frames", {1, 2, 3, 4, 5, 6, 7, 8});
+    //params.addBackend("backend", backend);
+    auto convoFilter = DMX_CREATE_FILTER("ConvolutionFilter");
+    DMXImage img(10, 10, 5, LayerDictionary{"beauty", "diffuse", "specular", "normal", "depth"});
+    EXPECT_NO_THROW(convoFilter->setParams(params));
+    EXPECT_NO_THROW(convoFilter->apply(img));
+
+    // Check log
+    assertLogContains(logFilePath, "requested frame", "requested layer", "not found", "6", "7", "8", "unknown");
+}
+
 
 TEST_F(ConvolutionFilterTest, SimpleConvolveAverages)
 {
