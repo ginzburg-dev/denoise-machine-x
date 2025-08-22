@@ -1,5 +1,5 @@
 // BuildInfo.hpp
-#pragma one
+#pragma once
 
 #include <dmxdenoiser/Version.hpp>
 
