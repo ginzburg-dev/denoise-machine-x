@@ -1,4 +1,6 @@
+#include <dmxdenoiser/DMXImage.hpp>
 #include <dmxdenoiser/DMXImageView.hpp>
+#include <dmxdenoiser/Kernel2D.hpp>
 #include <dmxdenoiser/Pixel.hpp>
 
 #include <cuda_runtime.h>
@@ -6,7 +8,7 @@
 namespace dmxdenoiser
 {
 
-    __global__ void convolve2D_CUDA(DMXImageView in, DMXImageView out, int* frames, int framesSize, int* layers, int layersSize,
+    __global__ void convolve2D_CUDA_kernel(DMXImageView in, DMXImageView out, int* frames, int framesSize, int* layers, int layersSize,
                                     float* kernel, int kernelSize, float strength, bool filterAlpha) 
     {
         int x = blockIdx.x * blockDim.x + threadIdx.x;
@@ -30,6 +32,18 @@ namespace dmxdenoiser
             }
         sum = blendPixels(orig, sum, strength, filterAlpha);
         out.at(x, y, frame, layer) = sum;
+    }
+
+    void convolve2D_CUDA(const DMXImage& in_, DMXImage& out_, std::vector<int> frames_, std::vector<int> layers_,
+                                    const Kernel2D& kernel_, float strength, bool filterAlpha)
+    {
+        int framesSize = frames_.size();
+        int* frames = new int[framesSize];
+        int layersSize = layers_.size();
+        int* layers = new int[layersSize];
+        
+
+        convolve2D_CUDA_kernel<<<>>>
     }
 
 } // namespace dmxdenoiser
