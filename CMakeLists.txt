@@ -31,18 +31,18 @@ if(NOT OpenEXR_FOUND)
 endif()
 
 
-#if(NOT OpenEXR_FOUND OR NOT Imath_FOUND)
-#    message(FATAL_ERROR
-#        "\nOpenEXR and/or Imath not found!\n"
-#        "Please install them before configuring this project.\n"
-#        "On macOS, run:\n"
-#        "    brew install openexr imath\n"
-#        "On Ubuntu/Debian, run:\n"
-#        "    sudo apt install libopenexr-dev libimath-dev\n"
-#        "On Windows (vcpkg):\n"
-#        "    vcpkg install openexr\n"
-#    )
-#endif()
+if(NOT OpenEXR_FOUND OR NOT Imath_FOUND)
+    message(FATAL_ERROR
+        "\nOpenEXR and/or Imath not found!\n"
+        "Please install them before configuring this project.\n"
+        "On macOS, run:\n"
+        "    brew install openexr imath\n"
+        "On Ubuntu/Debian, run:\n"
+        "    sudo apt install libopenexr-dev libimath-dev\n"
+        "On Windows (vcpkg):\n"
+        "    vcpkg install openexr\n"
+    )
+endif()
 
 # Include headers
 include_directories(${CMAKE_SOURCE_DIR}/include)
