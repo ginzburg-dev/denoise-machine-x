@@ -84,7 +84,7 @@ namespace dmxdenoiser
                         if (x != m_size - 1)
                             oss << " ";
                     }
-                    oss << "]";
+                    oss << "]\n";
                 }
             }
             return oss.str();
