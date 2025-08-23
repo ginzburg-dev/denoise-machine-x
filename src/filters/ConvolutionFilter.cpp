@@ -6,8 +6,10 @@
 #include <dmxdenoiser/filters/ConvolutionFilter.hpp>
 #include <dmxdenoiser/Logger.hpp>
 #include <dmxdenoiser/Parallel.hpp>
+#include <dmxdenoiser/util/NumericUtils.hpp>
 
 #include <optional>
+#include <cstdint>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -153,20 +155,20 @@ namespace dmxdenoiser
             for(int layerIdx = 0; layerIdx < layerIndices.size(); ++layerIdx)
             {
                 int layer = layerIndices[layerIdx];
-                parallelFor(0, height, [&](int y){
-                    for(int x = 0; x < width; ++x)
+                parallelFor(0, to_i64(height), [&](std::int64_t y){
+                    for(std::int64_t x = 0; x < to_i64(width); ++x)
                     {
-                        PixelRGBA orig = input.get(x, y, frame, layer);
+                        PixelRGBA orig = input.get(to_int(x), to_int(y), frame, layer);
                         PixelRGBA sum = {0.0f, 0.0f, 0.0f, 0.0f};
                         for(int ky = -offset; ky <= offset; ++ky)
                             for(int kx = -offset; kx <= offset; ++kx)
                             {
-                                int px = std::clamp(x + kx, 0, width - 1);
-                                int py = std::clamp(y + ky, 0, height - 1);
+                                int px = std::clamp(to_int(x) + kx, 0, width - 1);
+                                int py = std::clamp(to_int(y) + ky, 0, height - 1);
                                 sum += m_kernel(ky + offset, kx + offset) * input.get(px, py, frame, layer);
                             }
                         sum = blendPixels(orig, sum, m_strength, m_filterAlpha);
-                        output.at(x, y, frame, layer) = sum;
+                        output.at(to_int(x), to_int(y), frame, layer) = sum;
                     }
                 }, pool);
             }
