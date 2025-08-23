@@ -1,7 +1,7 @@
 // Version.hpp
 #pragma once
 
-#define DMX_NAME "Denoise Machine X"
+#define DMX_NAME "denoise-machine-x"
 #define DMX_SHORT_NAME "dmxdenoiser"
 #define DMX_VERSION "0.1.0"
 
