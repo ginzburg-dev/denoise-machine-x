@@ -143,7 +143,7 @@ namespace dmxdenoiser
             return std::nullopt;
         }
 
-        std::string ToString(bool verbose = false, std::string title = "\nParameters:") const
+        std::string ToString(bool verbose = true, std::string title = "\nParameters:") const
         {
             std::ostringstream oss;
 
