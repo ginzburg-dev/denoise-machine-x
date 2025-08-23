@@ -1,0 +1,8 @@
+[2025-08-23 03:01:13]: [DEBUG] [Logger] Logging system initialized
+[2025-08-23 03:01:13]: [INFO] [ThreadPool] ThreadPool 0x16fa7ac08 created with 7 threads.
+[2025-08-23 03:01:13]: [TRACE] [Parallel] parallelFor(int64_t) invoked with parameters: start = 0, end = 200, threadPool = provided, chunkSize = 0
+[2025-08-23 03:01:13]: [TRACE] [Parallel] parallelFor(int64_t, int64_t) invoked with parameters: start = 0, end = 200, threadPool = provided, chunkSize = 0
+[2025-08-23 03:01:13]: [TRACE] [Parallel] parallelFor(int64_t, int64_t): threads = 7
+[2025-08-23 03:01:13]: [TRACE] [Parallel] parallelFor(int64_t, int64_t): new chunkSize = 3
+[2025-08-23 03:01:13]: [ERROR] [Parallel] parallelFor(int64_t, int64_t): Some error.
+[2025-08-23 03:01:13]: [INFO] [ThreadPool] ThreadPool 0x16fa7ac08 stopped.

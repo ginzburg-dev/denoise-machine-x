@@ -1,5 +1,5 @@
-[2025-08-22 23:05:02]: [INFO] [Logger] Logging system initialized
-[2025-08-22 23:05:02]: [INFO] [ParamDictionary] 
+[2025-08-23 03:01:13]: [DEBUG] [Logger] Logging system initialized
+[2025-08-23 03:01:13]: [INFO] [ParamDictionary] 
 Parameters:
     int_array_var (int) = [ 0, 2 ]
     int_var (int) = [ 1 ]
@@ -11,11 +11,11 @@ Parameters:
     string_var (string) = [ String data ]
     kernel_array_var (Kerne2D) = 
         Kernel2D: Box 7 x 7
-,         Kernel2D: Box 5 x 5
- 
+            [0.0204 0.0204 0.0204 0.0204 0.0204 0.0204 0.0204]            [0.0204 0.0204 0.0204 0.0204 0.0204 0.0204 0.0204]            [0.0204 0.0204 0.0204 0.0204 0.0204 0.0204 0.0204]            [0.0204 0.0204 0.0204 0.0204 0.0204 0.0204 0.0204]            [0.0204 0.0204 0.0204 0.0204 0.0204 0.0204 0.0204]            [0.0204 0.0204 0.0204 0.0204 0.0204 0.0204 0.0204]            [0.0204 0.0204 0.0204 0.0204 0.0204 0.0204 0.0204],         Kernel2D: Box 5 x 5
+            [0.0400 0.0400 0.0400 0.0400 0.0400]            [0.0400 0.0400 0.0400 0.0400 0.0400]            [0.0400 0.0400 0.0400 0.0400 0.0400]            [0.0400 0.0400 0.0400 0.0400 0.0400]            [0.0400 0.0400 0.0400 0.0400 0.0400] 
     kernel_var (Kerne2D) = 
         Kernel2D: Gaussian 3 x 3
- 
+            [0.0751 0.1238 0.0751]            [0.1238 0.2042 0.1238]            [0.0751 0.1238 0.0751] 
     backend_array_var (Backend) = [ GPU, METAL ]
     backend_var (Backend) = [ GPU ]
     backend_res_array_var (BackendResource) = 

@@ -1,0 +1,3 @@
+[2025-08-23 03:01:12]: [DEBUG] [Logger] Logging system initialized
+[2025-08-23 03:01:12]: [INFO] [ThreadPool] ThreadPool 0x15b304190 created with 7 threads.
+[2025-08-23 03:01:12]: [INFO] [ThreadPool] ThreadPool 0x15b304190 stopped.

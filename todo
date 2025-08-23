@@ -1,15 +1,16 @@
-ConvolutionFilter: set parameters log -> out 'all' instead of 'empty' in layers and frames
-Backend: Upper case
-Config: debug level - verbosity
+ConvolutionFilter: add GPU backend implementations
+ConvolutionFilter: ToString()
+ParseArgs: parsing inputs
+DenoiserParams: params
+Cli: full pipeline
 BuildInfo: data from cmake
 Git actions: debug / release
 All code: place Trace Debag in the code
 Cmake: level of verbosity
-Release?
+Cmake: Release?
+Cmake: Config: debug level - verbosity
 Parallel: estimate time of parallel - Debug
 ThreadPool: ToString, Backend res -> threadPool - >> to string
-ConvolutionFilter: add CPU, METAL and GPU backend implementations
-ConvolutionFilter: ToString()
 Move function definitions from headers to cpp files where possible
 DMXImage: Duplicate or copy layers from one image to another (for Filter::convolve2D())
 DMXImage: Frame count should be odd.
@@ -21,10 +22,7 @@ ImageIOExr: Add unit tests for generated layers and frames
 ImageInfo: Update ToString() to print parameters
 ImageSequence: Add multi-frame logic (frame logic)
 ImageIO unit tests: Add frames tests
-ConvolutionFilter unit tests: Add params, layers, frames tests
-(e.g., SimpleConvolveAverages, SetFilteringLayersAndFrames)
 Kernel2D unit tests: Add tests for name method
-ToString() methods: Check format
 ImageIOExr - header ACES
 GUI / async display
 ML spatial
@@ -32,6 +30,7 @@ simple temporalFilter
 noise analyzer
 MV estimator/generator based on MSE and mv guidence
 PSNR/SSIM basic metrics
+ConvolutionFilter: add METAL backend implementations
 
         O-------------------O
         |                   |

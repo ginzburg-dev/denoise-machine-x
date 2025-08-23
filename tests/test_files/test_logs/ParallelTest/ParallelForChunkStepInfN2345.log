@@ -1,0 +1,6 @@
+[2025-08-23 03:01:13]: [DEBUG] [Logger] Logging system initialized
+[2025-08-23 03:01:13]: [INFO] [ThreadPool] ThreadPool 0x11f7043c0 created with 2 threads.
+[2025-08-23 03:01:13]: [TRACE] [Parallel] parallelFor(int64_t, int64_t) invoked with parameters: start = 0, end = 2345, threadPool = provided, chunkSize = 2147483647
+[2025-08-23 03:01:13]: [TRACE] [Parallel] parallelFor(int64_t, int64_t): threads = 2
+[2025-08-23 03:01:13]: [TRACE] [ParallelTest] ParallelForChunkStepInfN2345: N / min(N, UINT_MAX) = 1
+[2025-08-23 03:01:13]: [INFO] [ThreadPool] ThreadPool 0x11f7043c0 stopped.

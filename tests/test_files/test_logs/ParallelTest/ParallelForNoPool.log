@@ -1,0 +1,4 @@
+[2025-08-23 03:01:13]: [DEBUG] [Logger] Logging system initialized
+[2025-08-23 03:01:13]: [TRACE] [Parallel] parallelFor(int64_t) invoked with parameters: start = 0, end = 200, threadPool = none, chunkSize = 0
+[2025-08-23 03:01:13]: [TRACE] [Parallel] parallelFor(int64_t, int64_t) invoked with parameters: start = 0, end = 200, threadPool = none, chunkSize = 0
+[2025-08-23 03:01:13]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded
