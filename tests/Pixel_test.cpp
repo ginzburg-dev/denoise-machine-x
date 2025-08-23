@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <dmxdenoiser/Pixel.hpp>
-#include <dmxdenoiser/util/FloatUtils.hpp>
+#include <dmxdenoiser/util/NumericUtils.hpp>
 
 #include <limits>
 

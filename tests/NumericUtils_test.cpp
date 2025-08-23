@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
 
-#include <dmxdenoiser/util/FloatUtils.hpp>
+#include <dmxdenoiser/util/NumericUtils.hpp>
 
 #include <limits>
 
 using namespace dmxdenoiser;
 
-TEST(FloatUtils, FloatsEqualEpsilonBoundary)
+TEST(NumericUtils, FloatsEqualEpsilonBoundary)
 {
     float a = 1.000001f;
     float b = a + 1e-9f;
@@ -15,7 +15,7 @@ TEST(FloatUtils, FloatsEqualEpsilonBoundary)
     EXPECT_FALSE(floatsEqual(a, c));
 }
 
-TEST(FloatUtils, FloatsBlend)
+TEST(NumericUtils, FloatsBlend)
 {
     float a = 1.0f;
     float b = 2.0f;
