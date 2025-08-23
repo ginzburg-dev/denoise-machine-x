@@ -1,6 +1,0 @@
-[2025-08-23 03:01:13]: [DEBUG] [Logger] Logging system initialized
-[2025-08-23 03:01:13]: [INFO] [ThreadPool] ThreadPool 0x1288041f0 created with 2 threads.
-[2025-08-23 03:01:13]: [TRACE] [Parallel] parallelFor(int64_t, int64_t) invoked with parameters: start = 0, end = 400, threadPool = provided, chunkSize = 0
-[2025-08-23 03:01:13]: [TRACE] [Parallel] parallelFor(int64_t, int64_t): threads = 2
-[2025-08-23 03:01:13]: [TRACE] [Parallel] parallelFor(int64_t, int64_t): new chunkSize = 25
-[2025-08-23 03:01:13]: [INFO] [ThreadPool] ThreadPool 0x1288041f0 stopped.
