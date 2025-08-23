@@ -11,11 +11,8 @@ Thumbs.db
 /.VSCodeCounter/
 /vcpkg/
 /vcpkg_installed/
-<<<<<<< HEAD
 
 tests/test_files/
-=======
->>>>>>> 452e2e533f767a3fd536e49559468b10ecab724f
 
 CTestTestfile.cmake
 Makefile
