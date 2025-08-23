@@ -40,4 +40,6 @@ if (Test-Path CMakeFiles) { Remove-Item CMakeFiles -Recurse -Force }
 
 cmake -S . -B build -G "Visual Studio 17 2022" -A x64 `
   -DCMAKE_TOOLCHAIN_FILE="$PWD\vcpkg\scripts\buildsystems\vcpkg.cmake"
-cmake --build build -j 8 --config Release
+cd build
+ctest -j16 -C Debug -T test --output-on-failure --verbose
+cd ..
