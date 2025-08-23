@@ -6,7 +6,6 @@ Thumbs.db
 /build-debug/
 /build-release/
 /Testing/
-/tests/test_files/test_logs/
 *.dSYM
 /.vscode/
 /.VSCodeCounter/
@@ -14,3 +13,4 @@ Thumbs.db
 CTestTestfile.cmake
 Makefile
 cmake_install.cmake
+tests/test_files/test_logs/**
