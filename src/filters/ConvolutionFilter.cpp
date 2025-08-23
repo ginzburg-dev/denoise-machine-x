@@ -155,7 +155,7 @@ namespace dmxdenoiser
             for(int layerIdx = 0; layerIdx < layerIndices.size(); ++layerIdx)
             {
                 int layer = layerIndices[layerIdx];
-                parallelFor(0, to_i64(height), [&](std::int64_t y){
+                parallelFor(0, to_i64(height), [&](std::int64_t y) {
                     for(std::int64_t x = 0; x < to_i64(width); ++x)
                     {
                         PixelRGBA orig = input.get(to_int(x), to_int(y), frame, layer);
