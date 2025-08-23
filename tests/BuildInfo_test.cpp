@@ -1,19 +1,34 @@
 #include <gtest/gtest.h>
 
+#include "TestConfig.hpp"
 #include <dmxdenoiser/BuildInfo.hpp>
 #include <dmxdenoiser/Logger.hpp>
 
 #include <filesystem>
+#include <string>
+#include <string_view>
 
 using namespace dmxdenoiser;
 
 class BuildInfoTest : public ::testing::Test {
 protected:
-    std::string logFilePath = "../tests/test_files/dmxdenoiser_build_info_test.log";
-    
+    std::string getLogPath(std::string_view testDir = TEST_LOG_DIR) {
+        auto* info = ::testing::UnitTest::GetInstance()->current_test_info();
+        return std::string(testDir) + info->test_suite_name() + "/" + info->name() + ".log";
+    }
+
     void SetUp() override {
-        bool success = std::filesystem::remove(logFilePath); // Remove log file
-        DMX_LOG_INIT(LogLevel::Trace, &std::clog, logFilePath);
+        removeLogFile();
+        DMX_LOG_INIT(LogLevel::Trace, &std::clog, this->getLogPath());
+    }
+
+    void TearDown() override {
+        DMX_LOG_SHUTDOWN;
+        //removeLogFile();
+    }
+
+    void removeLogFile() {
+        bool success = std::filesystem::remove(this->getLogPath()); // Remove log file
     }
 };
 

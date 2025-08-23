@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "TestConfig.hpp"
 #include "AssertLogContains.hpp"
 #include <dmxdenoiser/Filter.hpp>
 #include <dmxdenoiser/FilterFactory.hpp>
@@ -10,7 +11,29 @@
 
 using namespace dmxdenoiser;
 
-TEST(FilterFactory, CanCreateRegisteredFilter){
+class FilterFactoryTest : public ::testing::Test {
+protected:
+    std::string getLogPath(std::string_view testDir = TEST_LOG_DIR) {
+        auto* info = ::testing::UnitTest::GetInstance()->current_test_info();
+        return std::string(testDir) + info->test_suite_name() + "/" + info->name() + ".log";
+    }
+
+    void SetUp() override {
+        removeLogFile();
+        DMX_LOG_INIT(LogLevel::Trace, &std::clog, this->getLogPath());
+    }
+
+    void TearDown() override {
+        DMX_LOG_SHUTDOWN;
+        //removeLogFile();
+    }
+
+    void removeLogFile() {
+        bool success = std::filesystem::remove(this->getLogPath()); // Remove log file
+    }
+};
+
+TEST_F(FilterFactoryTest, CanCreateRegisteredFilter){
     auto  exampleFilter = FilterFactory::instance().create("ConvolutionFilter");
     ASSERT_NE(exampleFilter, nullptr);
     std::string exampleFilterString = exampleFilter->ToString();
@@ -18,7 +41,7 @@ TEST(FilterFactory, CanCreateRegisteredFilter){
     std::cout << exampleFilterString << '\n';
 }
 
-TEST(FilterFactory, CanCreateRegisteredFilterWithDefinition){
+TEST_F(FilterFactoryTest, CanCreateRegisteredFilterWithDefinition){
     auto  exampleFilter = DMX_CREATE_FILTER("ConvolutionFilter");
     ASSERT_NE(exampleFilter, nullptr);
     std::string exampleFilterString = exampleFilter->ToString();
@@ -26,20 +49,16 @@ TEST(FilterFactory, CanCreateRegisteredFilterWithDefinition){
     std::cout << exampleFilterString << '\n';
 }
 
-TEST(FilterFactory, ThrowOnUnknownFilter){
-    std::string logFilePath = "../tests/test_files/dmxdenoiser_filterFactory_test.log";
-    bool success = std::filesystem::remove(logFilePath); // Remove log file
-    DMX_LOG_INIT(LogLevel::Debug, &std::clog, logFilePath);
-
+TEST_F(FilterFactoryTest, ThrowOnUnknownFilter){
     EXPECT_THROW({FilterFactory::instance().create("Unknown");}, std::runtime_error);
 
     // Check log file
     std::string tag{"FilterFactory"};
     std::string msg{"Filter not registered:"};
-    assertLogContains(logFilePath, "ERROR", tag, msg);
+    assertLogContains(getLogPath(), "ERROR", tag, msg);
 }
 
-TEST(FilterFactory, ReturnUniquePtrEachTime){
+TEST_F(FilterFactoryTest, ReturnUniquePtrEachTime){
     auto f1 = FilterFactory::instance().create("ConvolutionFilter");
     auto f2 = FilterFactory::instance().create("ConvolutionFilter");
     ASSERT_NE(f1, nullptr);
@@ -47,7 +66,7 @@ TEST(FilterFactory, ReturnUniquePtrEachTime){
     EXPECT_NE(f1.get(), f2.get());
 }
 
-TEST(FilterFactory, CanOverrideFilterRegistration){
+TEST_F(FilterFactoryTest, CanOverrideFilterRegistration){
     FilterFactory::instance().registerFilter("ConvolutionFilter", [](){
         class SpectralFilter : public Filter
         {

@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "TestConfig.hpp"
 #include "AssertLogContains.hpp"
 #include <dmxdenoiser/Logger.hpp>
 
@@ -13,9 +14,23 @@ using namespace dmxdenoiser;
 
 class LoggerTest : public ::testing::Test {
 protected:
+    std::string getLogPath(std::string_view testDir = TEST_LOG_DIR) {
+        auto* info = ::testing::UnitTest::GetInstance()->current_test_info();
+        return std::string(testDir) + info->test_suite_name() + "/" + info->name() + ".log";
+    }
+
     void SetUp() override {
-        std::string path = "../tests/test_files/dmxdenoiser_logger_test.log";
-        dmxdenoiser::Logger::instance().init(dmxdenoiser::LogLevel::Trace, &std::cout, path);
+        removeLogFile();
+        DMX_LOG_INIT(LogLevel::Trace, &std::clog, this->getLogPath());
+    }
+
+    void TearDown() override {
+        DMX_LOG_SHUTDOWN;
+        //removeLogFile();
+    }
+
+    void removeLogFile() {
+        bool success = std::filesystem::remove(this->getLogPath()); // Remove log file
     }
 };
 
@@ -26,44 +41,33 @@ void func(Args&&... args)
     (std::cout << ... << std::forward<Args>(args)) << '\n';
 }
 
-TEST(Logger, VardicFuncTemplates)
+TEST_F(LoggerTest, VardicFuncTemplates)
 {
     func(1, 2, "ggg", "sss");
 }
 
-TEST(Logger, LoggerInit)
+TEST_F(LoggerTest, LoggerInit)
 {
-    std::string logFilePath = "../tests/test_files/dmxdenoiser_logger_test.log";
-    bool success = std::filesystem::remove(logFilePath); // Remove log file
-    Logger::instance().init(LogLevel::Trace, &std::clog, logFilePath);
     std::string tag = "ConvolutionFilter";
     std::string msg = "Filter kernel error";
     Logger::instance().Log(LogLevel::Error, tag, msg);
 
     // Check log file
-    assertLogContains(logFilePath, "ERROR", tag, msg);
+    assertLogContains(getLogPath(), "ERROR", tag, msg);
 }
 
-TEST(Logger, LoggerInitWithDefinition)
+TEST_F(LoggerTest, LoggerInitWithDefinition)
 {
-    std::string logFilePath = "../tests/test_files/dmxdenoiser_logger_test.log";
-    bool success = std::filesystem::remove(logFilePath); // Remove log file
-    DMX_LOG_INIT(LogLevel::Trace, &std::clog, logFilePath);
     std::string tag = "ConvolutionFilter";
     std::string msg = "Filter kernel error";
     Logger::instance().Log(LogLevel::Error, tag, msg);
 
     // Check log file
-    assertLogContains(logFilePath, "ERROR", tag, msg);
+    assertLogContains(getLogPath(), "ERROR", tag, msg);
 }
 
-TEST(Logger, LoggerDefinition)
+TEST_F(LoggerTest, LoggerDefinition)
 {
-    std::string logFilePath = "../tests/test_files/dmxdenoiser_logger_test.log";
-    bool success = std::filesystem::remove(logFilePath); // Remove log file
-
-    Logger::instance().init(LogLevel::Trace, &std::clog, logFilePath);
-
     std::string tag = "Filter";
     std::string msg = "Strength=";
     float strength = 10.0f;
@@ -77,8 +81,8 @@ TEST(Logger, LoggerDefinition)
 
     // Check log file
     #if DMX_DEBUG_BUILD
-        assertLogContains(logFilePath, "TRACE", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL", tag, msg, "10");
+        assertLogContains(getLogPath(), "TRACE", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL", tag, msg, "10");
     #else
-        assertLogContains(logFilePath,  "INFO", "WARNING", "ERROR", "CRITICAL", tag, msg, "10");
+        assertLogContains(getLogPath(),  "INFO", "WARNING", "ERROR", "CRITICAL", tag, msg, "10");
     #endif
 }

@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "TestConfig.hpp"
 #include "AssertLogContains.hpp"
 #include <dmxdenoiser/Logger.hpp>
 #include <dmxdenoiser/ThreadPool.hpp>
@@ -17,12 +18,23 @@ using namespace dmxdenoiser;
 
 class ThreadPoolTest : public ::testing::Test {
 protected:
-    std::string logFilePath = "../tests/test_files/dmxdenoiser_threadPool_test.log";
-    std::mutex tpMutex;
-    
+    std::string getLogPath(std::string_view testDir = TEST_LOG_DIR) {
+        auto* info = ::testing::UnitTest::GetInstance()->current_test_info();
+        return std::string(testDir) + info->test_suite_name() + "/" + info->name() + ".log";
+    }
+
     void SetUp() override {
-        bool success = std::filesystem::remove(logFilePath); // Remove log file
-        DMX_LOG_INIT(LogLevel::Trace, &std::clog, logFilePath);
+        removeLogFile();
+        DMX_LOG_INIT(LogLevel::Trace, &std::clog, this->getLogPath());
+    }
+
+    void TearDown() override {
+        DMX_LOG_SHUTDOWN;
+        //removeLogFile();
+    }
+
+    void removeLogFile() {
+        bool success = std::filesystem::remove(this->getLogPath()); // Remove log file
     }
 };
 
@@ -34,8 +46,8 @@ TEST_F(ThreadPoolTest, Init){
         tp = std::make_unique<ThreadPool>(threads);
     );
     
-    assertLogContains(logFilePath, "INFO", "ThreadPool", "created with");
-    assertLogDoesNotContain(logFilePath, "ERROR");
+    assertLogContains(getLogPath(), "INFO", "ThreadPool", "created with");
+    assertLogDoesNotContain(getLogPath(), "ERROR");
 }
 
 TEST_F(ThreadPoolTest, InitWith0ValueHenseMaxThreads){
@@ -48,8 +60,8 @@ TEST_F(ThreadPoolTest, InitWith0ValueHenseMaxThreads){
 
     const int n = tp->runningThreads();
     
-    assertLogContains(logFilePath, "INFO", "ThreadPool", "created with");
-    assertLogDoesNotContain(logFilePath, "ERROR");
+    assertLogContains(getLogPath(), "INFO", "ThreadPool", "created with");
+    assertLogDoesNotContain(getLogPath(), "ERROR");
     EXPECT_EQ(n, ThreadPool::maxThreads());
 }
 
@@ -63,8 +75,8 @@ TEST_F(ThreadPoolTest, InitWithNegativeOneValueHenseMaxThreads){
 
     const int n = tp->runningThreads();
     
-    assertLogContains(logFilePath, "INFO", "ThreadPool", "created with");
-    assertLogDoesNotContain(logFilePath, "ERROR");
+    assertLogContains(getLogPath(), "INFO", "ThreadPool", "created with");
+    assertLogDoesNotContain(getLogPath(), "ERROR");
     EXPECT_EQ(n, ThreadPool::maxThreads());
 }
 
@@ -78,8 +90,8 @@ TEST_F(ThreadPoolTest, InitWithALargeValueHenseMaxThreads){
 
     const int n = tp->runningThreads();
     
-    assertLogContains(logFilePath, "INFO", "ThreadPool", "created with");
-    assertLogDoesNotContain(logFilePath, "ERROR");
+    assertLogContains(getLogPath(), "INFO", "ThreadPool", "created with");
+    assertLogDoesNotContain(getLogPath(), "ERROR");
     EXPECT_EQ(n, ThreadPool::maxThreads());
 }
 
@@ -100,5 +112,5 @@ TEST_F(ThreadPoolTest, RunSimpleTasksMaxThreads){
     }
     for (auto& f : futures)
         f.get();
-    assertLogDoesNotContain(logFilePath, "ERROR");
+    assertLogDoesNotContain(getLogPath(), "ERROR");
 }

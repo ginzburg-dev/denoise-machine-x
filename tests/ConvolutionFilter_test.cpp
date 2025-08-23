@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "TestConfig.hpp"
 #include "AssertLogContains.hpp"
 #include <dmxdenoiser/Backend.hpp>
 #include <dmxdenoiser/DMXImage.hpp>
@@ -22,12 +23,25 @@
 using namespace dmxdenoiser;
 
 class ConvolutionFilterTest : public ::testing::Test {
-    protected:
-        std::string logFilePath = "../tests/test_files/dmxdenoiser_convolutionFilter_test.log";
-        void SetUp() override {
-            bool success = std::filesystem::remove(logFilePath); // Remove log file
-            DMX_LOG_INIT(LogLevel::Trace, &std::clog, logFilePath);
-        }
+protected:
+    std::string getLogPath(std::string_view testDir = TEST_LOG_DIR) {
+        auto* info = ::testing::UnitTest::GetInstance()->current_test_info();
+        return std::string(testDir) + info->test_suite_name() + "/" + info->name() + ".log";
+    }
+
+    void SetUp() override {
+        removeLogFile();
+        DMX_LOG_INIT(LogLevel::Trace, &std::clog, this->getLogPath());
+    }
+
+    void TearDown() override {
+        DMX_LOG_SHUTDOWN;
+        //removeLogFile();
+    }
+
+    void removeLogFile() {
+        bool success = std::filesystem::remove(this->getLogPath()); // Remove log file
+    }
 };
 
 void applyFilterToImageFile(
@@ -73,7 +87,7 @@ TEST_F(ConvolutionFilterTest, ParametersNotSet)
     // Check log
     std::string tag{"ConvolutionFilter"};
     std::string msg{"Kernel is empty, size=0x0"};
-    assertLogContains(logFilePath, "ERROR", tag, msg);
+    assertLogContains(getLogPath(), "ERROR", tag, msg);
 }
 
 TEST_F(ConvolutionFilterTest, ParametersNotSetInfoLog)
@@ -87,7 +101,7 @@ TEST_F(ConvolutionFilterTest, ParametersNotSetInfoLog)
     EXPECT_NO_THROW(convoFilter->apply(img));
 
     // Check log
-    assertLogContains(logFilePath, "'strength'", "'strength'",
+    assertLogContains(getLogPath(), "'strength'", "'strength'",
         "'layers'", "'filterAlpha'", "'backend'", "'backendResource'");
 }
 
@@ -104,7 +118,7 @@ TEST_F(ConvolutionFilterTest, ParametersSetFramesLayersInfoLog)
     EXPECT_NO_THROW(convoFilter->apply(img));
 
     // Check log
-    assertLogContains(logFilePath, "requested frame", "requested layer", "not found", "6", "7", "8", "unknown");
+    assertLogContains(getLogPath(), "requested frame", "requested layer", "not found", "6", "7", "8", "unknown");
 }
 
 

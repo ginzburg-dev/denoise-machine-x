@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "TestConfig.hpp"
 #include <dmxdenoiser/Backend.hpp>
 #include <dmxdenoiser/FilterKernels.hpp>
 #include <dmxdenoiser/Kernel2D.hpp>
@@ -11,7 +12,29 @@
 
 using namespace dmxdenoiser;
 
-TEST(ParamDictionary, SetAndGetIntSingleValue){
+class ParamDictionaryTest : public ::testing::Test {
+protected:
+    std::string getLogPath(std::string_view testDir = TEST_LOG_DIR) {
+        auto* info = ::testing::UnitTest::GetInstance()->current_test_info();
+        return std::string(testDir) + info->test_suite_name() + "/" + info->name() + ".log";
+    }
+
+    void SetUp() override {
+        removeLogFile();
+        DMX_LOG_INIT(LogLevel::Trace, &std::clog, this->getLogPath());
+    }
+
+    void TearDown() override {
+        DMX_LOG_SHUTDOWN;
+        //removeLogFile();
+    }
+
+    void removeLogFile() {
+        bool success = std::filesystem::remove(this->getLogPath()); // Remove log file
+    }
+};
+
+TEST_F(ParamDictionaryTest, SetAndGetIntSingleValue){
     ParamDictionary params;
     int value = 7;
     params.addInt("sample", value);
@@ -20,7 +43,7 @@ TEST(ParamDictionary, SetAndGetIntSingleValue){
     EXPECT_EQ(sample_param.value(), value);
 }
 
-TEST(ParamDictionary, SetAndGetFloatSingleValue){
+TEST_F(ParamDictionaryTest, SetAndGetFloatSingleValue){
     ParamDictionary params;
     float value = 7.56789f;
     params.addFloat("sample", value);
@@ -29,7 +52,7 @@ TEST(ParamDictionary, SetAndGetFloatSingleValue){
     EXPECT_EQ(sample_param.value(), value);
 }
 
-TEST(ParamDictionary, SetAndGetBoolSingleValue){
+TEST_F(ParamDictionaryTest, SetAndGetBoolSingleValue){
     ParamDictionary params;
     bool value = true;
     params.addBool("sample", value);
@@ -38,7 +61,7 @@ TEST(ParamDictionary, SetAndGetBoolSingleValue){
     EXPECT_EQ(sample_param.value(), value);
 }
 
-TEST(ParamDictionary, SetAndGetStringSingleValue){
+TEST_F(ParamDictionaryTest, SetAndGetStringSingleValue){
     ParamDictionary params;
     std::string value = "SampleString";
     params.addString("sample", value);
@@ -47,7 +70,7 @@ TEST(ParamDictionary, SetAndGetStringSingleValue){
     EXPECT_EQ(sample_param.value(), value);
 }
 
-TEST(ParamDictionary, SetAndGetKernel2DSingleValue){
+TEST_F(ParamDictionaryTest, SetAndGetKernel2DSingleValue){
     ParamDictionary params;
     Kernel2D value = FilterKernels::getGaussianKernel(3, 1);
     params.addKernel2D("sample", value);
@@ -56,7 +79,7 @@ TEST(ParamDictionary, SetAndGetKernel2DSingleValue){
     EXPECT_EQ(sample_param.value(), value);
 }
 
-TEST(ParamDictionary, SetAndGetBackendSingleValue){
+TEST_F(ParamDictionaryTest, SetAndGetBackendSingleValue){
     ParamDictionary params;
     Backend value = Backend::GPU;
     params.addBackend("sample", value);
@@ -65,7 +88,7 @@ TEST(ParamDictionary, SetAndGetBackendSingleValue){
     EXPECT_EQ(sample_param.value(), value);
 }
 
-TEST(ParamDictionary, SetAndGetBackendResourceSingleValue){
+TEST_F(ParamDictionaryTest, SetAndGetBackendResourceSingleValue){
     ParamDictionary params;
     BackendResource value = BackendResource{};
     params.addBackendResource("sample", value);
@@ -74,21 +97,21 @@ TEST(ParamDictionary, SetAndGetBackendResourceSingleValue){
     EXPECT_EQ(sizeof(sample_param.value()), sizeof(value));
 }
 
-TEST(ParamDictionary, GetMissingParamReturnsNullopt){
+TEST_F(ParamDictionaryTest, GetMissingParamReturnsNullopt){
     ParamDictionary params;
     params.addInt("sample", 7);
     auto sample_param = params.getSingleParam<int>("nonexistent_key");
     EXPECT_EQ(sample_param, std::nullopt);
 }
 
-TEST(ParamDictionary, GetIntForStringParamReturnsNullopt){
+TEST_F(ParamDictionaryTest, GetIntForStringParamReturnsNullopt){
     ParamDictionary params;
     params.addString("sample", "StringParam");
     auto sample_param = params.getSingleParam<int>("sample");
     EXPECT_EQ(sample_param, std::nullopt);
 }
 
-TEST(ParamDictionary, SetAndGetIntArrayValue){
+TEST_F(ParamDictionaryTest, SetAndGetIntArrayValue){
     ParamDictionary params;
     std::vector<int> value = { 7, 8 };
     params.addIntArray("sample", value);
@@ -97,7 +120,7 @@ TEST(ParamDictionary, SetAndGetIntArrayValue){
     EXPECT_EQ(sample_param.value(), value);
 }
 
-TEST(ParamDictionary, SetAndGetFloatArrayValue){
+TEST_F(ParamDictionaryTest, SetAndGetFloatArrayValue){
     ParamDictionary params;
     std::vector<float> value = { 7.5f, 8.9f };
     params.addFloatArray("sample", value);
@@ -106,7 +129,7 @@ TEST(ParamDictionary, SetAndGetFloatArrayValue){
     EXPECT_EQ(sample_param.value(), value);
 }
 
-TEST(ParamDictionary, SetAndGetBoolArrayValue){
+TEST_F(ParamDictionaryTest, SetAndGetBoolArrayValue){
     ParamDictionary params;
     std::vector<bool> value = { true, false };
     params.addBoolArray("sample", value);
@@ -115,7 +138,7 @@ TEST(ParamDictionary, SetAndGetBoolArrayValue){
     EXPECT_EQ(sample_param.value(), value);
 }
 
-TEST(ParamDictionary, SetAndGetStringArrayValue){
+TEST_F(ParamDictionaryTest, SetAndGetStringArrayValue){
     ParamDictionary params;
     std::vector<std::string> value = { "First", "Second" };
     params.addStringArray("sample", value);
@@ -124,7 +147,7 @@ TEST(ParamDictionary, SetAndGetStringArrayValue){
     EXPECT_EQ(sample_param.value(), value);
 }
 
-TEST(ParamDictionary, SetAndGetKernel2DArrayValue){
+TEST_F(ParamDictionaryTest, SetAndGetKernel2DArrayValue){
     ParamDictionary params;
     std::vector<Kernel2D> value = { FilterKernels::getGaussianKernel(3, 1), FilterKernels::getBoxKernel(3) };
     params.addKernel2DArray("sample", value);
@@ -133,7 +156,7 @@ TEST(ParamDictionary, SetAndGetKernel2DArrayValue){
     EXPECT_EQ(sample_param.value(), value);
 }
 
-TEST(ParamDictionary, SetAndGetBackendArrayValue){
+TEST_F(ParamDictionaryTest, SetAndGetBackendArrayValue){
     ParamDictionary params;
     std::vector<Backend> value = { Backend::GPU, Backend::METAL };
     params.addBackendArray("sample", value);
@@ -142,7 +165,7 @@ TEST(ParamDictionary, SetAndGetBackendArrayValue){
     EXPECT_EQ(sample_param.value(), value);
 }
 
-TEST(ParamDictionary, SetAndGetBackendResourceArrayValue){
+TEST_F(ParamDictionaryTest, SetAndGetBackendResourceArrayValue){
     ParamDictionary params;
     std::vector<BackendResource> value = { BackendResource{}, BackendResource{} };
     params.addBackendResourceArray("sample", value);
@@ -151,7 +174,7 @@ TEST(ParamDictionary, SetAndGetBackendResourceArrayValue){
     EXPECT_EQ(sizeof(sample_param.value()), sizeof(value));
 }
 
-TEST(ParamDictionary, GetMissingStringArrayParamReturnsNullopt){
+TEST_F(ParamDictionaryTest, GetMissingStringArrayParamReturnsNullopt){
     ParamDictionary params;
     std::vector<std::string> value = { "First", "Second" };
     params.addStringArray("sample", value);
@@ -159,7 +182,7 @@ TEST(ParamDictionary, GetMissingStringArrayParamReturnsNullopt){
     EXPECT_EQ(sample_param, std::nullopt);
 }
 
-TEST(ParamDictionary, GetFloatForStringArrayParamReturnsNullopt){
+TEST_F(ParamDictionaryTest, GetFloatForStringArrayParamReturnsNullopt){
     ParamDictionary params;
     std::vector<std::string> value = { "First", "Second" };
     params.addStringArray("sample", value);
@@ -167,7 +190,7 @@ TEST(ParamDictionary, GetFloatForStringArrayParamReturnsNullopt){
     EXPECT_EQ(sample_param, std::nullopt);
 }
 
-TEST(ParamDictionary, AddEmptyArray){
+TEST_F(ParamDictionaryTest, AddEmptyArray){
     ParamDictionary params;
     std::vector<int> empty;
     params.addIntArray("empty", empty);
@@ -178,7 +201,7 @@ TEST(ParamDictionary, AddEmptyArray){
     EXPECT_EQ(single, std::nullopt);
 }
 
-TEST(ParamDictionary, OverwriteIntParam){
+TEST_F(ParamDictionaryTest, OverwriteIntParam){
     ParamDictionary params;
     params.addInt("x", 1);
     params.addInt("x", 2); // Should overwrite
@@ -187,7 +210,7 @@ TEST(ParamDictionary, OverwriteIntParam){
     EXPECT_EQ(val.value(), 2);
 }
 
-TEST(ParamDictionary, ToString){
+TEST_F(ParamDictionaryTest, ToString){
     ParamDictionary params;
     params.addInt("int_var", 1);
     params.addFloat("float_var", 2.0f);
@@ -204,9 +227,5 @@ TEST(ParamDictionary, ToString){
     params.addKernel2DArray("kernel_array_var", {FilterKernels::getBoxKernel(7), FilterKernels::getBoxKernel(5)});
     params.addBackendArray("backend_array_var", {Backend::GPU, Backend::METAL});
     params.addBackendResourceArray("backend_res_array_var", {BackendResource{}, BackendResource{}});
-    
-    std::string logFilePath = "../tests/test_files/dmxdenoiser_paramDictionary_test.log";
-    bool success = std::filesystem::remove(logFilePath); // Remove log file
-    DMX_LOG_INIT(LogLevel::Debug, &std::clog, logFilePath);
     DMX_LOG_INFO("ParamDictionary", params.ToString());
 }

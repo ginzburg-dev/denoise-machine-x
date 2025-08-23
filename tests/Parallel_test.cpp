@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "TestConfig.hpp"
 #include "AssertLogContains.hpp"
 #include <dmxdenoiser/Logger.hpp>
 #include <dmxdenoiser/ThreadPool.hpp>
@@ -20,14 +21,25 @@
 using namespace dmxdenoiser;
 
 class ParallelTest : public ::testing::Test {
-    protected:
-        std::string logFilePath = "../tests/test_files/dmxdenoiser_parallel_test.log";
-        std::mutex tpMutex;
+protected:
+    std::string getLogPath(std::string_view testDir = TEST_LOG_DIR) {
+        auto* info = ::testing::UnitTest::GetInstance()->current_test_info();
+        return std::string(testDir) + info->test_suite_name() + "/" + info->name() + ".log";
+    }
 
-        void SetUp() override {
-            bool success = std::filesystem::remove(logFilePath); // Remove log file
-            DMX_LOG_INIT(LogLevel::Trace, &std::clog, logFilePath);
-        }
+    void SetUp() override {
+        removeLogFile();
+        DMX_LOG_INIT(LogLevel::Trace, &std::clog, this->getLogPath());
+    }
+
+    void TearDown() override {
+        DMX_LOG_SHUTDOWN;
+        //removeLogFile();
+    }
+
+    void removeLogFile() {
+        bool success = std::filesystem::remove(this->getLogPath()); // Remove log file
+    }
 };
 
 TEST_F(ParallelTest, ParallelForOneParam){
@@ -39,7 +51,7 @@ TEST_F(ParallelTest, ParallelForOneParam){
     }, &threadPool);
 
     EXPECT_EQ(N, result);
-    assertLogDoesNotContain(logFilePath, "ERROR");
+    assertLogDoesNotContain(getLogPath(), "ERROR");
 }
 
 TEST_F(ParallelTest, ParallelForTwoParam){
@@ -53,7 +65,7 @@ TEST_F(ParallelTest, ParallelForTwoParam){
         }
     }, &threadPool);
     EXPECT_EQ(N, result);
-    assertLogDoesNotContain(logFilePath, "ERROR");
+    assertLogDoesNotContain(getLogPath(), "ERROR");
 }
 
 TEST_F(ParallelTest, ParallelForNoPool){
@@ -64,7 +76,7 @@ TEST_F(ParallelTest, ParallelForNoPool){
     });
 
     EXPECT_EQ(N, result);
-    assertLogDoesNotContain(logFilePath, "ERROR");
+    assertLogDoesNotContain(getLogPath(), "ERROR");
 }
 
 TEST_F(ParallelTest, ParallelForError) {
@@ -82,7 +94,7 @@ TEST_F(ParallelTest, ParallelForError) {
         EXPECT_NE(std::string(e.what()).find("Some error."), std::string::npos);
     }
 
-    assertLogContains(logFilePath, "ERROR", "Some error.");
+    assertLogContains(getLogPath(), "ERROR", "Some error.");
 }
 
 TEST_F(ParallelTest, ParallelForChunkStep2N300){
@@ -94,7 +106,7 @@ TEST_F(ParallelTest, ParallelForChunkStep2N300){
         ++result;
     }, threadPool.get(), chunk_size);
     EXPECT_EQ( N / chunk_size, result);
-    assertLogDoesNotContain(logFilePath, "ERROR");
+    assertLogDoesNotContain(getLogPath(), "ERROR");
 }
 
 TEST_F(ParallelTest, ParallelForChunkStep0N400){
@@ -106,7 +118,7 @@ TEST_F(ParallelTest, ParallelForChunkStep0N400){
         ++result;
     }, threadPool.get(), 0); // Zero chunk
     EXPECT_EQ( N / chunk_size , result);
-    assertLogDoesNotContain(logFilePath, "ERROR");
+    assertLogDoesNotContain(getLogPath(), "ERROR");
 }
 
 TEST_F(ParallelTest, ParallelForChunkStepInfN2345){
@@ -116,14 +128,14 @@ TEST_F(ParallelTest, ParallelForChunkStepInfN2345){
     int chunk_size = (N / (8 * threadPool->runningThreads()));
     parallelFor(0, N, [&](int x, int y){
         ++result;
-    }, threadPool.get(), std::numeric_limits<unsigned int>::max());
-    EXPECT_EQ( N / std::min<unsigned int>(std::numeric_limits<unsigned int>::max(), N) , result);
-    const std::uint64_t N64 = static_cast<std::uint64_t>(N);
-    const std::uint64_t UMAX = static_cast<std::uint64_t>(std::numeric_limits<unsigned int>::max());
-    const std::uint64_t denom = std::min<std::uint64_t>(N64, UMAX);
+    }, threadPool.get(), std::numeric_limits<int>::max());
+    EXPECT_EQ( N / std::min<int>(std::numeric_limits<int>::max(), N) , result);
+    const int N64 = static_cast<int>(N);
+    const int UMAX = static_cast<int>(std::numeric_limits<int>::max());
+    const int denom = std::min<int>(N64, UMAX);
     
     DMX_LOG_TRACE("ParallelTest",
         "ParallelForChunkStepInfN2345: N / min(N, UINT_MAX) = ", N64 / denom);
 
-    assertLogDoesNotContain(logFilePath, "ERROR");
+    assertLogDoesNotContain(getLogPath(), "ERROR");
 }
