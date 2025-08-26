@@ -10,7 +10,6 @@
 #include <dmxdenoiser/ParamDictionary.hpp>
 #include <dmxdenoiser/ThreadPool.hpp>
 #include <dmxdenoiser/ImageIOExr.hpp>
-#include <dmxdenoiser/ImageIOFactory.hpp>
 
 #include <chrono>
 #include <iostream>
@@ -52,7 +51,7 @@ void applyFilterToImageFile(
     Backend backend=Backend::CPU)
 {
     AovDictionary aovs = { {"beauty", "default"} };
-    std::unique_ptr<ImageIO> io = createImageIO(filename);
+    std::unique_ptr<ImageIO> io = ImageIO::create(filename);
     auto info = io->getImageInfo(filename);
 
     DMXImage img{info.width, info.height, 1, LayerDictionary{aovs}};
