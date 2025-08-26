@@ -32,6 +32,8 @@ namespace dmxdenoiser
     public:
         ImageIO() = default;
 
+        static std::unique_ptr<ImageIO> create(const std::string& filename);
+
         virtual void read(
                 const std::string& filename,
                 DMXImage& img,
