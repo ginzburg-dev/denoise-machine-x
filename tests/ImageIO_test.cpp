@@ -1,7 +1,10 @@
 #include <gtest/gtest.h>
 
+#include "TestConfig.hpp"
+#include "AssertLogContains.hpp"
 #include<dmxdenoiser/DMXImage.hpp>
 #include<dmxdenoiser/ImageIO.hpp>
+#include<dmxdenoiser/Logger.hpp>
 
 #include <iostream>
 #include <map>
@@ -12,6 +15,28 @@
 #include <Imath/half.h>
 
 using namespace dmxdenoiser;
+
+class ImageIOTest : public ::testing::Test {
+protected:
+    std::string getLogPath(std::string_view testDir = TEST_LOG_DIR) {
+        auto* info = ::testing::UnitTest::GetInstance()->current_test_info();
+        return std::string(testDir) + info->test_suite_name() + "/" + info->name() + ".log";
+    }
+
+    void SetUp() override {
+        removeLogFile();
+        DMX_LOG_INIT(LogLevel::Trace, &std::clog, this->getLogPath());
+    }
+
+    void TearDown() override {
+        DMX_LOG_SHUTDOWN;
+        //removeLogFile();
+    }
+
+    void removeLogFile() {
+        bool success = std::filesystem::remove(this->getLogPath()); // Remove log file
+    }
+};
 
 TEST(ImageIO, CopyChannelBufferToDMXImageAndBack)
 {
@@ -87,4 +112,12 @@ TEST(ImageIO, CopyChannelBufferToDMXImageAndBack)
             EXPECT_EQ(count, ch);
             ++count;
         }
+}
+
+TEST_F(ImageIOTest, CreateImageIOEmptyPath)
+{
+    std::string filename = "";
+    std::unique_ptr<ImageIO> io;
+    EXPECT_THROW(ImageIO::create(filename), std::runtime_error);
+    assertLogContains(getLogPath(), "not found");
 }

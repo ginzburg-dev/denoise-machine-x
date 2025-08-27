@@ -2,6 +2,7 @@
 #include <dmxdenoiser/ChannelBuffer.hpp>
 #include <dmxdenoiser/ImageFileType.hpp>
 #include <dmxdenoiser/ImageIOExr.hpp>
+#include <dmxdenoiser/Logger.hpp>
 #include <dmxdenoiser/DMXImage.hpp>
 #include <dmxdenoiser/PixelType.hpp>
 #include <dmxdenoiser/StringConversions.hpp>
@@ -9,6 +10,8 @@
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>
+#include <filesystem>
+#include <memory>
 #include <sstream>
 #include <utility>
 
@@ -24,6 +27,10 @@
 
 namespace dmxdenoiser
 {
+    std::unique_ptr<ImageIOExr> ImageIOExr::create()
+    {
+        return std::make_unique<ImageIOExr>();
+    }
 
     void ImageIOExr::read(
             const std::string& filename,
@@ -31,6 +38,11 @@ namespace dmxdenoiser
             int frame,
             const AovDictionary& layers)
     {
+        if(!std::filesystem::exists(filename)) {
+            DMX_LOG_ERROR("ImageIOExr", "read(): File \"", filename, "\" not found.");
+            throw std::runtime_error("File \"" + filename + "\" not found.");
+        }
+
         int numChannels = DEFAULT_NUM_CHANNELS;
         
         if (!img.hasValidLayerDictionary())
@@ -182,7 +194,11 @@ namespace dmxdenoiser
     
     ImageInfo ImageIOExr::getImageInfo(const std::string& filename) const
     {
-        
+        if(!std::filesystem::exists(filename)) {
+            DMX_LOG_ERROR("ImageIOExr", "getImageInfo(): File \"", filename, "\" not found.");
+            throw std::runtime_error("File \"" + filename + "\" not found.");
+        }
+
         ImageInfo info{};
         info.type = ImageFileType::EXR;
 
@@ -212,12 +228,11 @@ namespace dmxdenoiser
                 channel = name;
             }
             info.layers.addLayer(layer);
+            info.layers.getLayer(layer)->originalName = layer;
             info.layers.getLayer(layer)->addChannel(channel, toPixelType(i.channel().type));
         }
         
         return info;
     }
-    
-    ImageIOExr::~ImageIOExr() {}
 
 } // namespace dmxdenoiser

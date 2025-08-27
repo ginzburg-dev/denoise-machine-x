@@ -1,9 +1,11 @@
 #include <gtest/gtest.h>
 
+#include "TestConfig.hpp"
+#include "AssertLogContains.hpp"
 #include<dmxdenoiser/DMXImage.hpp>
 #include<dmxdenoiser/ImageIO.hpp>
 #include<dmxdenoiser/ImageIOExr.hpp>
-#include<dmxdenoiser/ImageIOFactory.hpp>
+#include<dmxdenoiser/Logger.hpp>
 
 #include <iostream>
 #include <map>
@@ -22,6 +24,28 @@
 #include <Imath/ImathBox.h>
 
 using namespace dmxdenoiser;
+
+class ImageIOExrTest : public ::testing::Test {
+protected:
+    std::string getLogPath(std::string_view testDir = TEST_LOG_DIR) {
+        auto* info = ::testing::UnitTest::GetInstance()->current_test_info();
+        return std::string(testDir) + info->test_suite_name() + "/" + info->name() + ".log";
+    }
+
+    void SetUp() override {
+        removeLogFile();
+        DMX_LOG_INIT(LogLevel::Trace, &std::clog, this->getLogPath());
+    }
+
+    void TearDown() override {
+        DMX_LOG_SHUTDOWN;
+        //removeLogFile();
+    }
+
+    void removeLogFile() {
+        bool success = std::filesystem::remove(this->getLogPath()); // Remove log file
+    }
+};
 
 void WriteEXRTestImage(const std::string& fileName)
 {
@@ -133,7 +157,7 @@ TEST(ImageIOExr, ReadTestImageInfo)
     };
 
     std::string filename = "../tests/test_files/test_exr_image2x2.exr";
-    auto io = createImageIO(filename);
+    auto io = ImageIO::create(filename);
     auto imageInfo = io->getImageInfo(filename);
 
     EXPECT_EQ(imageInfo.width, 2);
@@ -157,8 +181,6 @@ TEST(ImageIOExr, ReadTestImageInfo)
     }
 
     std::cout << imageInfo.ToString() << '\n';
-
-    
 }
 
 TEST(ImageIOExr, ReadWriteTestImageEXRFile)
@@ -196,7 +218,7 @@ TEST(ImageIOExr, ReadWriteTestImageEXRFile)
         {"depth", "Depth"}
     };
 
-    auto io = createImageIO(filename);
+    auto io = ImageIO::create(filename);
     ImageInfo info = io->getImageInfo(filename);
     
     DMXImage img{info.width, info.height, 1, LayerDictionary{aovs}};
@@ -237,4 +259,26 @@ TEST(ImageIOExr, ReadWriteTestImageEXRFile)
         }
 
     compareTwoImages(img, img1);
+}
+
+TEST_F(ImageIOExrTest, ReadImageInfoEmptyPath)
+{
+    std::string filename = "";
+    std::unique_ptr<ImageIO> io = ImageIOExr::create();
+    EXPECT_THROW(io->getImageInfo(filename), std::runtime_error);
+    assertLogContains(getLogPath(), "not found");
+}
+
+TEST_F(ImageIOExrTest, ReadImageEmptyPath)
+{
+    std::string filename = "";
+    std::unique_ptr<ImageIO> io = ImageIOExr::create();
+    DMXImage img;
+    AovDictionary aovs = {
+        {"beauty", "default"},
+        {"albedo", "Layer"},
+        {"depth", "Depth"}
+    };
+    EXPECT_THROW(io->read(filename, img, 0, aovs), std::runtime_error);
+    assertLogContains(getLogPath(), "not found");
 }
