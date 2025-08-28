@@ -23,7 +23,7 @@
         struct CLASS##Registrator{ \
             CLASS##Registrator() { \
                 /* Registration happens in the constructor, which is called before main() */ \
-                FilterFactory::instance().registerFilter( \
+                dmxdenoiser::FilterFactory::instance().registerFilter( \
                     CLASS::StaticClassName(), /* Register filter under its static name */ \
                     [](){ return std::make_unique<CLASS>(); }); /* Lambda creates new instance */ \
             } \
