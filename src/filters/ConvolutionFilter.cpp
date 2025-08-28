@@ -8,6 +8,10 @@
 #include <dmxdenoiser/Parallel.hpp>
 #include <dmxdenoiser/util/NumericUtils.hpp>
 
+#if DMX_ENABLE_CUDA
+    #include <dmxdenoiser/ConvolutionCUDA.cu>
+#endif
+
 #include <optional>
 #include <cstdint>
 #include <iostream>
@@ -177,14 +181,22 @@ namespace dmxdenoiser
 
     void ConvolutionFilter::convolveGPU(const DMXImage& input, DMXImage& output) const
     {
-        // IN PROGRESS
-        output = input;
+        #if DMX_ENABLE_CUDA
+            // GPU logic
+        #else
+            DMX_LOG_ERROR("ConvolutionFilter", "convolveGPU(): no CUDA build");
+            throw std::runtime_error("convolveGPU(): no CUDA build");
+        #endif
     }
 
     void ConvolutionFilter::convolveMETAL(const DMXImage& input, DMXImage& output) const
     {
-        // IN PROGRESS
-        output = input;
+        //#if DMX_ENABLE_METAL
+        //    // METAL logic
+        //#else
+            DMX_LOG_ERROR("ConvolutionFilter", "convolveMETAL(): no METAL build");
+            throw std::runtime_error("convolveMETAL(): no METAL build");
+        //#endif
     }
     
     void ConvolutionFilter::applyFilter(const DMXImage& in, DMXImage& out) const

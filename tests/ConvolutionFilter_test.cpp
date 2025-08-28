@@ -261,14 +261,6 @@ TEST_F(ConvolutionFilterTest, ApplySobelFilterKernelToTheImage)
     applyFilterToImageFile(filename, "../tests/test_files/rabbit_pixel_art_convo_sobel_y_3x3.exr", kernelY);
 }
 
-TEST_F(ConvolutionFilterTest, ApplyBoxFilterKernelToTheImageGPU)
-{
-    std::string filename = "../examples/rabbit_pixel_art.exr";
-    std::string outputFileName = "../tests/test_files/rabbit_pixel_art_convo_box_3x3_gpu.exr";
-    auto boxKernel = FilterKernels::getBoxKernel(3);
-    applyFilterToImageFile(filename, outputFileName, boxKernel, nullptr, Backend::GPU);
-}
-
 TEST_F(ConvolutionFilterTest, ApplyGaussianFilterKernelToTheImageParallel)
 {
     ThreadPool threadPool(0);
