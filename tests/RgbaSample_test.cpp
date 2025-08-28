@@ -20,7 +20,7 @@ int main()
     std::cout << info.ToString() << '\n';
     auto compression = info.params.getSingleParam<int>("compression");
     if(compression)
-        std::cout << "    Compresion: " << exrCompressionName(static_cast<Imf_3_3::Compression>(*compression)) << '\n';
+        std::cout << "    Compresion: " << exrCompressionName(static_cast<Imf::Compression>(*compression)) << '\n';
     std::cout << "    Channels: \n";
     for (auto& [layer, layerInfo] : info.layers.data())
         for (auto& c : layerInfo.channels)
