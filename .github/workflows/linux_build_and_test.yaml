@@ -30,4 +30,4 @@ jobs:
       run: cmake --build build/Release --parallel --config Release
 
     - name: Run tests
-      run: cd build && ctest --output-on-failure --verbose
+      run: cd build && cd Release && ctest --output-on-failure --verbose
