@@ -27,7 +27,7 @@ jobs:
       run: cmake -S . -B build -G Ninja
 
     - name: Build
-      run: cmake --build build/Release --parallel --config Release
+      run: cmake --build build --parallel --config Release
 
     - name: Run tests
-      run: cd build && cd Release && ctest --output-on-failure --verbose
+      run: cd build && ctest --output-on-failure --verbose
