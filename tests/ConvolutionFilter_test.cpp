@@ -282,7 +282,7 @@ TEST_F(ConvolutionFilterTest, ApplyGaussianFilterKernelToTheImageParallel)
 
 TEST_F(ConvolutionFilterTest, ApplyGaussianFilterKernelToTheImageParallelSingleThread)
 {
-    std::string filename = "../../examples/rabbit_pixel_art.exr";
+    std::string filename = "../examples/rabbit_pixel_art.exr";
     std::string outputFileName = "../../tests/test_files/rabbit_pixel_art_parallel_single_convo_gaussan_sigma2_3x3.exr";
     float sigma = 2.0f;
     auto gaussianKernel = FilterKernels::getGaussianKernel(3, sigma);
