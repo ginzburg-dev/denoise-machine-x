@@ -6,6 +6,7 @@
 #include <memory>
 
 #include <OpenEXR/ImfCompression.h>
+#include <OpenEXR/ImfNamespace.h>
 
 using namespace dmxdenoiser;
 
@@ -13,7 +14,7 @@ int main()
 {
     if (!std::filesystem::exists("../tests/test_files/sample_channels/rgba.0001.exr"))
         return 0;
-        
+
     auto io = ImageIOExr::create();
     auto info = io->getImageInfo("../tests/test_files/sample_channels/rgba.0001.exr");
     std::cout << info.ToString() << '\n';
