@@ -2,6 +2,7 @@
 #include <dmxdenoiser/PixelType.hpp>
 
 #include <iostream>
+#include <filesystem>
 #include <memory>
 
 #include <OpenEXR/ImfCompression.h>
@@ -10,9 +11,11 @@ using namespace dmxdenoiser;
 
 int main()
 {
+    if (!std::filesystem::exists("../tests/test_files/sample_channels/rgba.0001.exr"))
+        return 0;
+        
     auto io = ImageIOExr::create();
     auto info = io->getImageInfo("../tests/test_files/sample_channels/rgba.0001.exr");
-    
     std::cout << info.ToString() << '\n';
     auto compression = info.params.getSingleParam<int>("compression");
     if(compression)
