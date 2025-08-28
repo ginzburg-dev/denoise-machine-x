@@ -235,16 +235,16 @@ TEST_F(ConvolutionFilterTest, SimpleGaussianKernel)
 
 TEST_F(ConvolutionFilterTest, ApplyBoxFilterKernelToTheImage)
 {
-    std::string filename = "../examples/rabbit_pixel_art.exr";
-    std::string outputFileName = "../tests/test_files/rabbit_pixel_art_convo_box_3x3.exr";
+    std::string filename = "../../examples/rabbit_pixel_art.exr";
+    std::string outputFileName = "../../tests/test_files/rabbit_pixel_art_convo_box_3x3.exr";
     auto boxKernel = FilterKernels::getBoxKernel(3);
     applyFilterToImageFile(filename, outputFileName, boxKernel);
 }
 
 TEST_F(ConvolutionFilterTest, ApplyGaussianFilterKernelToTheImage)
 {
-    std::string filename = "../examples/rabbit_pixel_art.exr";
-    std::string outputFileName = "../tests/test_files/rabbit_pixel_art_convo_gaussan_sigma2_3x3.exr";
+    std::string filename = "../../examples/rabbit_pixel_art.exr";
+    std::string outputFileName = "../../tests/test_files/rabbit_pixel_art_convo_gaussan_sigma2_3x3.exr";
     float sigma = 2.0f;
     auto gaussianKernel = FilterKernels::getGaussianKernel(3, sigma);
     applyFilterToImageFile(filename, outputFileName, gaussianKernel);
@@ -252,19 +252,19 @@ TEST_F(ConvolutionFilterTest, ApplyGaussianFilterKernelToTheImage)
 
 TEST_F(ConvolutionFilterTest, ApplySobelFilterKernelToTheImage)
 {
-    std::string filename = "../examples/rabbit_pixel_art.exr";
+    std::string filename = "../../examples/rabbit_pixel_art.exr";
     
     auto kernelX = FilterKernels::getSobelKernelX();
     auto kernelY = FilterKernels::getSobelKernelY();
 
-    applyFilterToImageFile(filename, "../tests/test_files/rabbit_pixel_art_convo_sobel_x_3x3.exr", kernelX);
-    applyFilterToImageFile(filename, "../tests/test_files/rabbit_pixel_art_convo_sobel_y_3x3.exr", kernelY);
+    applyFilterToImageFile(filename, "../../tests/test_files/rabbit_pixel_art_convo_sobel_x_3x3.exr", kernelX);
+    applyFilterToImageFile(filename, "../../tests/test_files/rabbit_pixel_art_convo_sobel_y_3x3.exr", kernelY);
 }
 
 TEST_F(ConvolutionFilterTest, ApplyBoxFilterKernelToTheImageGPU)
 {
-    std::string filename = "../examples/rabbit_pixel_art.exr";
-    std::string outputFileName = "../tests/test_files/rabbit_pixel_art_convo_box_3x3_gpu.exr";
+    std::string filename = "../../examples/rabbit_pixel_art.exr";
+    std::string outputFileName = "../../tests/test_files/rabbit_pixel_art_convo_box_3x3_gpu.exr";
     auto boxKernel = FilterKernels::getBoxKernel(3);
     applyFilterToImageFile(filename, outputFileName, boxKernel, nullptr, Backend::GPU);
 }
@@ -273,8 +273,8 @@ TEST_F(ConvolutionFilterTest, ApplyGaussianFilterKernelToTheImageParallel)
 {
     ThreadPool threadPool(0);
 
-    std::string filename = "../examples/rabbit_pixel_art.exr";
-    std::string outputFileName = "../tests/test_files/rabbit_pixel_art_parallel_convo_gaussan_sigma2_3x3.exr";
+    std::string filename = "../../examples/rabbit_pixel_art.exr";
+    std::string outputFileName = "../../tests/test_files/rabbit_pixel_art_parallel_convo_gaussan_sigma2_3x3.exr";
     float sigma = 2.0f;
     auto gaussianKernel = FilterKernels::getGaussianKernel(3, sigma);
     applyFilterToImageFile(filename, outputFileName, gaussianKernel, &threadPool);
@@ -282,8 +282,8 @@ TEST_F(ConvolutionFilterTest, ApplyGaussianFilterKernelToTheImageParallel)
 
 TEST_F(ConvolutionFilterTest, ApplyGaussianFilterKernelToTheImageParallelSingleThread)
 {
-    std::string filename = "../examples/rabbit_pixel_art.exr";
-    std::string outputFileName = "../tests/test_files/rabbit_pixel_art_parallel_single_convo_gaussan_sigma2_3x3.exr";
+    std::string filename = "../../examples/rabbit_pixel_art.exr";
+    std::string outputFileName = "../../tests/test_files/rabbit_pixel_art_parallel_single_convo_gaussan_sigma2_3x3.exr";
     float sigma = 2.0f;
     auto gaussianKernel = FilterKernels::getGaussianKernel(3, sigma);
     applyFilterToImageFile(filename, outputFileName, gaussianKernel);
