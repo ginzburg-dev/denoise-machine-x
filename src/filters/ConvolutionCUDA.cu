@@ -1,5 +1,6 @@
 #include <dmxdenoiser/DMXImageView.hpp>
 #include <dmxdenoiser/Pixel.hpp>
+#include <dmxdenoiser/utils/NumericUtils.hpp>
 
 #include <cuda_runtime.h>
 
@@ -20,7 +21,7 @@ __global__ void convolve2D_CUDA(DMXImageView in, DMXImageView out, int* frames, 
     for(int ky = -offset; ky <= offset; ++ky)
         for(int kx = -offset; kx <= offset; ++kx)
         {
-            int px = std::clamp(to_int(x) + kx, 0, width - 1);
+            int px = clampf(to_int(x) + kx, 0, width - 1);
             int py = std::clamp(to_int(y) + ky, 0, height - 1);
             sum += m_kernel(ky + offset, kx + offset) * input.get(px, py, frame, layer);
         }
