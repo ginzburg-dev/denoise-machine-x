@@ -1,6 +1,8 @@
 // FloatUtils.hpp
 #pragma once
 
+#include <dmxdenoiser/Config.hpp>
+
 #include <algorithm> // for std::clamp()
 #include <cmath>
 #include <cstdint>
@@ -35,10 +37,15 @@ namespace dmxdenoiser
         return abs_c(a - b) < epsilon;
     }
 
+    DMX_CPU_GPU
+    constexpr inline float clampf(float x, float min, float max) {
+        return (x > max) ? max : ((x < min) ? min : x);
+    }
+
     // Blend two floats 
+    DMX_CPU_GPU
     constexpr inline float floatsBlend(float a, float b, float t) noexcept { 
-        //t = std::clamp(t, 0.0f, 1.0f);
-        t = t > 1.0f ? 1.0f : (t < 0.0f ? 0.0f : t);
+        t = clampf(t, 0.0f, 1.0f);
         return a + (b - a) * t;
     } 
 
