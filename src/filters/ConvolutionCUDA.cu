@@ -22,7 +22,7 @@ __global__ void convolve2D_CUDA(DMXImageView in, DMXImageView out, int* frames, 
         for(int kx = -offset; kx <= offset; ++kx)
         {
             int px = clampf(to_int(x) + kx, 0, width - 1);
-            int py = std::clamp(to_int(y) + ky, 0, height - 1);
+            int py = clampf(to_int(y) + ky, 0, height - 1);
             sum += m_kernel(ky + offset, kx + offset) * input.get(px, py, frame, layer);
         }
     sum = blendPixels(orig, sum, m_strength, m_filterAlpha);
