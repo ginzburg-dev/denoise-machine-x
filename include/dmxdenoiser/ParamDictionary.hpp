@@ -4,7 +4,7 @@
 
 #include <dmxdenoiser/Backend.hpp>
 #include <dmxdenoiser/Kernel2D.hpp>
-#include <dmxdenoiser/util/AlwaysFalse.hpp>
+#include <dmxdenoiser/utils/AlwaysFalse.hpp>
 
 #include <map>
 #include <initializer_list>

@@ -1,4 +1,4 @@
-#include <dmxdenoiser/util/FileUtils.hpp>
+#include <dmxdenoiser/utils/FileUtils.hpp>
 
 #include <algorithm>
 #include <string>

@@ -2,7 +2,7 @@
 #pragma once
 
 #include <dmxdenoiser/Config.hpp>
-#include <dmxdenoiser/util/FileUtils.hpp>
+#include <dmxdenoiser/utils/FileUtils.hpp>
 
 #include <ctime>
 #include <chrono>

@@ -6,7 +6,7 @@
 #include <dmxdenoiser/filters/ConvolutionFilter.hpp>
 #include <dmxdenoiser/Logger.hpp>
 #include <dmxdenoiser/Parallel.hpp>
-#include <dmxdenoiser/util/NumericUtils.hpp>
+#include <dmxdenoiser/utils/NumericUtils.hpp>
 
 #if DMX_ENABLE_CUDA
     #include <dmxdenoiser/ConvolutionCUDA.cu>

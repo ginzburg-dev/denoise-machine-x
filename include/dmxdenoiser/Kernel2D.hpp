@@ -1,7 +1,7 @@
 // Kernel2D.hpp
 #pragma once
 
-#include <dmxdenoiser/util/NumericUtils.hpp>
+#include <dmxdenoiser/utils/NumericUtils.hpp>
 
 #include <cmath>
 #include <cstddef>

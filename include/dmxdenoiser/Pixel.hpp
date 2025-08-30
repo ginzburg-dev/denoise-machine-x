@@ -1,7 +1,7 @@
 // Pixel.hpp
 #pragma once
 
-#include <dmxdenoiser/util/NumericUtils.hpp>
+#include <dmxdenoiser/utils/NumericUtils.hpp>
 
 namespace dmxdenoiser
 {

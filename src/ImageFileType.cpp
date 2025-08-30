@@ -1,5 +1,5 @@
 #include <dmxdenoiser/ImageFileType.hpp>
-#include <dmxdenoiser/util/FileUtils.hpp>
+#include <dmxdenoiser/utils/FileUtils.hpp>
 
 #include <string>
 #include <string_view>
