@@ -2,9 +2,11 @@
 #include <dmxdenoiser/DMXImageView.hpp>
 #include <dmxdenoiser/Kernel2D.hpp>
 #include <dmxdenoiser/Pixel.hpp>
-#include <dmxdenoiser/utils/NumericUtils.hpp>
 
 #include <cuda_runtime.h>
+
+namespace dmxdenoiser
+{
 
 namespace dmxdenoiser
 {
