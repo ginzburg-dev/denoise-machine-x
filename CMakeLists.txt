@@ -6,8 +6,8 @@ project(DenoiseMachineX
 )
 
 # ---- Options
-option(BUILD_CUDA     "Build CUDA backends" OFF)
-option(BUILD_TESTING  "Build tests"          ON)
+option(BUILD_CUDA     "Build CUDA backends"     ON)
+option(BUILD_TESTING  "Build tests"             ON)
 
 # ---- C++ setup
 set(CMAKE_CXX_STANDARD 20)
