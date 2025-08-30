@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <dmxdenoiser/util/NumericUtils.hpp>
+#include <dmxdenoiser/utils/NumericUtils.hpp>
 
 #include <limits>
 

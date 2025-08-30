@@ -28,25 +28,27 @@
         }
     },
     {
-        "name": "windows-cuda-release",
-        "displayName": "Windows CUDA Release",
-        "generator": "Ninja",
-        "binaryDir": "build-win-cuda",
+        "name": "windows-cuda",
+        "displayName": "Windows CUDA Debug",
+        "generator": "Ninja Multi-Config",
+        "binaryDir": "${sourceDir}/build-win-cuda",
         "cacheVariables": {
             "CMAKE_BUILD_TYPE": "Release",
+            "BUILD_TESTING": "ON",
             "BUILD_CUDA": "ON",
-            "BUILD_TESTING": "ON"
+            "CMAKE_CUDA_COMPILER": "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.0/bin/nvcc.exe",
+            "CMAKE_CUDA_ARCHITECTURES": "native"
         }
     }
     ],
     "buildPresets": [
         { "name": "mac-cpu-debug", "configurePreset": "mac-cpu-debug" },
         { "name": "linux-cuda-release", "configurePreset": "linux-cuda-release" },
-        { "name": "windows-cuda-release", "configurePreset": "windows-cuda-release" }
+        { "name": "windows-cuda-debug", "configurePreset": "windows-cuda", "configuration": "Debug" }
     ],
     "testPresets": [
         { "name": "mac-cpu-debug", "configurePreset": "mac-cpu-debug" },
         { "name": "linux-cuda-release", "configurePreset": "linux-cuda-release" },
-        { "name": "windows-cuda-release", "configurePreset": "windows-cuda-release" }
+        { "name": "windows-cuda_debug-ctest", "configurePreset": "windows-cuda",  "configuration": "Debug" }
     ]
 }

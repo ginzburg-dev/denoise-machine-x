@@ -27,10 +27,10 @@ find_package(OpenEXR CONFIG QUIET)
 
 # Fallback to classic find modules (v2.x dev packages)
 if(NOT Imath_FOUND)
-    find_package(Imath REQUIRED)       # provides Imath::Imath and/or IlmBase::Imath
+    find_package(Imath CONFIG REQUIRED)       # provides Imath::Imath and/or IlmBase::Imath
 endif()
 if(NOT OpenEXR_FOUND)
-    find_package(OpenEXR REQUIRED)     # provides OpenEXR::OpenEXR or legacy targets
+    find_package(OpenEXR CONFIG REQUIRED)     # provides OpenEXR::OpenEXR or legacy targets
 endif()
 
 

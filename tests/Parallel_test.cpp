@@ -5,7 +5,7 @@
 #include <dmxdenoiser/Logger.hpp>
 #include <dmxdenoiser/ThreadPool.hpp>
 #include <dmxdenoiser/Parallel.hpp>
-#include <dmxdenoiser/util/NumericUtils.hpp>
+#include <dmxdenoiser/utils/NumericUtils.hpp>
 
 #include <atomic>
 #include <algorithm>
