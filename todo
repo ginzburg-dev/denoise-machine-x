@@ -1,3 +1,6 @@
+DMXError: error handling on cuda (boundCheck etc.)
+DMXImageView: lightweight image viewer
+UMImage: unified memory allocation for CUDA
 ML Samples: video about collecting process
 RgbaSample_test: read channels, compression, check sample -> move it to lib
 ConvolutionFilter: add GPU backend implementations
