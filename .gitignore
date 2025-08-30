@@ -12,6 +12,7 @@ Thumbs.db
 /vcpkg/
 /vcpkg_installed/
 /build-win-cuda/
+
 tests/test_files/
 
 CTestTestfile.cmake

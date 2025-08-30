@@ -20,32 +20,105 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-# ---- Dependencies: OpenEXR + Imath (prefer CONFIG, fallback to modules)
-# Try config packages first (v3+)
-find_package(Imath CONFIG QUIET)
+
+if(BUILD_CUDA)
+  # Try to locate nvcc explicitly
+  find_program(NVCC_EXECUTABLE
+    NAMES nvcc nvcc.exe
+    HINTS "$ENV{CUDA_PATH}/bin"
+    PATHS
+      "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.0/bin"
+      "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.4/bin"
+      "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.3/bin"
+  )
+
+  if(NVCC_EXECUTABLE AND EXISTS "${NVCC_EXECUTABLE}")
+    set(CMAKE_CUDA_COMPILER "${NVCC_EXECUTABLE}" CACHE FILEPATH "nvcc" FORCE)
+    message(STATUS "Using CUDA compiler: ${CMAKE_CUDA_COMPILER}")
+    enable_language(CUDA)
+    find_package(CUDAToolkit REQUIRED)
+    # Good defaults
+    set(CMAKE_CUDA_STANDARD 17)
+    set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+    set(CMAKE_CUDA_ARCHITECTURES native) # or 75;86;89
+    add_compile_definitions(DMX_ENABLE_CUDA=1)
+  else()
+    message(WARNING
+      "CUDA not configured: nvcc not found. "
+      "Set CUDA_PATH or install CUDA, or pass -DCMAKE_CUDA_COMPILER=... . "
+      "Building without GPU.")
+    set(BUILD_CUDA OFF)
+    add_compile_definitions(DMX_ENABLE_CUDA=0)
+  endif()
+endif()
+
+
+if(BUILD_CUDA)
+  # 1) Locate nvcc (your existing logic is fine)
+  find_program(NVCC_EXECUTABLE
+    NAMES nvcc nvcc.exe
+    HINTS "$ENV{CUDA_PATH}/bin"
+  )
+
+  if(NVCC_EXECUTABLE)
+    set(CMAKE_CUDA_COMPILER "${NVCC_EXECUTABLE}" CACHE FILEPATH "nvcc" FORCE)
+
+    # 2) Reuse the MSVC compiler CMake already detected
+    if(MSVC AND CMAKE_CXX_COMPILER)
+      set(CMAKE_CUDA_HOST_COMPILER
+          "${CMAKE_CXX_COMPILER}"
+          CACHE FILEPATH "CUDA host compiler" FORCE)
+    endif()
+
+    enable_language(CUDA)
+    find_package(CUDAToolkit REQUIRED)
+
+    set(CMAKE_CUDA_STANDARD 17)
+    set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+    set(CMAKE_CUDA_ARCHITECTURES native)
+    add_compile_definitions(DMX_ENABLE_CUDA=1)
+  else()
+    message(WARNING "nvcc not found → building without GPU. Set CUDA_PATH or pass -DCMAKE_CUDA_COMPILER=...")
+    set(BUILD_CUDA OFF)
+    add_compile_definitions(DMX_ENABLE_CUDA=0)
+  endif()
+endif()
+
+
+# Prefer config packages first
+find_package(Imath   CONFIG QUIET)
 find_package(OpenEXR CONFIG QUIET)
 
-# Fallback to classic find modules (v2.x dev packages)
-if(NOT Imath_FOUND)
-    find_package(Imath CONFIG REQUIRED)       # provides Imath::Imath and/or IlmBase::Imath
+# Fallback to vendoring
+if(NOT TARGET Imath::Imath)
+  include(FetchContent)
+  message(STATUS "Fetching Imath…")
+  FetchContent_Declare(
+    imath
+    GIT_REPOSITORY https://github.com/AcademySoftwareFoundation/Imath.git
+    GIT_TAG        v3.1.11
+  )
+  set(IMATH_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+  set(IMATH_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
+  set(IMATH_INSTALL OFF CACHE BOOL "" FORCE)
+  FetchContent_MakeAvailable(imath)
+
+  # IMPORTANT: tell downstream (OpenEXR) where Imath's config is
+  # Use the *build* config dir:
+  set(Imath_DIR "${imath_BINARY_DIR}/config" CACHE PATH "" FORCE)
 endif()
 if(NOT OpenEXR_FOUND)
-    find_package(OpenEXR CONFIG REQUIRED)     # provides OpenEXR::OpenEXR or legacy targets
+    find_package(OpenEXR REQUIRED)     # provides OpenEXR::OpenEXR or legacy targets
 endif()
 
-
-if(NOT OpenEXR_FOUND OR NOT Imath_FOUND)
-    message(FATAL_ERROR
-        "\nOpenEXR and/or Imath not found!\n"
-        "Please install them before configuring this project.\n"
-        "On macOS, run:\n"
-        "    brew install openexr imath\n"
-        "On Ubuntu/Debian, run:\n"
-        "    sudo apt install libopenexr-dev libimath-dev\n"
-        "On Windows (vcpkg):\n"
-        "    vcpkg install openexr\n"
-    )
+# Sanity: targets must exist now (either system or vendored)
+if(NOT TARGET Imath::Imath)
+  message(FATAL_ERROR "Imath::Imath target not available")
 endif()
+if(NOT TARGET OpenEXR::OpenEXR)
+  message(FATAL_ERROR "OpenEXR::OpenEXR target not available")
+endif()
+
 
 # Include headers
 include_directories(${CMAKE_SOURCE_DIR}/include)
@@ -60,8 +133,6 @@ set(CLI_MAIN ${CMAKE_SOURCE_DIR}/cli/main.cpp)
 
 
 if(BUILD_CUDA)
-  enable_language(CUDA)
-  find_package(CUDAToolkit REQUIRED)
   add_compile_definitions(DMX_ENABLE_CUDA=1)
   file(GLOB_RECURSE SRC_CU CONFIGURE_DEPENDS
     ${CMAKE_SOURCE_DIR}/src/*.cu
