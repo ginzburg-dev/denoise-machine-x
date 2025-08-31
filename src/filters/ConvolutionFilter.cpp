@@ -8,6 +8,10 @@
 #include <dmxdenoiser/Parallel.hpp>
 #include <dmxdenoiser/utils/NumericUtils.hpp>
 
+#if DMX_ENABLE_CUDA
+    #include <dmxdenoiser/ConvolutionCUDA.cu>
+#endif
+
 #include <optional>
 #include <cstdint>
 #include <iostream>
@@ -178,7 +182,46 @@ namespace dmxdenoiser
     void ConvolutionFilter::convolveGPU(const DMXImage& input, DMXImage& output) const
     {
         #if DMX_ENABLE_CUDA
-            // GPU logic
+            ThreadPool* pool = m_backendResource.threadPool;
+            if(!pool)
+                DMX_LOG_WARNING("ConvolutionFilter", "convolveCPU(): no ThreadPool available; running single-threaded");
+
+            int width = input.width();
+            int height = input.height();
+            int ksize = m_kernel.size();
+            int offset = ksize/2;
+
+            std::vector<int> framesIndices;
+            // If no specific frames were set, process all frames by default.
+            if (m_frames.empty())
+            {
+                for (int i = 0; i < input.numFrames(); ++i) // Add all frames
+                        framesIndices.push_back(i);
+            } else {
+                for (int i = 0; i < m_frames.size(); ++i)
+                {
+                    int requestedFrame = m_frames[i];
+                    if(requestedFrame < input.numFrames())
+                        framesIndices.push_back(requestedFrame);
+                    else
+                        DMX_LOG_WARNING("ConvolutionFilter", "setParams(): requested frame ", 
+                            requestedFrame, " not found; skipping");
+                }
+            }
+
+            std::vector<int> layerIndices;
+            // If no specific layers were set, process by default.   
+            if (m_layers.empty()) {
+                layerIndices = input.getFilteringLayersIndices();
+            } else {
+                for (const auto& layer : m_layers)
+                {
+                    if (input.hasLayer(layer))
+                        layerIndices.push_back(input.getLayerIndex(layer));
+                    else
+                        DMX_LOG_WARNING("ConvolutionFilter", "setParams(): requested layer '", layer, "' not found; skipping");
+                }
+            }
         #else
             DMX_LOG_ERROR("ConvolutionFilter", "convolveGPU(): no CUDA build");
             throw std::runtime_error("convolveGPU(): no CUDA build");
