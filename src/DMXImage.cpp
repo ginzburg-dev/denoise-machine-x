@@ -1,5 +1,6 @@
-#include <dmxdenoiser/DMXImage.hpp>
 #include <dmxdenoiser/Aov.hpp>
+#include <dmxdenoiser/DMXImage.hpp>
+#include <dmxdenoiser/DMXImageView.hpp>
 #include <dmxdenoiser/LayerDictionary.hpp>
 #include <dmxdenoiser/Pixel.hpp>
 
@@ -126,6 +127,11 @@ namespace dmxdenoiser
     {
         int layerIdx = this->getLayerIndex(layer);
         return get(x, y, frame, layerIdx);
+    }
+
+    DMXImage::operator DMXImageView()
+    {
+        return { m_pixels.data(), m_width, m_height, this->numLayers(), this->numFrames(), this->numChannels() };
     }
 
     std::string DMXImage::ToString(std::size_t indent) const
