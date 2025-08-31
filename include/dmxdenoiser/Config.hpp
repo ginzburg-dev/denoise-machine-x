@@ -12,7 +12,7 @@
     #define DMX_ENABLE_CUDA 0
 #endif
 
-#if DMX_ENABLE_CUDA
+#if defined(__CUDAACC__)
     #define DMX_CPU_GPU __host__ __device__
 #else
     #define DMX_CPU_GPU

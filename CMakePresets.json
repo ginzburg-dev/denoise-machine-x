@@ -33,9 +33,11 @@
         "generator": "Ninja Multi-Config",
         "binaryDir": "${sourceDir}/build-win-cuda",
         "cacheVariables": {
-            "CMAKE_BUILD_TYPE": "Release",
+            "CMAKE_BUILD_TYPE": "Debug",
             "BUILD_TESTING": "ON",
             "BUILD_CUDA": "ON",
+            "CMAKE_C_COMPILER": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe",
+            "CMAKE_CXX_COMPILER": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe",
             "CMAKE_CUDA_COMPILER": "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.0/bin/nvcc.exe",
             "CMAKE_CUDA_ARCHITECTURES": "native"
         }

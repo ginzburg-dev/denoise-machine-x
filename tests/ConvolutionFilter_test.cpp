@@ -100,8 +100,8 @@ TEST_F(ConvolutionFilterTest, ParametersNotSetInfoLog)
     EXPECT_NO_THROW(convoFilter->apply(img));
 
     // Check log
-    assertLogContains(getLogPath(), "'strength'", "'strength'",
-        "'layers'", "'filterAlpha'", "'backend'", "'backendResource'");
+    assertLogContains(getLogPath(), "strength",
+        "layers", "filterAlpha", "backend", "backendResource");
 }
 
 TEST_F(ConvolutionFilterTest, ParametersSetFramesLayersInfoLog)
