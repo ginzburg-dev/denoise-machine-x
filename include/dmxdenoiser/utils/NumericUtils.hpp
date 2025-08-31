@@ -38,8 +38,8 @@ namespace dmxdenoiser
     }
 
     DMX_CPU_GPU
-    constexpr inline float clampf(float x, float min, float max) {
-        return (x > max) ? max : ((x < min) ? min : x);
+    constexpr inline float clampf(float x, float lo, float hi) {
+        return (x > hi) ? hi : ((x < lo) ? lo : x);
     }
 
     // Blend two floats 
