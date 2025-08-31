@@ -12,8 +12,18 @@
     #define DMX_ENABLE_CUDA 0
 #endif
 
-#if DMX_ENABLE_CUDA
+#if defined(__CUDAACC___)
     #define DMX_CPU_GPU __host__ __device__
+    #if defined(_MSC_VER)
+        #define DMX_INLINE __forceinline
+    #else
+        #define DMX_INLINE inline __attribute__((always_inline))
+    #endif
 #else
     #define DMX_CPU_GPU
+    #if defined(_MSC_VER)
+        #define DMX_INLINE __forceinline
+    #else
+        #define DMX_INLINE inline __attribute__((always_inline))
+    #endif
 #endif
