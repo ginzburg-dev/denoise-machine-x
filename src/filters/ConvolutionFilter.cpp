@@ -9,7 +9,7 @@
 #include <dmxdenoiser/utils/NumericUtils.hpp>
 
 #if DMX_ENABLE_CUDA
-    #include <dmxdenoiser/ConvolutionCUDA.cu>
+    #include <dmxdenoiser/filters/ConvolutionCUDA.cuh>
 #endif
 
 #include <optional>

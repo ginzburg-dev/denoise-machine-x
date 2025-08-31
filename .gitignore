@@ -11,9 +11,7 @@ Thumbs.db
 /.VSCodeCounter/
 /vcpkg/
 /vcpkg_installed/
-<<<<<<< HEAD
 /build-win-cuda/
-=======
 
 >>>>>>> 790a629 (Update)
 tests/test_files/
