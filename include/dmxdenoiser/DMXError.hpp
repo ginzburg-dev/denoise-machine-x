@@ -11,9 +11,10 @@ enum class DMXError
     dmxOutOfBound = 1,
 };
 
-#if define(__CUDA_ARCH__)
+#if defined(__CUDA_ARCH__)
     #define DMX_TRAP() asm("trap;")
 #else
     #include <stdexcept>
     #define DMX_TRAP(MSG) std::runtime_error(MSG)
 #endif
+

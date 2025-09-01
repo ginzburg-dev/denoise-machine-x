@@ -58,5 +58,5 @@ cmake -S . -B build -G Ninja ^
   -DCMAKE_TOOLCHAIN_FILE="%CD%\vcpkg\scripts\buildsystems\vcpkg.cmake" ^
   -DCMAKE_CUDA_COMPILER="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.0/bin/nvcc.exe" ^
   -DCMAKE_CUDA_ARCHITECTURES=native && ^
-cmake --build build -j8 && ^
-ctest --test-dir build --output-on-failure --verbose -j8
+cmake --build build -j16  && ^
+ctest --test-dir build --output-on-failure --verbose -j16

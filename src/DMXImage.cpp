@@ -1,5 +1,6 @@
-#include <dmxdenoiser/DMXImage.hpp>
 #include <dmxdenoiser/Aov.hpp>
+#include <dmxdenoiser/DMXImage.hpp>
+#include <dmxdenoiser/DMXImageView.hpp>
 #include <dmxdenoiser/LayerDictionary.hpp>
 #include <dmxdenoiser/Pixel.hpp>
 

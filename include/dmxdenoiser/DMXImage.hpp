@@ -2,6 +2,8 @@
 #pragma once
 
 #include <dmxdenoiser/Aov.hpp>
+#include <dmxdenoiser/Config.hpp>
+#include <dmxdenoiser/DMXImageView.hpp>
 #include <dmxdenoiser/LayerDictionary.hpp>
 #include <dmxdenoiser/Pixel.hpp>
 
@@ -12,8 +14,6 @@
 
 namespace dmxdenoiser
 {
-
-    inline constexpr int DEFAULT_NUM_CHANNELS = 4; // RGBA global internal fixed size for all images
 
     struct DMXImageOptions
     {
@@ -78,7 +78,7 @@ namespace dmxdenoiser
         bool hasValidLayerDictionary() const { return m_layers.size() != 0; }
         
         std::string ToString(std::size_t indent=0) const;
-
+        
         void clear();
 
         ~DMXImage() = default;

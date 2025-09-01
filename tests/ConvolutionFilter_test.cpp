@@ -280,3 +280,22 @@ TEST_F(ConvolutionFilterTest, ApplyGaussianFilterKernelToTheImageParallelSingleT
     auto gaussianKernel = FilterKernels::getGaussianKernel(3, sigma);
     applyFilterToImageFile(filename, outputFileName, gaussianKernel);
 }
+
+TEST_F(ConvolutionFilterTest, ApplyGaussianFilterKernelToPalmImageKernel7x7CPU)
+{
+    ThreadPool threadPool(0);
+    std::string filename = "../examples/palm_pixel_art.exr";
+    std::string outputFileName = "../tests/test_files/palm_pixel_art_cpu_convo_gaussan_sigma2_17x17.exr";
+    float sigma = 100.0f;
+    auto gaussianKernel = FilterKernels::getGaussianKernel(17, sigma);
+    applyFilterToImageFile(filename, outputFileName, gaussianKernel, &threadPool, Backend::CPU);
+}
+
+TEST_F(ConvolutionFilterTest, ApplyGaussianFilterKernelToPalmImageKernel17x17GPU)
+{
+    std::string filename = "../examples/palm_pixel_art.exr";
+    std::string outputFileName = "../tests/test_files/palm_pixel_art_gpu_convo_gaussan_sigma2_17x17.exr";
+    float sigma = 100.0f;
+    auto gaussianKernel = FilterKernels::getGaussianKernel(17, sigma);
+    applyFilterToImageFile(filename, outputFileName, gaussianKernel, nullptr, Backend::GPU);
+}

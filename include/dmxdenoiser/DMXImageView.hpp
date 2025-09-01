@@ -27,19 +27,25 @@ namespace dmxdenoiser
         }
 
         DMX_CPU_GPU 
-        PixelRGBAView at(int x, int y, int frame, int layer) {
+        float* at(int x, int y, int frame, int layer) {
             int index = getIndex(x, y, frame, layer);
-            return PixelRGBAView{ data[index], data[index + 1], data[index + 2], data[index + 3] };
+            return &data[index];
         }
 
+        DMX_CPU_GPU 
+        float* at(int x, int y, int frame, int layer) const {
+            int index = getIndex(x, y, frame, layer);
+            return &data[index];
+        }
+        /*
         DMX_CPU_GPU 
         PixelRGBA get(int x, int y, int frame, int layer) {
             int index = getIndex(x, y, frame, layer);
             return PixelRGBA{ data[index], data[index + 1], data[index + 2], data[index + 3] };
         }
-    
+        */
     private:
-        DMX_CPU_GPU int getIndex(int x, int y, int frame, int layer) {
+        DMX_CPU_GPU int getIndex(int x, int y, int frame, int layer) const {
             return (((frame * numLayers + layer) * height + y) * width + x) * numChannels;
         }
 

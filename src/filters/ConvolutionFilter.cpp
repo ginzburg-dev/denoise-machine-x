@@ -3,14 +3,12 @@
 #include <dmxdenoiser/StringConversions.hpp>
 #include <dmxdenoiser/FilterFactory.hpp>
 #include <dmxdenoiser/FilterKernels.hpp>
+#include <dmxdenoiser/filters/ConvolutionCUDA.hpp>
 #include <dmxdenoiser/filters/ConvolutionFilter.hpp>
 #include <dmxdenoiser/Logger.hpp>
 #include <dmxdenoiser/Parallel.hpp>
 #include <dmxdenoiser/utils/NumericUtils.hpp>
 
-#if DMX_ENABLE_CUDA
-    #include <dmxdenoiser/filters/ConvolutionCUDA.cuh>
-#endif
 
 #include <optional>
 #include <cstdint>
@@ -165,12 +163,14 @@ namespace dmxdenoiser
                         PixelRGBA orig = input.get(to_int(x), to_int(y), frame, layer);
                         PixelRGBA sum = {0.0f, 0.0f, 0.0f, 0.0f};
                         for(int ky = -offset; ky <= offset; ++ky)
+                        {
+                            int py = std::clamp(to_int(y) + ky, 0, height - 1);
                             for(int kx = -offset; kx <= offset; ++kx)
                             {
                                 int px = std::clamp(to_int(x) + kx, 0, width - 1);
-                                int py = std::clamp(to_int(y) + ky, 0, height - 1);
                                 sum += m_kernel(ky + offset, kx + offset) * input.get(px, py, frame, layer);
                             }
+                        }
                         sum = blendPixels(orig, sum, m_strength, m_filterAlpha);
                         output.at(to_int(x), to_int(y), frame, layer) = sum;
                     }
@@ -182,14 +182,9 @@ namespace dmxdenoiser
     void ConvolutionFilter::convolveGPU(const DMXImage& input, DMXImage& output) const
     {
         #if DMX_ENABLE_CUDA
-            ThreadPool* pool = m_backendResource.threadPool;
-            if(!pool)
-                DMX_LOG_WARNING("ConvolutionFilter", "convolveCPU(): no ThreadPool available; running single-threaded");
-
             int width = input.width();
             int height = input.height();
             int ksize = m_kernel.size();
-            int offset = ksize/2;
 
             std::vector<int> framesIndices;
             // If no specific frames were set, process all frames by default.
@@ -222,6 +217,9 @@ namespace dmxdenoiser
                         DMX_LOG_WARNING("ConvolutionFilter", "setParams(): requested layer '", layer, "' not found; skipping");
                 }
             }
+
+            convolve2D_CUDA(input, output, framesIndices, layerIndices, m_kernel, m_strength, m_filterAlpha);
+
         #else
             DMX_LOG_ERROR("ConvolutionFilter", "convolveGPU(): no CUDA build");
             throw std::runtime_error("convolveGPU(): no CUDA build");
