@@ -1,4 +1,7 @@
-DMXError: error handling on cuda (boundCheck etc.)
+NML filter: CPU CUDA
+Temporal Filter: CPU CUDA
+DMXError: error handling on cuda (boundCheck etc.) CUDA_CHECK
+DMXImage: Data -> prt_to_data
 DMXImageView: lightweight image viewer
 UMImage: unified memory allocation for CUDA
 ML Samples: video about collecting process
