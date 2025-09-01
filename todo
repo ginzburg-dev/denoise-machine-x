@@ -1,5 +1,6 @@
 NML filter: CPU CUDA
 Temporal Filter: CPU CUDA
+Pixel, ConvoCPU: simplify, pixel operations
 DMXError: error handling on cuda (boundCheck etc.) CUDA_CHECK
 DMXImage: Data -> prt_to_data
 DMXImageView: lightweight image viewer
