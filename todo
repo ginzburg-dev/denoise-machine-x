@@ -1,19 +1,21 @@
+ImageIOExr: put header into ImageInfo, then ImageInfo -> DMXImage as a map -> Write correct header metadata
 NML filter: CPU CUDA
-Temporal Filter: CPU CUDA
-Pixel, ConvoCPU: simplify, pixel operations
-DMXError: error handling on cuda (boundCheck etc.) CUDA_CHECK
-DMXImage: Data -> prt_to_data
-DMXImageView: lightweight image viewer
-UMImage: unified memory allocation for CUDA
-ML Samples: video about collecting process
-RgbaSample_test: read channels, compression, check sample -> move it to lib
-ConvolutionFilter: add GPU backend implementations
-ImageIOExr: separate dataWindow and displayWindow in params, fix read, write and ImageInfo to read actual display resolution
-ImageIOExr: put header into ImageInfo, then ImageInfo -> DMXImage as a map.
-ConvolutionFilter: ToString()
 ParseArgs: parsing inputs
+Move function definitions from headers to cpp files where possible
+DMXImage: Duplicate or copy layers from one image to another (for Filter::convolve2D())
+DMXImage: Frame count should be odd.
+DMXImage: frame map (to compute mv guidience)
 DenoiserParams: params
 Cli: full pipeline
+Temporal Filter: CPU CUDA
+Pixel, ConvoCPU: simplify, pixel operations
+UMImage: unified memory allocation for CUDA
+DMXError: error handling on cuda (boundCheck etc.) CUDA_CHECK
+DMXImage: rename Data to ptr_to_data — calling x.data().data() just to retrieve a pointer feels awkward.
+ML Samples: video about collecting process
+RgbaSample_test: read channels, compression, check sample -> move it to lib
+ImageIOExr: separate dataWindow and displayWindow in params, fix read, write and ImageInfo to read actual display resolution
+ConvolutionFilter: ToString()
 BuildInfo: data from cmake
 Git actions: debug / release
 All code: place Trace Debag in the code
@@ -22,11 +24,6 @@ Cmake: Release?
 Cmake: Config: debug level - verbosity
 Parallel: estimate time of parallel - Debug
 ThreadPool: ToString, Backend res -> threadPool - >> to string
-Move function definitions from headers to cpp files where possible
-DMXImage: Duplicate or copy layers from one image to another (for Filter::convolve2D())
-DMXImage: Frame count should be odd.
-DMXImage: frame map (to compute mv guidience)
-Logger: write to Log
 Kernel2D: split into separate cpp and hpp files
 ImageIO: Add unit tests after refactor
 ImageIOExr: Add unit tests for generated layers and frames
