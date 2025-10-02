@@ -88,37 +88,37 @@ namespace dmxdenoiser
         PixelRGBAView& operator=(const PixelRGBA& p) { r = p.r; g = p.g; b = p.b; a = p.a; return *this; }
     };
 
-    PixelRGBA::operator PixelRGBAView() { return PixelRGBAView{r, g, b, a}; }
-    PixelRGBA& PixelRGBA::operator=(const PixelRGBAView& pv) { r = pv.r; g = pv.g; b = pv.b; a = pv.a; return *this; };
+    inline PixelRGBA::operator PixelRGBAView() { return PixelRGBAView{r, g, b, a}; }
+    inline PixelRGBA& PixelRGBA::operator=(const PixelRGBAView& pv) { r = pv.r; g = pv.g; b = pv.b; a = pv.a; return *this; };
 
-    bool operator==(const PixelRGBA& p1, const PixelRGBA& p2) { 
+    inline bool operator==(const PixelRGBA& p1, const PixelRGBA& p2) { 
         return  floatsEqual(p1.r, p2.r) &&
                 floatsEqual(p1.g, p2.g) &&
                 floatsEqual(p1.b, p2.b) &&
                 floatsEqual(p1.a, p2.a);
     }
-    bool operator==(const PixelRGBAView& pv1, const PixelRGBAView& pv2) { 
+    inline bool operator==(const PixelRGBAView& pv1, const PixelRGBAView& pv2) { 
         return  floatsEqual(pv1.r, pv2.r) &&
                 floatsEqual(pv1.g, pv2.g) &&
                 floatsEqual(pv1.b, pv2.b) &&
                 floatsEqual(pv1.a, pv2.a);
     }
 
-    bool operator==(const PixelRGBA& p, const PixelRGBAView& pv) { 
+    inline bool operator==(const PixelRGBA& p, const PixelRGBAView& pv) { 
         return  floatsEqual(p.r, pv.r) &&
                 floatsEqual(p.g, pv.g) &&
                 floatsEqual(p.b, pv.b) &&
                 floatsEqual(p.a, pv.a);
     }
-    bool operator==(const PixelRGBAView& pv, const PixelRGBA& p) { return  p == pv; }
+    inline bool operator==(const PixelRGBAView& pv, const PixelRGBA& p) { return  p == pv; }
 
-    bool operator!=(const PixelRGBA& p1, const PixelRGBA& p2) { return  !(p1 == p2); }
-    bool operator!=(const PixelRGBAView& pv1, const PixelRGBAView& pv2) { return  !(pv1 == pv2); }
+    inline bool operator!=(const PixelRGBA& p1, const PixelRGBA& p2) { return  !(p1 == p2); }
+    inline bool operator!=(const PixelRGBAView& pv1, const PixelRGBAView& pv2) { return  !(pv1 == pv2); }
 
-    bool operator!=(const PixelRGBA& p, const PixelRGBAView& pv) { return  !(p == pv); }
-    bool operator!=(const PixelRGBAView& pv, const PixelRGBA& p) { return  p != pv; }
+    inline bool operator!=(const PixelRGBA& p, const PixelRGBAView& pv) { return  !(p == pv); }
+    inline bool operator!=(const PixelRGBAView& pv, const PixelRGBA& p) { return  p != pv; }
 
-    PixelRGBA blendPixels(const PixelRGBA& a, const PixelRGBA& b, float t, bool alphaBlend=false) noexcept {
+    inline PixelRGBA blendPixels(const PixelRGBA& a, const PixelRGBA& b, float t, bool alphaBlend=false) noexcept {
         PixelRGBA p{ 
             floatsBlend(a.r, b.r, t), 
             floatsBlend(a.g, b.g, t),
