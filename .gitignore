@@ -5,6 +5,8 @@ Thumbs.db
 /build/
 /build-debug/
 /build-release/
+/build-mac-debug/
+
 /Testing/
 *.dSYM
 /.vscode/
