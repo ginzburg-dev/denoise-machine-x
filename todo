@@ -1,4 +1,3 @@
-ImageIOExr: put header into ImageInfo, then ImageInfo -> DMXImage as a map -> Write correct header metadata
 NML filter: CPU CUDA
 ParseArgs: parsing inputs
 Move function definitions from headers to cpp files where possible
@@ -8,6 +7,7 @@ DMXImage: frame map (to compute mv guidience)
 DenoiserParams: params
 Cli: full pipeline
 Temporal Filter: CPU CUDA
+ImageIOExr: put header into ImageInfo, then ImageInfo -> DMXImage as a map -> Write correct header metadata
 Pixel, ConvoCPU: simplify, pixel operations
 UMImage: unified memory allocation for CUDA
 DMXError: error handling on cuda (boundCheck etc.) CUDA_CHECK
