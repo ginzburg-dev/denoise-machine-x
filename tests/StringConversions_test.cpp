@@ -96,3 +96,23 @@ TEST(StringConversions, JoinVector) {
     EXPECT_EQ(joinVector(vb), "[true, false, true]");
 }
 
+TEST(StringConversions, GetPadding) {
+    EXPECT_EQ(getPadding("####", '#'), 4);
+    EXPECT_EQ(getPadding("1#1##", '#'), 2);
+    EXPECT_EQ(getPadding("#", '#'), 1);
+    EXPECT_EQ(getPadding("none", '#'), 0);
+    EXPECT_EQ(getPadding("######", '#'), 6);
+}
+
+TEST(StringConversions, IntToStringPadded) {
+    EXPECT_EQ(intToStringPadded(1, 4), "0001");
+    EXPECT_EQ(intToStringPadded(-1, 4), "-0001");
+    EXPECT_EQ(intToStringPadded(10, 4), "0010");
+    EXPECT_EQ(intToStringPadded(-10, 4), "-0010");
+    EXPECT_EQ(intToStringPadded(100, 4), "0100");
+    EXPECT_EQ(intToStringPadded(-100, 4), "-0100");
+    EXPECT_EQ(intToStringPadded(1000, 4), "1000");
+    EXPECT_EQ(intToStringPadded(-1000, 4), "-1000");
+    EXPECT_EQ(intToStringPadded(100, 3), "100");
+}
+
