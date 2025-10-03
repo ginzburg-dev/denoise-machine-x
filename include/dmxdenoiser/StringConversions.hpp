@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <cstddef>
 #include <string>
 #include <sstream>
 #include <iomanip>
@@ -8,7 +9,7 @@
 #include <utility>
 
 namespace dmxdenoiser{
-
+    
         inline std::string toLower(const std::string& s)
         {
             std::string result = s;
@@ -97,4 +98,25 @@ namespace dmxdenoiser{
             return oss.str();
         }
         
+        inline int getPadding(std::string_view str, char pattern) {
+            int count = 0;
+
+            auto last = str.rfind(pattern);
+            if (last == std::string_view::npos) return 0;
+
+            std::size_t first = last;
+            while (first > 0 && str[first - 1] == pattern) first--;
+
+            int padding = static_cast<int>(last - first + 1);
+
+            return padding;
+        }
+
+    inline std::string intToStringPadded(int i, int padding) {
+        std::ostringstream oss;
+        oss << std::setw(padding) << std::setfill('0') << std::abs(i);
+        std::string result = (i < 0 ? "-" : "") + oss.str();
+        return result;
+    }
+
 } // namespace dmxdenoiser
