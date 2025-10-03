@@ -1,8 +1,11 @@
 #include <dmxdenoiser/utils/FileUtils.hpp>
+#include <dmxdenoiser/StringConversions.hpp>
 
 #include <algorithm>
 #include <string>
 #include <string_view>
+#include <sstream>
+#include <cmath>
 
 namespace dmxdenoiser
 {
@@ -22,6 +25,22 @@ namespace dmxdenoiser
         if (pos == std::string_view::npos)
             return {};
         return std::string(filename.substr(pos+1));
+    }
+
+    std::string formatSequencePath(std::string_view filename, int frame, char pattern) {
+        int padding = getPadding(filename, pattern);
+        if (padding == 0) return std::string{filename};
+
+        std::string frameStr = intToStringPadded(frame, padding);
+
+        auto pos = filename.rfind(pattern);
+
+        int startPos = pos - padding + 1;
+        std::string result = std::string{filename};
+
+        result.replace(startPos, padding, frameStr);
+
+        return result;
     }
 
 } // namespace dmxdenoiser

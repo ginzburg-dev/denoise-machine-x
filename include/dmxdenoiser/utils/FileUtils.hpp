@@ -11,5 +11,6 @@ namespace dmxdenoiser
 
     std::string getFileBaseName(std::string_view filename);
 
+    std::string formatSequencePath(std::string_view filename, int frame, char pattern = '#');
 
 } // namespace dmxdenoiser
