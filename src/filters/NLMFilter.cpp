@@ -14,6 +14,7 @@
 
 #include <optional>
 #include <cstdint>
+#include <cmath>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -98,15 +99,66 @@ namespace dmxdenoiser
             DMX_LOG_TRACE("NLMFilter", "setParams(): 'backendResource' parameter not set, using default: \n", m_backendResource.ToString(10));
         }
         
-        if (auto v = params.getSingleParam<Kernel2D>("kernel")) { 
-            m_kernel.set(*v);
-            paramsInfo += "     kernel (set) = " + m_kernel.ToString() + "\n";
+        if (auto v = params.getSingleParam<int>("radius")) {
+            m_radius = *v;
+            paramsInfo += "     radius (set) = " + std::to_string(m_radius) + "\n";
         }
         else
         {
-            DMX_LOG_ERROR("NLMFilter", "setParams(): Missing required parameter 'kernel'");
-            throw std::runtime_error("NLMFilter::setParams(): Missing required parameter 'kernel'");
+            paramsInfo += "     radius (default) = \n" + std::to_string(m_radius) + "\n";
+            DMX_LOG_TRACE("NLMFilter", "setParams(): 'radius' parameter not set, using default: \n", std::to_string(m_radius));
         }
+
+        if (auto v = params.getSingleParam<int>("patchRadius")) {
+            m_patchRadius = *v;
+            paramsInfo += "     patchRadius (set) = " + std::to_string(m_patchRadius) + "\n";
+        }
+        else
+        {
+            paramsInfo += "     patchRadius (default) = \n" + std::to_string(m_patchRadius) + "\n";
+            DMX_LOG_TRACE("NLMFilter", "setParams(): 'patchRadius' parameter not set, using default: \n", std::to_string(m_patchRadius));
+        }
+
+        if (auto v = params.getSingleParam<float>("sigmaBeauty")) {
+            m_sigmaBeauty = *v;
+            paramsInfo += "     sigmaBeauty (set) = " + std::to_string(m_sigmaBeauty) + "\n";
+        }
+        else
+        {
+            paramsInfo += "     sigmaBeauty (default) = \n" + std::to_string(m_sigmaBeauty) + "\n";
+            DMX_LOG_TRACE("NLMFilter", "setParams(): 'sigmaBeauty' parameter not set, using default: \n", std::to_string(m_sigmaBeauty));
+        }
+
+        if (auto v = params.getSingleParam<float>("sigmaAlbedo")) {
+            m_sigmaAlbedo = *v;
+            paramsInfo += "     sigmaAlbedo (set) = " + std::to_string(m_sigmaAlbedo) + "\n";
+        }
+        else
+        {
+            paramsInfo += "     sigmaAlbedo (default) = \n" + std::to_string(m_sigmaAlbedo) + "\n";
+            DMX_LOG_TRACE("NLMFilter", "setParams(): 'sigmaAlbedo' parameter not set, using default: \n", std::to_string(m_sigmaAlbedo));
+        }
+
+        if (auto v = params.getSingleParam<float>("sigmaNormal")) {
+            m_sigmaNormal = *v;
+            paramsInfo += "     sigmaNormal (set) = " + std::to_string(m_sigmaNormal) + "\n";
+        }
+        else
+        {
+            paramsInfo += "     sigmaNormal (default) = \n" + std::to_string(m_sigmaNormal) + "\n";
+            DMX_LOG_TRACE("NLMFilter", "setParams(): 'sigmaNormal' parameter not set, using default: \n", std::to_string(m_sigmaNormal));
+        }
+
+        if (auto v = params.getSingleParam<float>("sigmaDepth")) {
+            m_sigmaDepth = *v;
+            paramsInfo += "     sigmaDepth (set) = " + std::to_string(m_sigmaDepth) + "\n";
+        }
+        else
+        {
+            paramsInfo += "     sigmaDepth (default) = \n" + std::to_string(m_sigmaDepth) + "\n";
+            DMX_LOG_TRACE("NLMFilter", "setParams(): 'sigmaDepth' parameter not set, using default: \n", std::to_string(m_sigmaDepth));
+        }
+
         DMX_LOG_INFO("NLMFilter", "Setup filter settings:\nParameters:\n", paramsInfo);
     };
 
@@ -115,11 +167,12 @@ namespace dmxdenoiser
         ThreadPool* pool = m_backendResource.threadPool;
         if(!pool)
             DMX_LOG_WARNING("NLMFilter", "runFilterCPU(): no ThreadPool available; running single-threaded");
-
+        
         int width = input.width();
         int height = input.height();
-        int ksize = m_kernel.size();
-        int offset = ksize/2;
+        bool isAlbedo = input.hasLayer("albedo");
+        bool isNormal = input.hasLayer("normal");
+        bool isDepth = input.hasLayer("depth");
 
         std::vector<int> framesIndices;
         // If no specific frames were set, process all frames by default.
@@ -138,45 +191,100 @@ namespace dmxdenoiser
                         requestedFrame, " not found; skipping");
             }
         }
-
-        std::vector<int> layerIndices;
-        // If no specific layers were set, process by default.   
-        if (m_layers.empty()) {
-            layerIndices = input.getFilteringLayersIndices();
-        } else {
-            for (const auto& layer : m_layers)
-            {
-                if (input.hasLayer(layer))
-                    layerIndices.push_back(input.getLayerIndex(layer));
-                else
-                    DMX_LOG_WARNING("NLMFilter", "setParams(): requested layer '", layer, "' not found; skipping");
-            }
-        }
-
+        
         for(int frameIdx = 0; frameIdx < framesIndices.size(); ++frameIdx)
         {
             int frame = framesIndices[frameIdx];
-            for(int layerIdx = 0; layerIdx < layerIndices.size(); ++layerIdx)
-            {
-                int layer = layerIndices[layerIdx];
-                parallelFor(0, to_i64(height), [&](std::int64_t y) {
-                    for(std::int64_t x = 0; x < to_i64(width); ++x)
-                    {
-                        PixelRGBA orig = input.get(to_int(x), to_int(y), frame, layer);
-                        PixelRGBA sum = {0.0f, 0.0f, 0.0f, 0.0f};
-                        for(int ky = -offset; ky <= offset; ++ky)
-                            for(int kx = -offset; kx <= offset; ++kx)
-                            {
-                                int px = std::clamp(to_int(x) + kx, 0, width - 1);
-                                int py = std::clamp(to_int(y) + ky, 0, height - 1);
-                                sum += m_kernel(ky + offset, kx + offset) * input.get(px, py, frame, layer);
-                            }
-                        sum = blendPixels(orig, sum, m_strength, m_filterAlpha);
-                        output.at(to_int(x), to_int(y), frame, layer) = sum;
+            int beautyLayerIndex = input.getLayerIndex("beauty");
+            int albedoLayerIndex = -1;
+            int normalLayerIndex = -1;
+            int depthLayerIndex = -1;
+            if (isAlbedo) albedoLayerIndex = input.getLayerIndex("albedo");
+            if (isNormal) normalLayerIndex = input.getLayerIndex("normal");
+            if (isDepth) depthLayerIndex = input.getLayerIndex("depth");
+
+            float eps = 1e-12f;
+            auto sqr = [](float v){ return v*v; };
+
+            parallelFor(0, to_i64(height), [&](std::int64_t y) {
+                for(std::int64_t x = 0; x < to_i64(width); ++x)
+                {
+                    PixelRGBA orig = input.get(to_int(x), to_int(y), frame, beautyLayerIndex);
+                    PixelRGBA sum = {0.0f, 0.0f, 0.0f, 0.0f};
+                    float weightSum = 0.f;
+                    for(int ky = -m_radius; ky <= m_radius; ++ky)
+                        for(int kx = -m_radius; kx <= m_radius; ++kx)
+                        {
+                            int px = std::clamp(to_int(x) + kx, 0, width - 1);
+                            int py = std::clamp(to_int(y) + ky, 0, height - 1);
+
+                            PixelRGBA pixBeautyP = input.get(px, py, frame, beautyLayerIndex);
+
+                            float ssdBeauty = 0.f;
+                            float ssdAlbedo = 0.f;
+                            float ssdNormal = 0.f;
+                            float ssdDepth = 0.f;
+
+                            for(int jy = -m_patchRadius; jy <= m_patchRadius; ++jy)
+                                for(int jx = -m_patchRadius; jx <= m_patchRadius; ++jx) 
+                                {
+                                    int poxj = std::clamp(to_int(x) + jx, 0, width - 1);
+                                    int poyj = std::clamp(to_int(y) + jy, 0, height - 1);
+                                    int pxj = std::clamp(px + jx, 0, width - 1);
+                                    int pyj = std::clamp(py + jy, 0, height - 1);
+
+                                    PixelRGBA OjB = input.get(poxj, poyj, frame, beautyLayerIndex);
+                                    PixelRGBA PjB = input.get(pxj, pyj, frame, beautyLayerIndex);
+                                    float dbr = OjB.r - PjB.r;
+                                    float dbg = OjB.g - PjB.g;
+                                    float dbb = OjB.b - PjB.b;
+                                    ssdBeauty += dbr*dbr + dbg*dbg + dbb*dbb;
+
+                                    if (isAlbedo){
+                                        PixelRGBA OjA = input.get(poxj, poyj, frame, albedoLayerIndex);
+                                        PixelRGBA PjA = input.get(pxj, pyj, frame, albedoLayerIndex);
+                                        float dar = OjA.r - PjA.r;
+                                        float dag = OjA.g - PjA.g;
+                                        float dab = OjA.b - PjA.b;
+                                        ssdAlbedo += dar*dar + dag*dag + dab*dab;
+                                    }
+
+                                    if (isNormal){
+                                        PixelRGBA OjN = input.get(poxj, poyj, frame, normalLayerIndex);
+                                        PixelRGBA PjN = input.get(pxj, pyj, frame, normalLayerIndex);
+                                        float dnr = OjN.r - PjN.r;
+                                        float dng = OjN.g - PjN.g;
+                                        float dnb = OjN.b - PjN.b;
+                                        ssdNormal += dnr*dnr + dng*dng + dnb*dnb;
+                                    }
+
+                                    if (isDepth){
+                                        PixelRGBA OjD = input.get(poxj, poyj, frame, depthLayerIndex);
+                                        PixelRGBA PjD = input.get(pxj, pyj, frame, depthLayerIndex);
+                                        float ddr = OjD.r - PjD.r;
+                                        float ddg = OjD.g - PjD.g;
+                                        float ddb = OjD.b - PjD.b;
+                                        ssdDepth += ddr*ddr + ddg*ddg + ddb*ddb;
+                                    }
+                                }
+                            float w = std::expf(-ssdBeauty/std::max(eps, m_sigmaBeauty*m_sigmaBeauty));
+                            if (isAlbedo) w *= std::expf(-ssdAlbedo/std::max(eps, m_sigmaAlbedo*m_sigmaAlbedo));
+                            if (isNormal) w *= std::expf(-ssdNormal/std::max(eps, m_sigmaNormal*m_sigmaNormal));
+                            if (isDepth) w *= std::expf(-ssdDepth/std::max(eps, m_sigmaDepth*m_sigmaDepth));
+                            weightSum += w;
+                            sum += w * pixBeautyP;
+                        }
+                    if (weightSum > 0.0f) {
+                        sum /= weightSum;
+                    } else {
+                        sum = orig;
                     }
-                }, pool);
-            }
+                    sum = blendPixels(orig, sum, m_strength, m_filterAlpha);
+                    output.at(to_int(x), to_int(y), frame, beautyLayerIndex) = sum;
+                }
+            }, pool);
         }
+        
     }
 
     void NLMFilter::runFilterGPU(const DMXImage& input, DMXImage& output) const
@@ -201,9 +309,9 @@ namespace dmxdenoiser
     
     void NLMFilter::applyFilter(const DMXImage& in, DMXImage& out) const
     {
-        if (m_kernel.size() == 0) {
-            DMX_LOG_ERROR("NLMFilter", "applyFilter(): Kernel is empty, size=0x0");
-            throw std::runtime_error("NLMFilter::applyFilter(): Kernel is empty, size=0x0");
+        if (m_patchRadius == 0) {
+            DMX_LOG_ERROR("NLMFilter", "applyFilter(): patchRadius is zero");
+            throw std::runtime_error("NLMFilter::applyFilter(): patchRadius is zero");
         }
 
         if (m_backend == Backend::CPU) {
@@ -218,7 +326,7 @@ namespace dmxdenoiser
     std::string NLMFilter::ToString() const
     {
         // IN PROGRESS
-        return "NLMFilter: \n" + m_kernel.ToString(4);
+        return "NLMFilter: \n";
     };
 
     REGISTER_FILTER(NLMFilter)

@@ -14,7 +14,12 @@ namespace dmxdenoiser
     struct NLMFilter : public Filter
     {
         // Parameters
-        Kernel2D m_kernel;
+        int m_radius = 4;
+        int m_patchRadius = 3;
+        float m_sigmaBeauty = 1.f;
+        float m_sigmaAlbedo = 1.f;
+        float m_sigmaNormal = 1.f;
+        float m_sigmaDepth = 1.f;
 
         // Required: unique filter name
         static constexpr const char* StaticClassName() { return "NLMFilter"; }
@@ -23,8 +28,8 @@ namespace dmxdenoiser
         NLMFilter() = default;
         explicit NLMFilter(const ParamDictionary& params) {  setParams(params); }
 
-        NLMFilter(NLMFilter&&) noexcept;
-        NLMFilter& operator=(NLMFilter&&) noexcept;
+        NLMFilter(NLMFilter&&) noexcept = default;
+        NLMFilter& operator=(NLMFilter&&) noexcept = default;
 
         NLMFilter(const NLMFilter&) = delete;
         NLMFilter& operator=(const NLMFilter&) = delete;
@@ -34,7 +39,15 @@ namespace dmxdenoiser
         std::string ToString() const override;
 
     protected:
-        void resetParams() override { Filter::resetParams(); m_kernel.clear(); };
+        void resetParams() override { 
+            Filter::resetParams();
+            m_radius = 4;
+            m_patchRadius = 3;
+            m_sigmaBeauty = 1.f;
+            m_sigmaAlbedo = 1.f;
+            m_sigmaNormal = 1.f;
+            m_sigmaDepth = 1.f;
+        };
 
     private:
         void applyFilter(const DMXImage& in, DMXImage& out) const override;
