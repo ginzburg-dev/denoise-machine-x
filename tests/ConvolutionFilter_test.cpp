@@ -55,7 +55,7 @@ void applyFilterToImageFile(
     auto info = io->getImageInfo(filename);
 
     DMXImage img{info.width, info.height, 1, LayerDictionary{aovs}};
-
+    
     io->read(filename, img, 0, aovs);
 
     auto convoFilter = FilterFactory::instance().create("ConvolutionFilter");
