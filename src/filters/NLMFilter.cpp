@@ -267,10 +267,10 @@ namespace dmxdenoiser
                                         ssdDepth += ddr*ddr + ddg*ddg + ddb*ddb;
                                     }
                                 }
-                            float w = std::expf(-ssdBeauty/std::max(eps, m_sigmaBeauty*m_sigmaBeauty));
-                            if (isAlbedo) w *= std::expf(-ssdAlbedo/std::max(eps, m_sigmaAlbedo*m_sigmaAlbedo));
-                            if (isNormal) w *= std::expf(-ssdNormal/std::max(eps, m_sigmaNormal*m_sigmaNormal));
-                            if (isDepth) w *= std::expf(-ssdDepth/std::max(eps, m_sigmaDepth*m_sigmaDepth));
+                            float w = std::exp(-ssdBeauty/std::max(eps, m_sigmaBeauty*m_sigmaBeauty));
+                            if (isAlbedo) w *= std::exp(-ssdAlbedo/std::max(eps, m_sigmaAlbedo*m_sigmaAlbedo));
+                            if (isNormal) w *= std::exp(-ssdNormal/std::max(eps, m_sigmaNormal*m_sigmaNormal));
+                            if (isDepth) w *= std::exp(-ssdDepth/std::max(eps, m_sigmaDepth*m_sigmaDepth));
                             weightSum += w;
                             sum += w * pixBeautyP;
                         }
