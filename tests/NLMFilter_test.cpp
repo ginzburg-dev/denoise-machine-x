@@ -44,24 +44,47 @@ protected:
 };
 
 void applyFilterToImageFile(
-    const std::string& filename, 
+    const std::string& filenameBeauty,
+    const std::string& filenameAlbedo,
+    const std::string& filenameNormal,
+    const std::string& filenameDepth,
     const std::string& outputFileName,
-    const Kernel2D& kernel,
+    int radius,
+    int patchRadius,
+    float sigmaBeauty,
+    float sigmaAlbedo,
+    float sigmaNormal,
+    float sigmaDepth,
     ThreadPool* pool = nullptr,
-    Backend backend=Backend::CPU)
+    AovDictionary aovs = { {"beauty", "default"}, {"albedo", "default"}, {"normal", "default"}, {"depth", "default"} },
+    Backend backend=Backend::CPU
+    )
 {
-    AovDictionary aovs = { {"beauty", "default"} };
-    std::unique_ptr<ImageIO> io = ImageIO::create(filename);
-    auto info = io->getImageInfo(filename);
+    std::unique_ptr<ImageIO> io = ImageIO::create(filenameBeauty);
+    auto info = io->getImageInfo(filenameBeauty);
+    for (const auto& [name, exrName] : info.layers.data())
+        for (const auto& ch : exrName.channels)
+            std::cout << "layer: " << name << " - " <<  ch.name << '\n';
 
     DMXImage img{info.width, info.height, 1, LayerDictionary{aovs}};
 
-    io->read(filename, img, 0, aovs);
+    io->read(filenameBeauty, img, 0, AovDictionary{ {"beauty", "default"} });
+    if (filenameAlbedo != "")
+        io->read(filenameAlbedo, img, 0, AovDictionary{ {"albedo", "default"} });
+    if (filenameNormal != "")
+        io->read(filenameNormal, img, 0, AovDictionary{ {"normal", "default"} });
+    if (filenameDepth != "")
+        io->read(filenameDepth, img, 0, AovDictionary{ {"depth", "depth"} });
 
     auto NLMFilter = FilterFactory::instance().create("NLMFilter");
 
     ParamDictionary params;
-    params.addKernel2D("kernel", kernel);
+    params.addInt("radius", radius);
+    params.addInt("patchRadius", patchRadius);
+    params.addFloat("sigmaBeauty", sigmaBeauty);
+    params.addFloat("sigmaAlbedo", sigmaAlbedo);
+    params.addFloat("sigmaNormal", sigmaNormal);
+    params.addFloat("sigmaDepth", sigmaDepth);
     params.addBackend("backend", backend);
     BackendResource res;
     res.threadPool = pool;
@@ -252,12 +275,36 @@ TEST_F(ConvolutionFilterTest, ApplyGaussianFilterKernelToTheImageParallel)
 }
 */
 
-TEST_F(NLMFilterTest, ApplyGaussianFilterKernelToTheImageParallelSingleThread)
+TEST_F(NLMFilterTest, ApplyNLMFilterKernelToTheImageRabbit)
 {
     ThreadPool threadPool(0);
     std::string filename = "../examples/rabbit_pixel_art.exr";
-    std::string outputFileName = "../tests/test_files/rabbit_pixel_art_parallel_single_nlm_gaussan_sigma2_3x3.exr";
-    float sigma = 2.0f;
-    auto gaussianKernel = FilterKernels::getGaussianKernel(3, sigma);
-    applyFilterToImageFile(filename, outputFileName, gaussianKernel, &threadPool);
+    std::string outputFileName = "../tests/test_files/rabbit_pixel_art_nlm_7_3.exr";
+    int radius = 7;
+    int patchRadius = 3;
+    float sigmaBeauty = 2.f;
+    float sigmaAlbedo = 0.f;
+    float sigmaNormal = 0.f;
+    float sigmaDepth = 0.f;
+    applyFilterToImageFile(filename, "", "", "", outputFileName, radius, patchRadius, 
+                            sigmaBeauty, sigmaAlbedo, sigmaNormal, sigmaDepth, &threadPool, { {"beauty", "default"} });
+}
+
+TEST_F(NLMFilterTest, ApplyNLMFilterKernelToTheImageForest)
+{
+    ThreadPool threadPool(0);
+    std::string filenameBeauty = "../examples/sample_forest/TGB0203070_env_mid_anim_rgba.0001.exr";
+    std::string filenameAlbedo = "../examples/sample_forest/TGB0203070_env_mid_anim_albedo.0001.exr";
+    std::string filenameNormal = "../examples/sample_forest/TGB0203070_env_mid_anim_normal.0001.exr";
+    std::string filenameDepth = "../examples/sample_forest/TGB0203070_env_mid_anim_depth.0001.exr";
+    std::string outputFileName = "../tests/test_files/forest_nlm_2_1.exr";
+    int radius = 2;
+    int patchRadius = 1;
+    float sigmaBeauty = 1.0f;
+    float sigmaAlbedo = 0.3f;
+    float sigmaNormal = 0.4f;
+    float sigmaDepth = 0.5f;
+    applyFilterToImageFile(filenameBeauty, filenameAlbedo, filenameNormal, filenameDepth, 
+                            outputFileName, radius, patchRadius, sigmaBeauty, sigmaAlbedo, 
+                            sigmaNormal, sigmaDepth, &threadPool);
 }
