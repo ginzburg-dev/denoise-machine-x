@@ -30,8 +30,8 @@ namespace dmxdenoiser
         ConvolutionFilter() = default;
         explicit ConvolutionFilter(const ParamDictionary& params) {  setParams(params); }
 
-        ConvolutionFilter(ConvolutionFilter&&) noexcept;
-        ConvolutionFilter& operator=(ConvolutionFilter&&) noexcept;
+        ConvolutionFilter(ConvolutionFilter&&) noexcept = default;
+        ConvolutionFilter& operator=(ConvolutionFilter&&) noexcept = default;
 
         ConvolutionFilter(const ConvolutionFilter&) = delete;
         ConvolutionFilter& operator=(const ConvolutionFilter&) = delete;
