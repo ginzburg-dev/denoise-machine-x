@@ -38,9 +38,9 @@
             "CMAKE_BUILD_TYPE": "Release",
             "BUILD_CUDA": "ON",
             "BUILD_TESTING": "ON",
-            "CMAKE_C_COMPILER": "gcc-11",
-            "CMAKE_CXX_COMPILER": "g++-11",
-            "CMAKE_CUDA_HOST_COMPILER": "g++-11"
+            "CMAKE_C_COMPILER": "/usr/bin/gcc-11",
+            "CMAKE_CXX_COMPILER": "/usr/bin/g++-11",
+            "CMAKE_CUDA_HOST_COMPILER": "/usr/bin/g++-11"
         }
     },
     {
