@@ -15,4 +15,3 @@ tests/test_files/
 CTestTestfile.cmake
 Makefile
 cmake_install.cmake
-
