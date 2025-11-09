@@ -19,10 +19,27 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 include(FetchContent)
 
-# ---- Dependencies from vcpkg
-find_package(Imath CONFIG REQUIRED)       # provides Imath::Imath
-find_package(OpenEXR CONFIG REQUIRED)     # provides OpenEXR::OpenEXR
-# find_package(ZLIB REQUIRED)             # usually not needed explicitly
+option(DMX_FETCH_DEPS "Allow CMake to auto-fetch Imath/OpenEXR if missing" ON)
+
+# Try config-based first (Homebrew/system/etc.)
+find_package(Imath CONFIG QUIET)
+find_package(OpenEXR CONFIG QUIET)
+
+if(DMX_FETCH_DEPS AND (NOT Imath_FOUND OR NOT OpenEXR_FOUND))
+  message(STATUS "Imath/OpenEXR not found, fetching via FetchContent...")
+
+  FetchContent_Declare(Imath
+    GIT_REPOSITORY https://github.com/AcademySoftwareFoundation/Imath.git
+    GIT_TAG v3.1.10
+  )
+  FetchContent_MakeAvailable(Imath)
+
+  FetchContent_Declare(OpenEXR
+    GIT_REPOSITORY https://github.com/AcademySoftwareFoundation/openexr.git
+    GIT_TAG v3.2.4
+  )
+  FetchContent_MakeAvailable(OpenEXR)
+endif()
 
 # ---- Sources
 file(GLOB_RECURSE SRC_CPP CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/src/*.cpp)
