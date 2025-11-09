@@ -100,7 +100,7 @@ if(BUILD_TESTING)
     target_link_libraries(${test_name}
       PRIVATE
         gtest_main
-        dmxcore       # <- reuse your main library/exe as a link target
+        dmxcore
     )
     if(MSVC)
       target_compile_definitions(${test_name}
