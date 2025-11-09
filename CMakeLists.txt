@@ -19,27 +19,16 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 include(FetchContent)
 
-option(DMX_FETCH_DEPS "Allow CMake to auto-fetch Imath/OpenEXR if missing" ON)
-
-# Try config-based first (Homebrew/system/etc.)
-find_package(Imath CONFIG QUIET)
-find_package(OpenEXR CONFIG QUIET)
-
-if(DMX_FETCH_DEPS AND (NOT Imath_FOUND OR NOT OpenEXR_FOUND))
-  message(STATUS "Imath/OpenEXR not found, fetching via FetchContent...")
-
-  FetchContent_Declare(Imath
-    GIT_REPOSITORY https://github.com/AcademySoftwareFoundation/Imath.git
-    GIT_TAG v3.1.10
-  )
-  FetchContent_MakeAvailable(Imath)
-
-  FetchContent_Declare(OpenEXR
-    GIT_REPOSITORY https://github.com/AcademySoftwareFoundation/openexr.git
-    GIT_TAG v3.2.4
-  )
-  FetchContent_MakeAvailable(OpenEXR)
-endif()
+FetchContent_Declare(Imath
+  GIT_REPOSITORY https://github.com/AcademySoftwareFoundation/Imath.git
+  GIT_TAG v3.1.10
+)
+FetchContent_MakeAvailable(Imath)
+FetchContent_Declare(OpenEXR
+  GIT_REPOSITORY https://github.com/AcademySoftwareFoundation/openexr.git
+  GIT_TAG v3.2.4
+)
+FetchContent_MakeAvailable(OpenEXR)
 
 # ---- Sources
 file(GLOB_RECURSE SRC_CPP CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/src/*.cpp)
@@ -63,6 +52,11 @@ target_include_directories(dmxcore
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
+    # Imath / OpenEXR headers from FetchContent
+    $<BUILD_INTERFACE:${imath_SOURCE_DIR}/src>
+    $<BUILD_INTERFACE:${imath_BINARY_DIR}/config>
+    $<BUILD_INTERFACE:${openexr_SOURCE_DIR}/src/lib>
+    $<BUILD_INTERFACE:${openexr_BINARY_DIR}/config>
 )
 
 target_link_libraries(dmxcore
