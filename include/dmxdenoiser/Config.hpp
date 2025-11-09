@@ -30,3 +30,4 @@ namespace dmxdenoiser {
         #define DMX_INLINE inline __attribute__((always_inline))
     #endif
 #endif
+

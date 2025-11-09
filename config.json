@@ -1,5 +1,4 @@
 {
-
     "gpu": 0,
     "input_mapping": {
         "beauty": "default",
@@ -20,5 +19,4 @@
         "level": "debug",
         "outputFolder": "log"
     }
-        
 }

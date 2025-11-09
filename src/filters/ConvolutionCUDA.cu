@@ -10,7 +10,7 @@
 #include <cuda_runtime.h>
 
 #define CUDA_CHECK(x) do { cudaError_t _e = (x); if (_e != cudaSuccess) \
-  throw std::runtime_error(std::string("CUDA error: ")+cudaGetErrorString(_e)); } while(0)
+    throw std::runtime_error(std::string("CUDA error: ")+cudaGetErrorString(_e)); } while(0)
 
 namespace dmxdenoiser
 {
@@ -102,7 +102,7 @@ namespace dmxdenoiser
             (in_.width() + threads.x - 1)/threads.x,
             (in_.height() + threads.y - 1)/threads.y,
             std::max(1, framesSize * layersSize)
-         );
+        );
         
         convolve2D_CUDA_kernel<<<blocks, threads>>>(in, out, d_frames, framesSize, d_layers, 
             layersSize, d_kernel, kernelSize, strength, filterAlpha);

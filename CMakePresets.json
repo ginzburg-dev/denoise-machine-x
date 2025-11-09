@@ -6,14 +6,28 @@
     },
     "configurePresets": [
     {
+        "name": "mac-cpu-dev",
+        "displayName": "macOS CPU Dev",
+        "generator": "",
+        "binaryDir": "build-mac-dev",
+        "cacheVariables": {
+            "CMAKE_TOOLCHAIN_FILE": "$PWD/vcpkg/scripts/buildsystems/vcpkg.cmake",
+            "CMAKE_BUILD_TYPE": "Debug",
+            "BUILD_CUDA": "OFF",
+            "BUILD_TESTING": "ON",
+            "DMX_MIN_LOG_LEVEL": "0"
+        }
+    },
+    {
         "name": "mac-cpu-debug",
         "displayName": "macOS CPU Debug",
-        "generator": "Ninja",
+        "generator": "",
         "binaryDir": "build-mac-debug",
         "cacheVariables": {
             "CMAKE_BUILD_TYPE": "Debug",
             "BUILD_CUDA": "OFF",
-            "BUILD_TESTING": "ON"
+            "BUILD_TESTING": "ON",
+            "DMX_MIN_LOG_LEVEL": "1"
         }
     },
     {
@@ -28,12 +42,44 @@
         }
     },
     {
-        "name": "windows-cuda",
-        "displayName": "Windows CUDA Debug",
+        "name": "windows-cuda-dev",
+        "displayName": "Windows CUDA Dev",
         "generator": "Ninja Multi-Config",
-        "binaryDir": "${sourceDir}/build-win-cuda",
+        "binaryDir": "${sourceDir}/build-win-cuda-dev",
         "cacheVariables": {
             "CMAKE_BUILD_TYPE": "Debug",
+            "BUILD_TESTING": "ON",
+            "BUILD_CUDA": "ON",
+            "DMX_MIN_LOG_LEVEL": "0",
+            "CMAKE_C_COMPILER": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe",
+            "CMAKE_CXX_COMPILER": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe",
+            "CMAKE_CUDA_COMPILER": "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.0/bin/nvcc.exe",
+            "CMAKE_CUDA_ARCHITECTURES": "native"
+        }
+    },
+    {
+        "name": "windows-cuda-debug",
+        "displayName": "Windows CUDA Debug",
+        "generator": "Ninja Multi-Config",
+        "binaryDir": "${sourceDir}/build-win-cuda-debug",
+        "cacheVariables": {
+            "CMAKE_BUILD_TYPE": "Debug",
+            "BUILD_TESTING": "ON",
+            "BUILD_CUDA": "ON",
+            "DMX_MIN_LOG_LEVEL": "1",
+            "CMAKE_C_COMPILER": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe",
+            "CMAKE_CXX_COMPILER": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe",
+            "CMAKE_CUDA_COMPILER": "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.0/bin/nvcc.exe",
+            "CMAKE_CUDA_ARCHITECTURES": "native"
+        }
+    },
+    {
+        "name": "windows-cuda-release",
+        "displayName": "Windows CUDA Release",
+        "generator": "Ninja Multi-Config",
+        "binaryDir": "${sourceDir}/build-win-cuda-release",
+        "cacheVariables": {
+            "CMAKE_BUILD_TYPE": "Release",
             "BUILD_TESTING": "ON",
             "BUILD_CUDA": "ON",
             "CMAKE_C_COMPILER": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe",
@@ -44,13 +90,41 @@
     }
     ],
     "buildPresets": [
+        { "name": "mac-cpu-dev", "configurePreset": "mac-cpu-dev" },
         { "name": "mac-cpu-debug", "configurePreset": "mac-cpu-debug" },
         { "name": "linux-cuda-release", "configurePreset": "linux-cuda-release" },
-        { "name": "windows-cuda-debug", "configurePreset": "windows-cuda", "configuration": "Debug" }
+        { "name": "windows-cuda-debug", "configurePreset": "windows-cuda-debug" },
+        { "name": "windows-cuda-release", "configurePreset": "windows-cuda-release" }
     ],
     "testPresets": [
-        { "name": "mac-cpu-debug", "configurePreset": "mac-cpu-debug" },
+        { 
+            "name": "mac-cpu-dev", 
+            "displayName": "Mac CPU Dev Tests",
+            "configurePreset": "mac-cpu-dev",
+            "output": 
+            {
+                "outputOnFailure": true,
+                "verbosity": "verbose"
+            },
+            "execution": {
+                "jobs": 16
+            }
+        },
+        { 
+            "name": "mac-cpu-debug", 
+            "displayName": "Mac CPU Debug Tests",
+            "configurePreset": "mac-cpu-debug",
+            "output": 
+            {
+                "outputOnFailure": true,
+                "verbosity": "verbose"
+            },
+            "execution": {
+                "jobs": 16
+            }
+        },
         { "name": "linux-cuda-release", "configurePreset": "linux-cuda-release" },
-        { "name": "windows-cuda_debug-ctest", "configurePreset": "windows-cuda",  "configuration": "Debug" }
+        { "name": "windows-cuda-debug", "configurePreset": "windows-cuda-debug" },
+        { "name": "windows-cuda-release", "configurePreset": "windows-cuda-release" }
     ]
 }
