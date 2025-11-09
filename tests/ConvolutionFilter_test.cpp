@@ -128,36 +128,12 @@ TEST_F(ConvolutionFilterTest, SimpleConvolveAverages)
     DMXImage img(imageSize, imageSize, 1, LayerDictionary{aovs});
     ConvolutionFilter filter;
 
-    // Fill the pixel data
-    /*
-    for (int y = 0; y < imageSize; ++y)
-        for (int x = 0; x < imageSize; ++x)
-        {
-            img.data()[(y*size + x)*img.numChannels() + 0] = 1.0f; // R
-            img.data()[(y*size + x)*img.numChannels() + 1] = 2.0f; // G
-            img.data()[(y*size + x)*img.numChannels() + 2] = 3.0f; // B
-            img.data()[(y*size + x)*img.numChannels() + 3] = 4.0f; // A
-        }
-    */    
-
     Kernel2D boxKernel = FilterKernels::getBoxKernel(3);
     ParamDictionary params;
     params.addKernel2D("kernel", boxKernel);
     filter.setParams(params);
 
     filter.apply(img);
-
-    /*
-    for (int y = 0; y < imageSize; ++y)
-        for (int x = 0; x < imageSize; ++x)
-        {
-            auto p = img.at(x, y, 0, 0);
-            EXPECT_FLOAT_EQ(p.r, 1.0f);
-            EXPECT_FLOAT_EQ(p.g, 2.0f);
-            EXPECT_FLOAT_EQ(p.b, 3.0f);
-            EXPECT_FLOAT_EQ(p.a, 4.0f);
-        }
-    */
 }
 
 TEST_F(ConvolutionFilterTest, SetFilteringLayersAndFrames)
