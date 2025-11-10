@@ -30,21 +30,29 @@
         }
     },
     {
-        "name": "linux-cuda-release",
+        "name": "linux-cpu-release",
         "displayName": "Linux CUDA Release",
         "generator": "Ninja",
         "binaryDir": "build-linux-cuda",
         "cacheVariables": {
             "CMAKE_BUILD_TYPE": "Release",
             "BUILD_CUDA": "ON",
-            "BUILD_TESTING": "ON",
-            "CMAKE_C_COMPILER": "/usr/bin/gcc-11",
-            "CMAKE_CXX_COMPILER": "/usr/bin/g++-11",
-            "CMAKE_CUDA_HOST_COMPILER": "/usr/bin/g++-11"
+            "BUILD_TESTING": "ON"
         }
     },
     {
-        "name": "windows-cuda-dev",
+        "name": "linux-gpu-release",
+        "displayName": "Linux CUDA Release",
+        "generator": "Ninja",
+        "binaryDir": "build-linux-cuda",
+        "cacheVariables": {
+            "CMAKE_BUILD_TYPE": "Release",
+            "BUILD_CUDA": "ON",
+            "BUILD_TESTING": "ON"
+        }
+    },
+    {
+        "name": "windows-gpu-dev",
         "displayName": "Windows CUDA Dev",
         "generator": "Ninja Multi-Config",
         "binaryDir": "${sourceDir}/build-win-cuda-dev",
@@ -60,7 +68,7 @@
         }
     },
     {
-        "name": "windows-cuda-debug",
+        "name": "windows-gpu-debug",
         "displayName": "Windows CUDA Debug",
         "generator": "Ninja Multi-Config",
         "binaryDir": "${sourceDir}/build-win-cuda-debug",
@@ -76,7 +84,7 @@
         }
     },
     {
-        "name": "windows-cuda-release",
+        "name": "windows-gpu-release",
         "displayName": "Windows CUDA Release",
         "generator": "Ninja Multi-Config",
         "binaryDir": "${sourceDir}/build-win-cuda-release",
@@ -94,9 +102,9 @@
     "buildPresets": [
         { "name": "mac-cpu-dev", "configurePreset": "mac-cpu-dev" },
         { "name": "mac-cpu-debug", "configurePreset": "mac-cpu-debug" },
-        { "name": "linux-cuda-release", "configurePreset": "linux-cuda-release" },
-        { "name": "windows-cuda-debug", "configurePreset": "windows-cuda-debug" },
-        { "name": "windows-cuda-release", "configurePreset": "windows-cuda-release" }
+        { "name": "linux-gpu-release", "configurePreset": "linux-gpu-release" },
+        { "name": "windows-gpu-debug", "configurePreset": "windows-gpu-debug" },
+        { "name": "windows-gpu-release", "configurePreset": "windows-gpu-release" }
     ],
     "testPresets": [
         { 
@@ -125,8 +133,8 @@
                 "jobs": 16
             }
         },
-        { "name": "linux-cuda-release", "configurePreset": "linux-cuda-release" },
-        { "name": "windows-cuda-debug", "configurePreset": "windows-cuda-debug" },
-        { "name": "windows-cuda-release", "configurePreset": "windows-cuda-release" }
+        { "name": "linux-gpu-release", "configurePreset": "linux-gpu-release" },
+        { "name": "windows-gpu-debug", "configurePreset": "windows-gpu-debug" },
+        { "name": "windows-gpu-release", "configurePreset": "windows-gpu-release" }
     ]
 }
