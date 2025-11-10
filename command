@@ -60,3 +60,12 @@ cmake -S . -B build -G Ninja ^
   -DCMAKE_CUDA_ARCHITECTURES=native && ^
 cmake --build build -j16  && ^
 ctest --test-dir build --output-on-failure --verbose -j16
+
+
+cmake --preset mac-cpu-debug
+cmake --build --preset mac-cpu-debug
+ctest -R ConvolutionFilter_test --preset mac-cpu-debug --parallel 8 --verbose
+
+cmake --preset mac-cpu-dev
+cmake --build --preset mac-cpu-dev
+ctest -R ConvolutionFilter_test --preset mac-cpu-dev --parallel 8 --verbose
