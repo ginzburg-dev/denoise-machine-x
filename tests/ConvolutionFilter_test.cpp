@@ -31,7 +31,6 @@ protected:
     void SetUp() override {
         removeLogFile();
         DMX_LOG_INIT(DMX_MIN_LOG_LEVEL, &std::clog, this->getLogPath());
-        std::cout << "DMX_MIN_LOG_LEVEL: " << DMX_MIN_LOG_LEVEL << '\n';
     }
 
     void TearDown() override {

@@ -65,12 +65,18 @@ target_link_libraries(dmxcore
     OpenEXR::OpenEXR
 )
 
+if(DMX_CUDA_ENABLED)
+  if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+    set(CMAKE_CUDA_ARCHITECTURES "75;86;87;89;90;120" CACHE STRING "CUDA architectures")
+  endif()
+endif()
+
 if(BUILD_CUDA)
   target_compile_definitions(dmxcore PUBLIC DMX_ENABLE_CUDA=1)
   target_link_libraries(dmxcore PRIVATE CUDA::cudart CUDA::cuda_driver)
   set_target_properties(dmxcore PROPERTIES
     CUDA_SEPARABLE_COMPILATION ON
-    CUDA_ARCHITECTURES native
+    CUDA_ARCHITECTURES "${CMAKE_CUDA_ARCHITECTURES}"
   )
 else()
   target_compile_definitions(dmxcore PUBLIC DMX_ENABLE_CUDA=0)

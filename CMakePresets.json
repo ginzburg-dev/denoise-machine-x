@@ -30,25 +30,52 @@
         }
     },
     {
-        "name": "linux-cpu-release",
-        "displayName": "Linux CUDA Release",
+        "name": "linux-cpu-debug",
+        "displayName": "Linux CPU Debug",
         "generator": "Ninja",
-        "binaryDir": "build-linux-cuda",
+        "binaryDir": "build-linux-cpu-debug",
+        "cacheVariables": {
+            "CMAKE_BUILD_TYPE": "Debug",
+            "BUILD_CUDA": "OFF",
+            "BUILD_TESTING": "ON",
+            "DMX_MIN_LOG_LEVEL": "1"
+        }
+    },
+    {
+        "name": "linux-cpu-release",
+        "displayName": "Linux CPU Release",
+        "generator": "Ninja",
+        "binaryDir": "build-linux-cpu-release",
         "cacheVariables": {
             "CMAKE_BUILD_TYPE": "Release",
+            "BUILD_CUDA": "OFF",
+            "BUILD_TESTING": "OFF"
+        }
+    },
+    {
+        "name": "linux-gpu-debug",
+        "displayName": "Linux CUDA Debug",
+        "generator": "Ninja",
+        "binaryDir": "build-linux-gpu-debug",
+        "cacheVariables": {
+            "CMAKE_BUILD_TYPE": "Debug",
             "BUILD_CUDA": "ON",
-            "BUILD_TESTING": "ON"
+            "BUILD_TESTING": "ON",
+            "CMAKE_CUDA_COMPILER": "nvcc",
+            "CMAKE_CUDA_ARCHITECTURES": "75;86"
         }
     },
     {
         "name": "linux-gpu-release",
         "displayName": "Linux CUDA Release",
         "generator": "Ninja",
-        "binaryDir": "build-linux-cuda",
+        "binaryDir": "build-linux-gpu-release",
         "cacheVariables": {
             "CMAKE_BUILD_TYPE": "Release",
             "BUILD_CUDA": "ON",
-            "BUILD_TESTING": "ON"
+            "BUILD_TESTING": "OFF",
+            "CMAKE_CUDA_COMPILER": "nvcc",
+            "CMAKE_CUDA_ARCHITECTURES": "75;86"
         }
     },
     {
@@ -102,6 +129,9 @@
     "buildPresets": [
         { "name": "mac-cpu-dev", "configurePreset": "mac-cpu-dev" },
         { "name": "mac-cpu-debug", "configurePreset": "mac-cpu-debug" },
+        { "name": "linux-cpu-debug", "configurePreset": "linux-cpu-debug" },
+        { "name": "linux-cpu-release", "configurePreset": "linux-cpu-release" },
+        { "name": "linux-gpu-debug", "configurePreset": "linux-gpu-debug" },
         { "name": "linux-gpu-release", "configurePreset": "linux-gpu-release" },
         { "name": "windows-gpu-debug", "configurePreset": "windows-gpu-debug" },
         { "name": "windows-gpu-release", "configurePreset": "windows-gpu-release" }
@@ -124,6 +154,19 @@
             "name": "mac-cpu-debug", 
             "displayName": "Mac CPU Debug Tests",
             "configurePreset": "mac-cpu-debug",
+            "output": 
+            {
+                "outputOnFailure": true,
+                "verbosity": "verbose"
+            },
+            "execution": {
+                "jobs": 16
+            }
+        },
+        { 
+            "name": "linux-cpu-debug", 
+            "displayName": "Linux CPU Debug Tests",
+            "configurePreset": "linux-cpu-debug",
             "output": 
             {
                 "outputOnFailure": true,

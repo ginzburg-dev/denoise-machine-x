@@ -169,14 +169,16 @@ namespace dmxdenoiser
 } // namespace dmxdenoiser
 
 // Initialize logger
-#define DMX_LOG_INIT(LOGLEVEL, OSTREAMPTR, FILENAME) \
-    dmxdenoiser::Logger::instance().init((LOGLEVEL), (OSTREAMPTR), (FILENAME)); \
-    dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Debug, "Logger", "Logging system initialized")
 
 #if DMX_DEBUG_BUILD
+    #define DMX_LOG_INIT(LOGLEVEL, OSTREAMPTR, FILENAME) \
+        dmxdenoiser::Logger::instance().init((LOGLEVEL), (OSTREAMPTR), (FILENAME)); \
+        dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Debug, "Logger", "Logging system initialized")
     #define DMX_LOG_TRACE(tag, ...) dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Trace, (tag), ##__VA_ARGS__)
     #define DMX_LOG_DEBUG(tag, ...) dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Debug, (tag), ##__VA_ARGS__)
 #else
+    #define DMX_LOG_INIT(LOGLEVEL, OSTREAMPTR, FILENAME) \
+        dmxdenoiser::Logger::instance().init((LOGLEVEL), (OSTREAMPTR), (FILENAME))
     #define DMX_LOG_DEBUG(tag, ...) ((void)0)
     #define DMX_LOG_TRACE(tag, ...) ((void)0)
 #endif

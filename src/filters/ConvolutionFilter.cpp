@@ -105,7 +105,7 @@ namespace dmxdenoiser
             DMX_LOG_ERROR("ConvolutionFilter", "setParams(): Missing required parameter 'kernel'");
             throw std::runtime_error("ConvolutionFilter::setParams(): Missing required parameter 'kernel'");
         }
-        DMX_LOG_INFO("ConvolutionFilter", "Setup filter settings:\nParameters:\n", paramsInfo);
+        DMX_LOG_DEBUG("ConvolutionFilter", "Setup filter settings:\nParameters:\n", paramsInfo);
     };
 
     void ConvolutionFilter::convolveCPU(const DMXImage& input, DMXImage& output) const
