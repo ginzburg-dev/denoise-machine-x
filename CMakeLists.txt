@@ -25,6 +25,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
+if(POLICY CMP0169)
+  cmake_policy(SET CMP0169 OLD)
+endif()
+
 include(FetchContent)
 
 FetchContent_Declare(Imath
@@ -40,58 +44,49 @@ FetchContent_MakeAvailable(OpenEXR)
 
 # ---- Sources
 file(GLOB_RECURSE SRC_CPP CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/src/*.cpp)
+file(GLOB_RECURSE SRC_CU  CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/src/*.cu)
 set(CLI_MAIN ${CMAKE_SOURCE_DIR}/cli/main.cpp)
 
 if(BUILD_CUDA)
   enable_language(CUDA)
   find_package(CUDAToolkit REQUIRED)
   add_compile_definitions(DMX_ENABLE_CUDA=1)
-  file(GLOB_RECURSE SRC_CU CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/src/*.cu)
+  if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+    set(CMAKE_CUDA_ARCHITECTURES "75;86;87;89;90;120" CACHE STRING "CUDA architectures")
+  endif()
 else()
   add_compile_definitions(DMX_ENABLE_CUDA=0)
   set(SRC_CU)
 endif()
 
 # ---- Executable
-add_library(dmxcore ${SRC_CPP} ${SRC_CU})
-
-# Public includes: your headers + Imath/OpenEXR parents (so OpenEXR/… and Imath/… resolve)
-target_include_directories(dmxcore
-  PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-    # Imath / OpenEXR headers from FetchContent
-    $<BUILD_INTERFACE:${imath_SOURCE_DIR}/src>
-    $<BUILD_INTERFACE:${imath_BINARY_DIR}/config>
-    $<BUILD_INTERFACE:${openexr_SOURCE_DIR}/src/lib>
-    $<BUILD_INTERFACE:${openexr_BINARY_DIR}/config>
+add_executable(dmxdenoiser
+  ${CLI_MAIN}
+  ${SRC_CPP}
+  ${SRC_CU}
 )
 
-target_link_libraries(dmxcore
-  PUBLIC
+target_include_directories(dmxdenoiser PRIVATE
+  ${CMAKE_SOURCE_DIR}/include
+  ${imath_SOURCE_DIR}/src
+  ${imath_BINARY_DIR}/config
+  ${openexr_SOURCE_DIR}/src/lib
+  ${openexr_BINARY_DIR}/config
+)
+
+target_link_libraries(dmxdenoiser
+  PRIVATE
     Imath::Imath
     OpenEXR::OpenEXR
 )
 
 if(BUILD_CUDA)
-  if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
-    set(CMAKE_CUDA_ARCHITECTURES "75;86;87;89;90;120" CACHE STRING "CUDA architectures")
-  endif()
-endif()
-
-if(BUILD_CUDA)
-  target_compile_definitions(dmxcore PUBLIC DMX_ENABLE_CUDA=1)
-  target_link_libraries(dmxcore PRIVATE CUDA::cudart CUDA::cuda_driver)
-  set_target_properties(dmxcore PROPERTIES
+  target_link_libraries(dmxdenoiser PRIVATE CUDA::cudart CUDA::cuda_driver)
+  set_target_properties(dmxdenoiser PROPERTIES
     CUDA_SEPARABLE_COMPILATION ON
     CUDA_ARCHITECTURES "${CMAKE_CUDA_ARCHITECTURES}"
   )
-else()
-  target_compile_definitions(dmxcore PUBLIC DMX_ENABLE_CUDA=0)
 endif()
-
-add_executable(dmxdenoiser ${CLI_MAIN})
-target_link_libraries(dmxdenoiser PRIVATE dmxcore)
 
 # Silence MSVC deprecation spam from OpenEXR threadpool atomics
 if(MSVC)
@@ -101,6 +96,8 @@ endif()
 # ---- Tests
 if(BUILD_TESTING)
   include(CTest)
+  enable_testing()
+  
   FetchContent_Declare(googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
     GIT_TAG v1.14.0
@@ -110,16 +107,39 @@ if(BUILD_TESTING)
   file(GLOB TEST_SOURCES CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/tests/*.cpp)
   foreach(test_src ${TEST_SOURCES})
     get_filename_component(test_name ${test_src} NAME_WE)
-    add_executable(${test_name} ${test_src})
-    target_link_libraries(${test_name}
-      PRIVATE
-        gtest_main
-        dmxcore
+    add_executable(${test_name}
+      ${SRC_CPP}
+      ${SRC_CU}
+      ${test_src}
     )
+
+    target_include_directories(${test_name} PRIVATE
+      ${CMAKE_SOURCE_DIR}/include
+      ${imath_SOURCE_DIR}/src
+      ${imath_BINARY_DIR}/config
+      ${openexr_SOURCE_DIR}/src/lib
+      ${openexr_BINARY_DIR}/config
+    )
+
+    target_link_libraries(${test_name} PRIVATE
+      gtest_main
+      Imath::Imath
+      OpenEXR::OpenEXR
+    )
+
+    if(BUILD_CUDA)
+      target_link_libraries(${test_name} PRIVATE CUDA::cudart CUDA::cuda_driver)
+      set_target_properties(${test_name} PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+        CUDA_ARCHITECTURES "${CMAKE_CUDA_ARCHITECTURES}"
+      )
+    endif()
+
     if(MSVC)
       target_compile_definitions(${test_name}
         PUBLIC _SILENCE_CXX20_OLD_SHARED_PTR_ATOMIC_SUPPORT_DEPRECATION_WARNING)
     endif()
+
     add_test(NAME ${test_name} COMMAND ${test_name})
   endforeach()
 endif()
