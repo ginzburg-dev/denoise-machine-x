@@ -4,7 +4,6 @@
 #include "AssertLogContains.hpp"
 #include <dmxdenoiser/Filter.hpp>
 #include <dmxdenoiser/FilterFactory.hpp>
-#include <dmxdenoiser/filters/ConvolutionFilter.hpp>
 
 #include <iostream>
 #include <memory>
