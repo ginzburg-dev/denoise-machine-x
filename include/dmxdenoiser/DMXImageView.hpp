@@ -19,7 +19,7 @@ namespace dmxdenoiser
         int numChannels = DEFAULT_NUM_CHANNELS;
 
         DMX_CPU_GPU
-        bool inBounds(int x, int y, int frame, int layer) {
+        bool inBounds(int x, int y, int frame, int layer) const {
             return  (x >= 0 && x < width ) &&
                     (y >= 0 && y < height ) &&
                     (frame >= 0 && frame < numFrames ) &&
@@ -27,19 +27,18 @@ namespace dmxdenoiser
         }
 
         DMX_CPU_GPU 
-        PixelRGBAView at(int x, int y, int frame, int layer) {
+        float* at(int x, int y, int frame, int layer) {
             int index = getIndex(x, y, frame, layer);
-            return PixelRGBAView{ data[index], data[index + 1], data[index + 2], data[index + 3] };
+            return &data[index];
         }
 
         DMX_CPU_GPU 
-        PixelRGBA get(int x, int y, int frame, int layer) {
-            int index = getIndex(x, y, frame, layer);
-            return PixelRGBA{ data[index], data[index + 1], data[index + 2], data[index + 3] };
+        const float* at(int x, int y, int frame, int layer) const {
+            return const_cast<DMXImageView*>(this)->at(x, y, frame, layer);
         }
-    
+
     private:
-        DMX_CPU_GPU int getIndex(int x, int y, int frame, int layer) {
+        DMX_CPU_GPU int getIndex(int x, int y, int frame, int layer) const {
             return (((frame * numLayers + layer) * height + y) * width + x) * numChannels;
         }
 

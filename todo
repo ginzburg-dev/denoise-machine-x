@@ -1,44 +1,48 @@
-NML filter: CPU CUDA
-ParseArgs: parsing inputs
+Filter: avoid storing frameIndex / layerIndex as members - pass the relevant frames/layers (or indices) to applyFilter().
+Filters: refactor hardcoding including Logs - use Name() method, Backend - repeating in every filter. backend methods -> universal
+Filters: Checking Logs can pick from ConvoFilter
+UMImage: unified memory allocation for CUDA
+Convo and NLM CPU GPU: try to simplify pixel operations and make
+ConvolutionFilter and all filters: ToString() ??
 Move function definitions from headers to cpp files where possible
+
 DMXImage: Duplicate or copy layers from one image to another (for Filter::convolve2D())
 DMXImage: Frame count should be odd.
 DMXImage: frame map (to compute mv guidience)
-DenoiserParams: params
-Cli: full pipeline
-Temporal Filter: CPU CUDA
-ImageIOExr: put header into ImageInfo, then ImageInfo -> DMXImage as a map -> Write correct header metadata
-Pixel, ConvoCPU: simplify, pixel operations
-UMImage: unified memory allocation for CUDA
-DMXError: error handling on cuda (boundCheck etc.) CUDA_CHECK
 DMXImage: rename Data to ptr_to_data — calling x.data().data() just to retrieve a pointer feels awkward.
-ML Samples: video about collecting process
-RgbaSample_test: read channels, compression, check sample -> move it to lib
-ImageIOExr: separate dataWindow and displayWindow in params, fix read, write and ImageInfo to read actual display resolution
-ConvolutionFilter: ToString()
-BuildInfo: data from cmake
+ImageIOExr: separate dataWindow and displayWindow in params, fix read, write and ImageInfo to read actual display resolution ??
+Store EXR header in ImageInfo, pass it to DMXImage as metadata map, and write it back to preserve correct header.
+
+DenoiserParams: params
+ImageSequence: Add multi-frame logic (frame logic)
+CLI: full pipeline
+
+NML filter: CUDA
+Temporal Filter: CPU CUDA, MV estimator/generator based on MSE and mv guidence
+ConvolutionFilter: add METAL backend implementations
+
+makegile: create filter, build, quality-check, format, etc.
+tools/python wrapper
 Git actions: debug / release
-All code: place Trace Debag in the code
-Cmake: level of verbosity
-Cmake: Release?
-Cmake: Config: debug level - verbosity
+BuildInfo: data from cmake, changelog, version
+Release pipeline
+
+GetParameter: add defaulting
+ParseArgs: parsing inputs
+
+
+ML spatial
+ML Samples: video about collecting process
+
 Parallel: estimate time of parallel - Debug
 ThreadPool: ToString, Backend res -> threadPool - >> to string
-Kernel2D: split into separate cpp and hpp files
-ImageIO: Add unit tests after refactor
-ImageIOExr: Add unit tests for generated layers and frames
-ImageInfo: Update ToString() to print parameters
-ImageSequence: Add multi-frame logic (frame logic)
-ImageIO unit tests: Add frames tests
-Kernel2D unit tests: Add tests for name method
-ImageIOExr - header ACES
+ImageInfo: Update ToString()
+
+
 GUI / async display
-ML spatial
-simple temporalFilter
 noise analyzer
-MV estimator/generator based on MSE and mv guidence
 PSNR/SSIM basic metrics
-ConvolutionFilter: add METAL backend implementations
+
 
         O-------------------O
         |                   |
@@ -52,6 +56,3 @@ ConvolutionFilter: add METAL backend implementations
         |        CLI        |
         O-------------------O
 
-
-Addressed:
-ParamDictionary: default value instead throwing error - addressed. No needed

@@ -112,6 +112,7 @@ TEST_F(NLMFilterTest, ApplyNLMFilterKernelToTheImageRabbit)
                             sigmaBeauty, sigmaAlbedo, sigmaNormal, sigmaDepth, &threadPool, { {"beauty", "default"} });
 }
 
+#if DMX_ENABLE_HEAVY_TESTS
 TEST_F(NLMFilterTest, ApplyNLMFilterKernelToTheImageForest)
 {
     ThreadPool threadPool(0);
@@ -130,3 +131,4 @@ TEST_F(NLMFilterTest, ApplyNLMFilterKernelToTheImageForest)
                             outputFileName, radius, patchRadius, sigmaBeauty, sigmaAlbedo, 
                             sigmaNormal, sigmaDepth, &threadPool);
 }
+#endif

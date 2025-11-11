@@ -2,9 +2,9 @@ name: linux-build-and-test
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, develop ]
 
 jobs:
   linux-build-and-test:
@@ -17,17 +17,11 @@ jobs:
     - name: Set up CMake
       uses: jwlawson/actions-setup-cmake@v2
 
-    - name: Install OpenEXR (Ubuntu)
-      run: sudo apt-get update && sudo apt-get install -y libopenexr-dev libimath-dev
-      
-    - name: Install dependencies
-      run: sudo apt-get update && sudo apt-get install -y g++ ninja-build
-
     - name: Configure
-      run: cmake -S . -B build -G Ninja
+      run: cmake --preset linux-cpu-debug
 
     - name: Build
-      run: cmake --build build --parallel --config Release
+      run: cmake --build --preset linux-cpu-debug
 
     - name: Run tests
-      run: cd build && ctest --output-on-failure --verbose
+      run: ctest --preset linux-cpu-debug

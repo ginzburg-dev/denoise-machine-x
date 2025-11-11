@@ -19,7 +19,7 @@ protected:
 
     void SetUp() override {
         removeLogFile();
-        DMX_LOG_INIT(LogLevel::Trace, &std::clog, this->getLogPath());
+        DMX_LOG_INIT(DMX_MIN_LOG_LEVEL, &std::clog, this->getLogPath());
     }
 
     void TearDown() override {

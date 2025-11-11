@@ -2,19 +2,17 @@
 Thumbs.db
 /_deps/
 /CMakeFiles/
-/build/
-/build-debug/
-/build-release/
-/build-mac-debug/
-
+/build*
 /Testing/
 *.dSYM
 /.vscode/
 /.VSCodeCounter/
+/vcpkg/
+/vcpkg_installed/
 
 tests/test_files/
 
 CTestTestfile.cmake
 Makefile
 cmake_install.cmake
-
+cuda-keyring_1.1-1_all.deb

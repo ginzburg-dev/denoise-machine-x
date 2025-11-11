@@ -84,7 +84,7 @@ namespace dmxdenoiser
                 }
             );
         }
-        DMX_LOG_INFO("ThreadPool", "ThreadPool ", this, " created with ", threads, " threads.");
+        DMX_LOG_DEBUG("ThreadPool", "ThreadPool ", this, " created with ", threads, " threads.");
     }
 
     template<class F, class... Args>
@@ -118,7 +118,7 @@ namespace dmxdenoiser
         for(std::thread& worker : m_workers)
             worker.join();
         
-        DMX_LOG_INFO("ThreadPool", "ThreadPool ", this, " stopped.");
+        DMX_LOG_TRACE("ThreadPool", "ThreadPool ", this, " stopped.");
     }
 
 } // namespace dmxdenoiser
