@@ -24,10 +24,10 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y g++ ninja-build
 
     - name: Configure
-      run: cmake -S . -B build -G Ninja
+      run: cmake --preset linux-cpu-dev
 
     - name: Build
-      run: cmake --build build --parallel --config Release
+      run: cmake --build --preset linux-cpu-release
 
     - name: Run tests
-      run: cd build && ctest --output-on-failure --verbose
+      run: ctest --preset linux-cpu-release
