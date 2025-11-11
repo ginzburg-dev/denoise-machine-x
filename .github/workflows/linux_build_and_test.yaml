@@ -17,17 +17,11 @@ jobs:
     - name: Set up CMake
       uses: jwlawson/actions-setup-cmake@v2
 
-    - name: Install OpenEXR (Ubuntu)
-      run: sudo apt-get update && sudo apt-get install -y libopenexr-dev libimath-dev
-      
-    - name: Install dependencies
-      run: sudo apt-get update && sudo apt-get install -y g++ ninja-build
-
     - name: Configure
-      run: cmake --preset linux-cpu-dev
+      run: cmake --preset linux-cpu-debug
 
     - name: Build
-      run: cmake --build --preset linux-cpu-release
+      run: cmake --build --preset linux-cpu-debug
 
     - name: Run tests
-      run: ctest --preset linux-cpu-release
+      run: ctest --preset linux-cpu-debug
