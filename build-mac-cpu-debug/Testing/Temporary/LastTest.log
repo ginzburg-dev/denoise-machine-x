@@ -1,0 +1,1165 @@
+Start testing: Nov 11 02:09 GMT
+----------------------------------------------------------
+9/20 Testing: Kernel2D_test
+9/20 Test: Kernel2D_test
+Command: "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/bin/Kernel2D_test"
+Directory: /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug
+"Kernel2D_test" start time: Nov 11 02:09 GMT
+Output:
+----------------------------------------------------------
+Running main() from /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 7 tests from Kernel2D
+[ RUN      ] Kernel2D.CopyConstructor
+[       OK ] Kernel2D.CopyConstructor (0 ms)
+[ RUN      ] Kernel2D.Construct3x3
+[       OK ] Kernel2D.Construct3x3 (0 ms)
+[ RUN      ] Kernel2D.ThrowOnNonSquare
+[       OK ] Kernel2D.ThrowOnNonSquare (0 ms)
+[ RUN      ] Kernel2D.ThrowOnEmpty
+[       OK ] Kernel2D.ThrowOnEmpty (0 ms)
+[ RUN      ] Kernel2D.ThrowOnEven
+[       OK ] Kernel2D.ThrowOnEven (0 ms)
+[ RUN      ] Kernel2D.ThrowOnOutOfBound
+[       OK ] Kernel2D.ThrowOnOutOfBound (0 ms)
+[ RUN      ] Kernel2D.ToString
+Kernel2D: UniqueKernelName 3 x 3
+    [2.0000 2.0000 2.0000]
+    [2.0000 2.0000 2.0000]
+    [2.0000 2.0000 2.0000]
+
+[       OK ] Kernel2D.ToString (0 ms)
+[----------] 7 tests from Kernel2D (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 7 tests from 1 test suite ran. (0 ms total)
+[  PASSED  ] 7 tests.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"Kernel2D_test" end time: Nov 11 02:09 GMT
+"Kernel2D_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/20 Testing: ChannelBuffer_test
+2/20 Test: ChannelBuffer_test
+Command: "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/bin/ChannelBuffer_test"
+Directory: /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug
+"ChannelBuffer_test" start time: Nov 11 02:09 GMT
+Output:
+----------------------------------------------------------
+Running main() from /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 3 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 3 tests from ChannelBuffer
+[ RUN      ] ChannelBuffer.Allocate
+[       OK ] ChannelBuffer.Allocate (0 ms)
+[ RUN      ] ChannelBuffer.ReadAndWriteHalfBuffer
+[       OK ] ChannelBuffer.ReadAndWriteHalfBuffer (0 ms)
+[ RUN      ] ChannelBuffer.LayerChannelBufferMapSet
+[       OK ] ChannelBuffer.LayerChannelBufferMapSet (0 ms)
+[----------] 3 tests from ChannelBuffer (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 3 tests from 1 test suite ran. (1 ms total)
+[  PASSED  ] 3 tests.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"ChannelBuffer_test" end time: Nov 11 02:09 GMT
+"ChannelBuffer_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/20 Testing: FileUtils_test
+5/20 Test: FileUtils_test
+Command: "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/bin/FileUtils_test"
+Directory: /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug
+"FileUtils_test" start time: Nov 11 02:09 GMT
+Output:
+----------------------------------------------------------
+Running main() from /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from FileUtils
+[ RUN      ] FileUtils.FormatSequencePath
+[       OK ] FileUtils.FormatSequencePath (0 ms)
+[----------] 1 test from FileUtils (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"FileUtils_test" end time: Nov 11 02:09 GMT
+"FileUtils_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+14/20 Testing: NumericUtils_test
+14/20 Test: NumericUtils_test
+Command: "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/bin/NumericUtils_test"
+Directory: /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug
+"NumericUtils_test" start time: Nov 11 02:09 GMT
+Output:
+----------------------------------------------------------
+Running main() from /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 2 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 2 tests from NumericUtils
+[ RUN      ] NumericUtils.FloatsEqualEpsilonBoundary
+[       OK ] NumericUtils.FloatsEqualEpsilonBoundary (0 ms)
+[ RUN      ] NumericUtils.FloatsBlend
+[       OK ] NumericUtils.FloatsBlend (0 ms)
+[----------] 2 tests from NumericUtils (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 2 tests from 1 test suite ran. (0 ms total)
+[  PASSED  ] 2 tests.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"NumericUtils_test" end time: Nov 11 02:09 GMT
+"NumericUtils_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+10/20 Testing: LayerDictionary_test
+10/20 Test: LayerDictionary_test
+Command: "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/bin/LayerDictionary_test"
+Directory: /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug
+"LayerDictionary_test" start time: Nov 11 02:09 GMT
+Output:
+----------------------------------------------------------
+Running main() from /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 10 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 10 tests from LayerDictionary
+[ RUN      ] LayerDictionary.CreateLayerDictionaryWithVector
+[       OK ] LayerDictionary.CreateLayerDictionaryWithVector (0 ms)
+[ RUN      ] LayerDictionary.CreateLayerDictionaryWithAovDictionary
+[       OK ] LayerDictionary.CreateLayerDictionaryWithAovDictionary (0 ms)
+[ RUN      ] LayerDictionary.CreateLayerDictionaryWithInputFilesMap
+[       OK ] LayerDictionary.CreateLayerDictionaryWithInputFilesMap (0 ms)
+[ RUN      ] LayerDictionary.AddDublicatedLayerToDictionary
+[       OK ] LayerDictionary.AddDublicatedLayerToDictionary (0 ms)
+[ RUN      ] LayerDictionary.AddLayerToDictionary
+[       OK ] LayerDictionary.AddLayerToDictionary (0 ms)
+[ RUN      ] LayerDictionary.AddLayerOverrides
+[       OK ] LayerDictionary.AddLayerOverrides (0 ms)
+[ RUN      ] LayerDictionary.RemoveLayerFromDictionary
+[       OK ] LayerDictionary.RemoveLayerFromDictionary (0 ms)
+[ RUN      ] LayerDictionary.GetLayerOffset
+[       OK ] LayerDictionary.GetLayerOffset (0 ms)
+[ RUN      ] LayerDictionary.GetLayerFromEmptyDict
+[       OK ] LayerDictionary.GetLayerFromEmptyDict (0 ms)
+[ RUN      ] LayerDictionary.GetLayerFromDictionary
+[       OK ] LayerDictionary.GetLayerFromDictionary (0 ms)
+[----------] 10 tests from LayerDictionary (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 10 tests from 1 test suite ran. (0 ms total)
+[  PASSED  ] 10 tests.
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"LayerDictionary_test" end time: Nov 11 02:09 GMT
+"LayerDictionary_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/20 Testing: DMXImage_test
+4/20 Test: DMXImage_test
+Command: "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/bin/DMXImage_test"
+Directory: /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug
+"DMXImage_test" start time: Nov 11 02:09 GMT
+Output:
+----------------------------------------------------------
+Running main() from /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 10 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 10 tests from DMXImage
+[ RUN      ] DMXImage.InitializesCorrectlyWithValidParams
+[       OK ] DMXImage.InitializesCorrectlyWithValidParams (0 ms)
+[ RUN      ] DMXImage.ConstructorWorksCorrectlyWithValidParams
+[       OK ] DMXImage.ConstructorWorksCorrectlyWithValidParams (0 ms)
+[ RUN      ] DMXImage.OptConstructorWorksCorrectlyWithValidParams
+[       OK ] DMXImage.OptConstructorWorksCorrectlyWithValidParams (0 ms)
+[ RUN      ] DMXImage.HasLayer
+[       OK ] DMXImage.HasLayer (0 ms)
+[ RUN      ] DMXImage.hasValidLayerDictionary
+[       OK ] DMXImage.hasValidLayerDictionary (0 ms)
+[ RUN      ] DMXImage.GetLayerIndex
+[       OK ] DMXImage.GetLayerIndex (0 ms)
+[ RUN      ] DMXImage.GetPixelIndex
+[       OK ] DMXImage.GetPixelIndex (0 ms)
+[ RUN      ] DMXImage.GetPixelIndexOutOfBounds
+[       OK ] DMXImage.GetPixelIndexOutOfBounds (0 ms)
+[ RUN      ] DMXImage.PixelAt
+[       OK ] DMXImage.PixelAt (0 ms)
+[ RUN      ] DMXImage.ToStringMethod
+DMXImage: 
+    Dimensions: 2 x 2
+    Frames: 2
+    Channels: 4
+    Layers: beauty albedo normal 
+[       OK ] DMXImage.ToStringMethod (0 ms)
+[----------] 10 tests from DMXImage (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 10 tests from 1 test suite ran. (1 ms total)
+[  PASSED  ] 10 tests.
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"DMXImage_test" end time: Nov 11 02:09 GMT
+"DMXImage_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/20 Testing: LayerInfo_test
+11/20 Test: LayerInfo_test
+Command: "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/bin/LayerInfo_test"
+Directory: /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug
+"LayerInfo_test" start time: Nov 11 02:09 GMT
+Output:
+----------------------------------------------------------
+Running main() from /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 3 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 3 tests from LayerInfo
+[ RUN      ] LayerInfo.CreateLayerInfoAndOrderingChannels
+[       OK ] LayerInfo.CreateLayerInfoAndOrderingChannels (0 ms)
+[ RUN      ] LayerInfo.GetLayer
+[       OK ] LayerInfo.GetLayer (0 ms)
+[ RUN      ] LayerInfo.CustomChannelSort
+[       OK ] LayerInfo.CustomChannelSort (0 ms)
+[----------] 3 tests from LayerInfo (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 3 tests from 1 test suite ran. (0 ms total)
+[  PASSED  ] 3 tests.
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"LayerInfo_test" end time: Nov 11 02:09 GMT
+"LayerInfo_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+16/20 Testing: ParamDictionary_test
+16/20 Test: ParamDictionary_test
+Command: "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/bin/ParamDictionary_test"
+Directory: /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug
+"ParamDictionary_test" start time: Nov 11 02:09 GMT
+Output:
+----------------------------------------------------------
+Running main() from /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 21 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 21 tests from ParamDictionaryTest
+[ RUN      ] ParamDictionaryTest.SetAndGetIntSingleValue
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[       OK ] ParamDictionaryTest.SetAndGetIntSingleValue (0 ms)
+[ RUN      ] ParamDictionaryTest.SetAndGetFloatSingleValue
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[       OK ] ParamDictionaryTest.SetAndGetFloatSingleValue (0 ms)
+[ RUN      ] ParamDictionaryTest.SetAndGetBoolSingleValue
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[       OK ] ParamDictionaryTest.SetAndGetBoolSingleValue (0 ms)
+[ RUN      ] ParamDictionaryTest.SetAndGetStringSingleValue
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[       OK ] ParamDictionaryTest.SetAndGetStringSingleValue (0 ms)
+[ RUN      ] ParamDictionaryTest.SetAndGetKernel2DSingleValue
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[       OK ] ParamDictionaryTest.SetAndGetKernel2DSingleValue (0 ms)
+[ RUN      ] ParamDictionaryTest.SetAndGetBackendSingleValue
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[       OK ] ParamDictionaryTest.SetAndGetBackendSingleValue (0 ms)
+[ RUN      ] ParamDictionaryTest.SetAndGetBackendResourceSingleValue
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[       OK ] ParamDictionaryTest.SetAndGetBackendResourceSingleValue (0 ms)
+[ RUN      ] ParamDictionaryTest.GetMissingParamReturnsNullopt
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[       OK ] ParamDictionaryTest.GetMissingParamReturnsNullopt (0 ms)
+[ RUN      ] ParamDictionaryTest.GetIntForStringParamReturnsNullopt
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[       OK ] ParamDictionaryTest.GetIntForStringParamReturnsNullopt (0 ms)
+[ RUN      ] ParamDictionaryTest.SetAndGetIntArrayValue
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[       OK ] ParamDictionaryTest.SetAndGetIntArrayValue (0 ms)
+[ RUN      ] ParamDictionaryTest.SetAndGetFloatArrayValue
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[       OK ] ParamDictionaryTest.SetAndGetFloatArrayValue (0 ms)
+[ RUN      ] ParamDictionaryTest.SetAndGetBoolArrayValue
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[       OK ] ParamDictionaryTest.SetAndGetBoolArrayValue (0 ms)
+[ RUN      ] ParamDictionaryTest.SetAndGetStringArrayValue
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[       OK ] ParamDictionaryTest.SetAndGetStringArrayValue (0 ms)
+[ RUN      ] ParamDictionaryTest.SetAndGetKernel2DArrayValue
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[       OK ] ParamDictionaryTest.SetAndGetKernel2DArrayValue (0 ms)
+[ RUN      ] ParamDictionaryTest.SetAndGetBackendArrayValue
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[       OK ] ParamDictionaryTest.SetAndGetBackendArrayValue (0 ms)
+[ RUN      ] ParamDictionaryTest.SetAndGetBackendResourceArrayValue
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[       OK ] ParamDictionaryTest.SetAndGetBackendResourceArrayValue (0 ms)
+[ RUN      ] ParamDictionaryTest.GetMissingStringArrayParamReturnsNullopt
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[       OK ] ParamDictionaryTest.GetMissingStringArrayParamReturnsNullopt (0 ms)
+[ RUN      ] ParamDictionaryTest.GetFloatForStringArrayParamReturnsNullopt
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[       OK ] ParamDictionaryTest.GetFloatForStringArrayParamReturnsNullopt (0 ms)
+[ RUN      ] ParamDictionaryTest.AddEmptyArray
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[       OK ] ParamDictionaryTest.AddEmptyArray (0 ms)
+[ RUN      ] ParamDictionaryTest.OverwriteIntParam
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[       OK ] ParamDictionaryTest.OverwriteIntParam (4 ms)
+[ RUN      ] ParamDictionaryTest.ToString
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [INFO] [ParamDictionary] 
+Parameters:
+    int_array_var (int) = [ 0, 2 ]
+    int_var (int) = [ 1 ]
+    float_array_var (float) = [ 3, 4 ]
+    float_var (float) = [ 2 ]
+    bool_array_var (bool) = [ false, true ]
+    bool_var (bool) = [ true ]
+    string_array_var (string) = [ String data1, String data2 ]
+    string_var (string) = [ String data ]
+    kernel_array_var (Kerne2D) = 
+        Kernel2D: Box 7 x 7
+            [0.0204 0.0204 0.0204 0.0204 0.0204 0.0204 0.0204]
+            [0.0204 0.0204 0.0204 0.0204 0.0204 0.0204 0.0204]
+            [0.0204 0.0204 0.0204 0.0204 0.0204 0.0204 0.0204]
+            [0.0204 0.0204 0.0204 0.0204 0.0204 0.0204 0.0204]
+            [0.0204 0.0204 0.0204 0.0204 0.0204 0.0204 0.0204]
+            [0.0204 0.0204 0.0204 0.0204 0.0204 0.0204 0.0204]
+            [0.0204 0.0204 0.0204 0.0204 0.0204 0.0204 0.0204]
+,         Kernel2D: Box 5 x 5
+            [0.0400 0.0400 0.0400 0.0400 0.0400]
+            [0.0400 0.0400 0.0400 0.0400 0.0400]
+            [0.0400 0.0400 0.0400 0.0400 0.0400]
+            [0.0400 0.0400 0.0400 0.0400 0.0400]
+            [0.0400 0.0400 0.0400 0.0400 0.0400]
+ 
+    kernel_var (Kerne2D) = 
+        Kernel2D: Gaussian 3 x 3
+            [0.0751 0.1238 0.0751]
+            [0.1238 0.2042 0.1238]
+            [0.0751 0.1238 0.0751]
+ 
+    backend_array_var (Backend) = [ GPU, METAL ]
+    backend_var (Backend) = [ GPU ]
+    backend_res_array_var (BackendResource) = 
+        BackendResource:
+             threadPool: 0x0
+             cudaDevice: 0
+             metalDevice: 0x0
+             metalCommandQueue: 0x0        BackendResource:
+             threadPool: 0x0
+             cudaDevice: 0
+             metalDevice: 0x0
+             metalCommandQueue: 0x0
+    backend_res_var (BackendResource) = 
+        BackendResource:
+             threadPool: 0x0
+             cudaDevice: 0
+             metalDevice: 0x0
+             metalCommandQueue: 0x0
+
+[       OK ] ParamDictionaryTest.ToString (0 ms)
+[----------] 21 tests from ParamDictionaryTest (9 ms total)
+
+[----------] Global test environment tear-down
+[==========] 21 tests from 1 test suite ran. (9 ms total)
+[  PASSED  ] 21 tests.
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"ParamDictionary_test" end time: Nov 11 02:09 GMT
+"ParamDictionary_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/20 Testing: Logger_test
+12/20 Test: Logger_test
+Command: "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/bin/Logger_test"
+Directory: /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug
+"Logger_test" start time: Nov 11 02:09 GMT
+Output:
+----------------------------------------------------------
+Running main() from /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 4 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 4 tests from LoggerTest
+[ RUN      ] LoggerTest.VardicFuncTemplates
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+1 2 ggg sss 
+12gggsss
+[       OK ] LoggerTest.VardicFuncTemplates (1 ms)
+[ RUN      ] LoggerTest.LoggerInit
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [ERROR] [ConvolutionFilter] Filter kernel error
+[       OK ] LoggerTest.LoggerInit (0 ms)
+[ RUN      ] LoggerTest.LoggerInitWithDefinition
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [ERROR] [ConvolutionFilter] Filter kernel error
+[       OK ] LoggerTest.LoggerInitWithDefinition (0 ms)
+[ RUN      ] LoggerTest.LoggerDefinition
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [TRACE] [Filter] Strength=10
+[2025-11-11 02:09:33]: [DEBUG] [Filter] Strength=10
+[2025-11-11 02:09:33]: [INFO] [Filter] Strength=10
+[2025-11-11 02:09:33]: [WARNING] [Filter] Strength=10
+[2025-11-11 02:09:33]: [ERROR] [Filter] Strength=10
+[2025-11-11 02:09:33]: [CRITICAL] [Filter] Strength=10
+[       OK ] LoggerTest.LoggerDefinition (0 ms)
+[----------] 4 tests from LoggerTest (2 ms total)
+
+[----------] Global test environment tear-down
+[==========] 4 tests from 1 test suite ran. (2 ms total)
+[  PASSED  ] 4 tests.
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"Logger_test" end time: Nov 11 02:09 GMT
+"Logger_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/20 Testing: ImageIO_test
+8/20 Test: ImageIO_test
+Command: "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/bin/ImageIO_test"
+Directory: /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug
+"ImageIO_test" start time: Nov 11 02:09 GMT
+Output:
+----------------------------------------------------------
+Running main() from /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 2 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 1 test from ImageIO
+[ RUN      ] ImageIO.CopyChannelBufferToDMXImageAndBack
+[       OK ] ImageIO.CopyChannelBufferToDMXImageAndBack (0 ms)
+[----------] 1 test from ImageIO (0 ms total)
+
+[----------] 1 test from ImageIOTest
+[ RUN      ] ImageIOTest.CreateImageIOEmptyPath
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [ERROR] [ImageIO] create(): File "" not found.
+[       OK ] ImageIOTest.CreateImageIOEmptyPath (1 ms)
+[----------] 1 test from ImageIOTest (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 2 tests from 2 test suites ran. (1 ms total)
+[  PASSED  ] 2 tests.
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"ImageIO_test" end time: Nov 11 02:09 GMT
+"ImageIO_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/20 Testing: FilterFactory_test
+6/20 Test: FilterFactory_test
+Command: "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/bin/FilterFactory_test"
+Directory: /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug
+"FilterFactory_test" start time: Nov 11 02:09 GMT
+Output:
+----------------------------------------------------------
+Running main() from /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 5 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 5 tests from FilterFactoryTest
+[ RUN      ] FilterFactoryTest.CanCreateRegisteredFilter
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+ConvolutionFilter: 
+    Kernel2D:  0 x 0
+
+[       OK ] FilterFactoryTest.CanCreateRegisteredFilter (1 ms)
+[ RUN      ] FilterFactoryTest.CanCreateRegisteredFilterWithDefinition
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+ConvolutionFilter: 
+    Kernel2D:  0 x 0
+
+[       OK ] FilterFactoryTest.CanCreateRegisteredFilterWithDefinition (0 ms)
+[ RUN      ] FilterFactoryTest.ThrowOnUnknownFilter
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [ERROR] [FilterFactory] Filter not registered: Unknown
+[       OK ] FilterFactoryTest.ThrowOnUnknownFilter (0 ms)
+[ RUN      ] FilterFactoryTest.ReturnUniquePtrEachTime
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[       OK ] FilterFactoryTest.ReturnUniquePtrEachTime (0 ms)
+[ RUN      ] FilterFactoryTest.CanOverrideFilterRegistration
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[       OK ] FilterFactoryTest.CanOverrideFilterRegistration (0 ms)
+[----------] 5 tests from FilterFactoryTest (2 ms total)
+
+[----------] Global test environment tear-down
+[==========] 5 tests from 1 test suite ran. (2 ms total)
+[  PASSED  ] 5 tests.
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"FilterFactory_test" end time: Nov 11 02:09 GMT
+"FilterFactory_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/20 Testing: BuildInfo_test
+1/20 Test: BuildInfo_test
+Command: "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/bin/BuildInfo_test"
+Directory: /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug
+"BuildInfo_test" start time: Nov 11 02:09 GMT
+Output:
+----------------------------------------------------------
+Running main() from /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from BuildInfoTest
+[ RUN      ] BuildInfoTest.LogBanner
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [INFO] [BuildInfo] "denoise-machine-x" (dmxdenoiser), version: 0.1.0, (Nov 11 2025 01:56:28), build mode: Debug
+[       OK ] BuildInfoTest.LogBanner (1 ms)
+[----------] 1 test from BuildInfoTest (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (1 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"BuildInfo_test" end time: Nov 11 02:09 GMT
+"BuildInfo_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/20 Testing: ImageIOExr_test
+7/20 Test: ImageIOExr_test
+Command: "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/bin/ImageIOExr_test"
+Directory: /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug
+"ImageIOExr_test" start time: Nov 11 02:09 GMT
+Output:
+----------------------------------------------------------
+Running main() from /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 5 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 3 tests from ImageIOExr
+[ RUN      ] ImageIOExr.WriteTestImage
+[       OK ] ImageIOExr.WriteTestImage (3 ms)
+[ RUN      ] ImageIOExr.ReadTestImageInfo
+ImageInfo: 
+    Dimensions: 2 x 2
+    ImageFileType: Exr
+    Layers: Layer Depth default 
+[       OK ] ImageIOExr.ReadTestImageInfo (0 ms)
+[ RUN      ] ImageIOExr.ReadWriteTestImageEXRFile
+[       OK ] ImageIOExr.ReadWriteTestImageEXRFile (2 ms)
+[----------] 3 tests from ImageIOExr (5 ms total)
+
+[----------] 2 tests from ImageIOExrTest
+[ RUN      ] ImageIOExrTest.ReadImageInfoEmptyPath
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [ERROR] [ImageIOExr] getImageInfo(): File "" not found.
+[       OK ] ImageIOExrTest.ReadImageInfoEmptyPath (11 ms)
+[ RUN      ] ImageIOExrTest.ReadImageEmptyPath
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [ERROR] [ImageIOExr] read(): File "" not found.
+[       OK ] ImageIOExrTest.ReadImageEmptyPath (0 ms)
+[----------] 2 tests from ImageIOExrTest (11 ms total)
+
+[----------] Global test environment tear-down
+[==========] 5 tests from 2 test suites ran. (17 ms total)
+[  PASSED  ] 5 tests.
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"ImageIOExr_test" end time: Nov 11 02:09 GMT
+"ImageIOExr_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+19/20 Testing: StringConversions_test
+19/20 Test: StringConversions_test
+Command: "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/bin/StringConversions_test"
+Directory: /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug
+"StringConversions_test" start time: Nov 11 02:09 GMT
+Output:
+----------------------------------------------------------
+Running main() from /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 10 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 10 tests from StringConversions
+[ RUN      ] StringConversions.ConvertFloatToStringPreserveOrigDecimalPart
+[       OK ] StringConversions.ConvertFloatToStringPreserveOrigDecimalPart (0 ms)
+[ RUN      ] StringConversions.PassDoubleToConvert
+[       OK ] StringConversions.PassDoubleToConvert (0 ms)
+[ RUN      ] StringConversions.SmallValue
+[       OK ] StringConversions.SmallValue (0 ms)
+[ RUN      ] StringConversions.LargeValue
+[       OK ] StringConversions.LargeValue (0 ms)
+[ RUN      ] StringConversions.RoundsCorrectly
+[       OK ] StringConversions.RoundsCorrectly (0 ms)
+[ RUN      ] StringConversions.IntegerValue
+[       OK ] StringConversions.IntegerValue (0 ms)
+[ RUN      ] StringConversions.HasToString
+[       OK ] StringConversions.HasToString (0 ms)
+[ RUN      ] StringConversions.JoinVector
+[0.01, 0.1, 1][       OK ] StringConversions.JoinVector (0 ms)
+[ RUN      ] StringConversions.GetPadding
+[       OK ] StringConversions.GetPadding (0 ms)
+[ RUN      ] StringConversions.IntToStringPadded
+[       OK ] StringConversions.IntToStringPadded (0 ms)
+[----------] 10 tests from StringConversions (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 10 tests from 1 test suite ran. (0 ms total)
+[  PASSED  ] 10 tests.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"StringConversions_test" end time: Nov 11 02:09 GMT
+"StringConversions_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+15/20 Testing: Parallel_test
+15/20 Test: Parallel_test
+Command: "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/bin/Parallel_test"
+Directory: /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug
+"Parallel_test" start time: Nov 11 02:09 GMT
+Output:
+----------------------------------------------------------
+Running main() from /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 7 tests from ParallelTest
+[ RUN      ] ParallelTest.ParallelForOneParam
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [DEBUG] [ThreadPool] ThreadPool 0x16dd769a8 created with 7 threads.
+[2025-11-11 02:09:33]: [TRACE] [Parallel] parallelFor(int64_t) invoked with parameters: start = 0, end = 200, threadPool = provided, chunkSize = 0
+[2025-11-11 02:09:33]: [TRACE] [Parallel] parallelFor(int64_t, int64_t) invoked with parameters: start = 0, end = 200, threadPool = provided, chunkSize = 0
+[2025-11-11 02:09:33]: [TRACE] [Parallel] parallelFor(int64_t, int64_t): threads = 7
+[2025-11-11 02:09:33]: [TRACE] [Parallel] parallelFor(int64_t, int64_t): new chunkSize = 3
+[2025-11-11 02:09:33]: [TRACE] [ThreadPool] ThreadPool 0x16dd769a8 stopped.
+[       OK ] ParallelTest.ParallelForOneParam (2 ms)
+[ RUN      ] ParallelTest.ParallelForTwoParam
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [DEBUG] [ThreadPool] ThreadPool 0x16dd769a8 created with 7 threads.
+[2025-11-11 02:09:33]: [TRACE] [Parallel] parallelFor(int64_t, int64_t) invoked with parameters: start = 0, end = 200, threadPool = provided, chunkSize = 0
+[2025-11-11 02:09:33]: [TRACE] [Parallel] parallelFor(int64_t, int64_t): threads = 7
+[2025-11-11 02:09:33]: [TRACE] [Parallel] parallelFor(int64_t, int64_t): new chunkSize = 3
+[2025-11-11 02:09:33]: [TRACE] [ThreadPool] ThreadPool 0x16dd769a8 stopped.
+[       OK ] ParallelTest.ParallelForTwoParam (0 ms)
+[ RUN      ] ParallelTest.ParallelForNoPool
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [TRACE] [Parallel] parallelFor(int64_t) invoked with parameters: start = 0, end = 200, threadPool = none, chunkSize = 0
+[2025-11-11 02:09:33]: [TRACE] [Parallel] parallelFor(int64_t, int64_t) invoked with parameters: start = 0, end = 200, threadPool = none, chunkSize = 0
+[2025-11-11 02:09:33]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded
+[       OK ] ParallelTest.ParallelForNoPool (0 ms)
+[ RUN      ] ParallelTest.ParallelForError
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [DEBUG] [ThreadPool] ThreadPool 0x16dd769a8 created with 7 threads.
+[2025-11-11 02:09:33]: [TRACE] [Parallel] parallelFor(int64_t) invoked with parameters: start = 0, end = 200, threadPool = provided, chunkSize = 0
+[2025-11-11 02:09:33]: [TRACE] [Parallel] parallelFor(int64_t, int64_t) invoked with parameters: start = 0, end = 200, threadPool = provided, chunkSize = 0
+[2025-11-11 02:09:33]: [TRACE] [Parallel] parallelFor(int64_t, int64_t): threads = 7
+[2025-11-11 02:09:33]: [TRACE] [Parallel] parallelFor(int64_t, int64_t): new chunkSize = 3
+[2025-11-11 02:09:33]: [ERROR] [Parallel] parallelFor(int64_t, int64_t): Some error.
+[2025-11-11 02:09:33]: [TRACE] [ThreadPool] ThreadPool 0x16dd769a8 stopped.
+[       OK ] ParallelTest.ParallelForError (13 ms)
+[ RUN      ] ParallelTest.ParallelForChunkStep2N300
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [DEBUG] [ThreadPool] ThreadPool 0x130204560 created with 2 threads.
+[2025-11-11 02:09:33]: [TRACE] [Parallel] parallelFor(int64_t, int64_t) invoked with parameters: start = 0, end = 300, threadPool = provided, chunkSize = 2
+[2025-11-11 02:09:33]: [TRACE] [Parallel] parallelFor(int64_t, int64_t): threads = 2
+[2025-11-11 02:09:33]: [TRACE] [ThreadPool] ThreadPool 0x130204560 stopped.
+[       OK ] ParallelTest.ParallelForChunkStep2N300 (0 ms)
+[ RUN      ] ParallelTest.ParallelForChunkStep0N400
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [DEBUG] [ThreadPool] ThreadPool 0x1301044d0 created with 2 threads.
+[2025-11-11 02:09:33]: [TRACE] [Parallel] parallelFor(int64_t, int64_t) invoked with parameters: start = 0, end = 400, threadPool = provided, chunkSize = 0
+[2025-11-11 02:09:33]: [TRACE] [Parallel] parallelFor(int64_t, int64_t): threads = 2
+[2025-11-11 02:09:33]: [TRACE] [Parallel] parallelFor(int64_t, int64_t): new chunkSize = 25
+[2025-11-11 02:09:33]: [TRACE] [ThreadPool] ThreadPool 0x1301044d0 stopped.
+[       OK ] ParallelTest.ParallelForChunkStep0N400 (7 ms)
+[ RUN      ] ParallelTest.ParallelForChunkStepInfN2345
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [DEBUG] [ThreadPool] ThreadPool 0x130204560 created with 2 threads.
+[2025-11-11 02:09:33]: [TRACE] [Parallel] parallelFor(int64_t, int64_t) invoked with parameters: start = 0, end = 2345, threadPool = provided, chunkSize = 9223372036854775807
+[2025-11-11 02:09:33]: [TRACE] [Parallel] parallelFor(int64_t, int64_t): threads = 2
+[2025-11-11 02:09:33]: [TRACE] [ParallelTest] ParallelForChunkStepInfN2345: N / min(N, UINT_MAX) = 1
+[2025-11-11 02:09:33]: [TRACE] [ThreadPool] ThreadPool 0x130204560 stopped.
+[       OK ] ParallelTest.ParallelForChunkStepInfN2345 (6 ms)
+[----------] 7 tests from ParallelTest (31 ms total)
+
+[----------] Global test environment tear-down
+[==========] 7 tests from 1 test suite ran. (31 ms total)
+[  PASSED  ] 7 tests.
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"Parallel_test" end time: Nov 11 02:09 GMT
+"Parallel_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+18/20 Testing: RgbaSample_test
+18/20 Test: RgbaSample_test
+Command: "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/bin/RgbaSample_test"
+Directory: /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug
+"RgbaSample_test" start time: Nov 11 02:09 GMT
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"RgbaSample_test" end time: Nov 11 02:09 GMT
+"RgbaSample_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+17/20 Testing: Pixel_test
+17/20 Test: Pixel_test
+Command: "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/bin/Pixel_test"
+Directory: /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug
+"Pixel_test" start time: Nov 11 02:09 GMT
+Output:
+----------------------------------------------------------
+Running main() from /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 11 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 11 tests from Pixel
+[ RUN      ] Pixel.PixelRGBAComparison
+[       OK ] Pixel.PixelRGBAComparison (0 ms)
+[ RUN      ] Pixel.PixelRGBAViewComparison
+[       OK ] Pixel.PixelRGBAViewComparison (0 ms)
+[ RUN      ] Pixel.PixelRGBAViewAssigning
+[       OK ] Pixel.PixelRGBAViewAssigning (0 ms)
+[ RUN      ] Pixel.PixelRGBAViewAssigningPixelRGBA
+[       OK ] Pixel.PixelRGBAViewAssigningPixelRGBA (0 ms)
+[ RUN      ] Pixel.PixelRGBAAssigningPixelRGBAView
+[       OK ] Pixel.PixelRGBAAssigningPixelRGBAView (0 ms)
+[ RUN      ] Pixel.PixelRGBAArithmetics
+[       OK ] Pixel.PixelRGBAArithmetics (0 ms)
+[ RUN      ] Pixel.PixelRGBAViewWriteThrough
+[       OK ] Pixel.PixelRGBAViewWriteThrough (0 ms)
+[ RUN      ] Pixel.PixelRGBAViewAssignAndWriteThrough
+[       OK ] Pixel.PixelRGBAViewAssignAndWriteThrough (0 ms)
+[ RUN      ] Pixel.PixelRGBAViewToPixelRGBAConversion
+[       OK ] Pixel.PixelRGBAViewToPixelRGBAConversion (0 ms)
+[ RUN      ] Pixel.PixelRGBANegation
+[       OK ] Pixel.PixelRGBANegation (0 ms)
+[ RUN      ] Pixel.PixelsBlend
+[       OK ] Pixel.PixelsBlend (0 ms)
+[----------] 11 tests from Pixel (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 1 test suite ran. (0 ms total)
+[  PASSED  ] 11 tests.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"Pixel_test" end time: Nov 11 02:09 GMT
+"Pixel_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+20/20 Testing: ThreadPool_test
+20/20 Test: ThreadPool_test
+Command: "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/bin/ThreadPool_test"
+Directory: /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug
+"ThreadPool_test" start time: Nov 11 02:09 GMT
+Output:
+----------------------------------------------------------
+Running main() from /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 5 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 5 tests from ThreadPoolTest
+[ RUN      ] ThreadPoolTest.Init
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [DEBUG] [ThreadPool] ThreadPool 0x12c004e00 created with 4 threads.
+[2025-11-11 02:09:33]: [TRACE] [ThreadPool] ThreadPool 0x12c004e00 stopped.
+[       OK ] ThreadPoolTest.Init (5 ms)
+[ RUN      ] ThreadPoolTest.InitWith0ValueHenseMaxThreads
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [DEBUG] [ThreadPool] ThreadPool 0x12c404190 created with 7 threads.
+[2025-11-11 02:09:33]: [TRACE] [ThreadPool] ThreadPool 0x12c404190 stopped.
+[       OK ] ThreadPoolTest.InitWith0ValueHenseMaxThreads (2 ms)
+[ RUN      ] ThreadPoolTest.InitWithNegativeOneValueHenseMaxThreads
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [DEBUG] [ThreadPool] ThreadPool 0x12c404160 created with 7 threads.
+[2025-11-11 02:09:33]: [TRACE] [ThreadPool] ThreadPool 0x12c404160 stopped.
+[       OK ] ThreadPoolTest.InitWithNegativeOneValueHenseMaxThreads (1 ms)
+[ RUN      ] ThreadPoolTest.InitWithALargeValueHenseMaxThreads
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [DEBUG] [ThreadPool] ThreadPool 0x12c504190 created with 7 threads.
+[2025-11-11 02:09:33]: [TRACE] [ThreadPool] ThreadPool 0x12c504190 stopped.
+[       OK ] ThreadPoolTest.InitWithALargeValueHenseMaxThreads (4 ms)
+[ RUN      ] ThreadPoolTest.RunSimpleTasksMaxThreads
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [DEBUG] [ThreadPool] ThreadPool 0x16d6ca9a8 created with 7 threads.
+[2025-11-11 02:09:33]: [TRACE] [ThreadPool] Task 0 is starting on 0x16d753000 thread.
+[2025-11-11 02:09:33]: [TRACE] [ThreadPool] Task 0 sucessfully completed.
+[2025-11-11 02:09:33]: [TRACE] [ThreadPool] Task 1 is starting on 0x16d753000 thread.
+[2025-11-11 02:09:33]: [TRACE] [ThreadPool] Task 1 sucessfully completed.
+[2025-11-11 02:09:33]: [TRACE] [ThreadPool] Task 2 is starting on 0x16d753000 thread.
+[2025-11-11 02:09:33]: [TRACE] [ThreadPool] Task 2 sucessfully completed.
+[2025-11-11 02:09:33]: [TRACE] [ThreadPool] Task 3 is starting on 0x16d753000 thread.
+[2025-11-11 02:09:33]: [TRACE] [ThreadPool] Task 3 sucessfully completed.
+[2025-11-11 02:09:33]: [TRACE] [ThreadPool] ThreadPool 0x16d6ca9a8 stopped.
+[       OK ] ThreadPoolTest.RunSimpleTasksMaxThreads (5 ms)
+[----------] 5 tests from ThreadPoolTest (19 ms total)
+
+[----------] Global test environment tear-down
+[==========] 5 tests from 1 test suite ran. (19 ms total)
+[  PASSED  ] 5 tests.
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"ThreadPool_test" end time: Nov 11 02:09 GMT
+"ThreadPool_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/20 Testing: ConvolutionFilter_test
+3/20 Test: ConvolutionFilter_test
+Command: "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/bin/ConvolutionFilter_test"
+Directory: /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug
+"ConvolutionFilter_test" start time: Nov 11 02:09 GMT
+Output:
+----------------------------------------------------------
+Running main() from /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 11 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 11 tests from ConvolutionFilterTest
+[ RUN      ] ConvolutionFilterTest.ParametersNotSet
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [ERROR] [ConvolutionFilter] applyFilter(): Kernel is empty, size=0x0
+[       OK ] ConvolutionFilterTest.ParametersNotSet (1 ms)
+[ RUN      ] ConvolutionFilterTest.ParametersNotSetInfoLog
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [DEBUG] [ConvolutionFilter] Setup filter settings:
+Parameters:
+     strength (default) = 1.000000
+     frames (default) = [all]
+     layers (default)  = [all]
+     filterAlpha (default) = false
+     backend (default) = CPU
+     backendResource (default) = 
+          BackendResource:
+               threadPool: 0x0
+               cudaDevice: 0
+               metalDevice: 0x0
+               metalCommandQueue: 0x0
+     kernel (set) = Kernel2D: Box 3 x 3
+
+
+[2025-11-11 02:09:33]: [WARNING] [ConvolutionFilter] convolveCPU(): no ThreadPool available; running single-threaded
+[2025-11-11 02:09:33]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded
+[       OK ] ConvolutionFilterTest.ParametersNotSetInfoLog (0 ms)
+[ RUN      ] ConvolutionFilterTest.ParametersSetFramesLayersInfoLog
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [DEBUG] [ConvolutionFilter] Setup filter settings:
+Parameters:
+     strength (default) = 1.000000
+     frames (set) = [1, 2, 3, 4, 5, 6, 7, 8]
+     layers (set) = [beauty, diffuse, specular, unknown]
+     filterAlpha (default) = false
+     backend (default) = CPU
+     backendResource (default) = 
+          BackendResource:
+               threadPool: 0x0
+               cudaDevice: 0
+               metalDevice: 0x0
+               metalCommandQueue: 0x0
+     kernel (set) = Kernel2D: Box 3 x 3
+
+
+[2025-11-11 02:09:33]: [WARNING] [ConvolutionFilter] convolveCPU(): no ThreadPool available; running single-threaded
+[2025-11-11 02:09:33]: [WARNING] [ConvolutionFilter] convolveCPU(): requested frame 5 out of range for input; skipping
+[2025-11-11 02:09:33]: [WARNING] [ConvolutionFilter] convolveCPU(): requested frame 6 out of range for input; skipping
+[2025-11-11 02:09:33]: [WARNING] [ConvolutionFilter] convolveCPU(): requested frame 7 out of range for input; skipping
+[2025-11-11 02:09:33]: [WARNING] [ConvolutionFilter] convolveCPU(): requested frame 8 out of range for input; skipping
+[2025-11-11 02:09:33]: [WARNING] [ConvolutionFilter] setParams(): requested layer 'unknown' not found; skipping
+[2025-11-11 02:09:33]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded
+[2025-11-11 02:09:33]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded
+[2025-11-11 02:09:33]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded
+[2025-11-11 02:09:33]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded
+[2025-11-11 02:09:33]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded
+[2025-11-11 02:09:33]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded
+[2025-11-11 02:09:33]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded
+[2025-11-11 02:09:33]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded
+[2025-11-11 02:09:33]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded
+[2025-11-11 02:09:33]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded
+[2025-11-11 02:09:33]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded
+[2025-11-11 02:09:33]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded
+[       OK ] ConvolutionFilterTest.ParametersSetFramesLayersInfoLog (2 ms)
+[ RUN      ] ConvolutionFilterTest.SimpleConvolveAverages
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [DEBUG] [ConvolutionFilter] Setup filter settings:
+Parameters:
+     strength (default) = 1.000000
+     frames (default) = [all]
+     layers (default)  = [all]
+     filterAlpha (default) = false
+     backend (default) = CPU
+     backendResource (default) = 
+          BackendResource:
+               threadPool: 0x0
+               cudaDevice: 0
+               metalDevice: 0x0
+               metalCommandQueue: 0x0
+     kernel (set) = Kernel2D: Box 3 x 3
+
+
+[2025-11-11 02:09:33]: [WARNING] [ConvolutionFilter] convolveCPU(): no ThreadPool available; running single-threaded
+[2025-11-11 02:09:33]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded
+[       OK ] ConvolutionFilterTest.SimpleConvolveAverages (4 ms)
+[ RUN      ] ConvolutionFilterTest.SetFilteringLayersAndFrames
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [DEBUG] [ConvolutionFilter] Setup filter settings:
+Parameters:
+     strength (default) = 1.000000
+     frames (default) = [all]
+     layers (default)  = [all]
+     filterAlpha (default) = false
+     backend (default) = CPU
+     backendResource (default) = 
+          BackendResource:
+               threadPool: 0x0
+               cudaDevice: 0
+               metalDevice: 0x0
+               metalCommandQueue: 0x0
+     kernel (set) = Kernel2D: Box 3 x 3
+
+
+[2025-11-11 02:09:33]: [WARNING] [ConvolutionFilter] convolveCPU(): no ThreadPool available; running single-threaded
+[2025-11-11 02:09:33]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded
+[       OK ] ConvolutionFilterTest.SetFilteringLayersAndFrames (0 ms)
+[ RUN      ] ConvolutionFilterTest.SimpleGaussianKernel
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [DEBUG] [ConvolutionFilter] Setup filter settings:
+Parameters:
+     strength (default) = 1.000000
+     frames (default) = [all]
+     layers (default)  = [all]
+     filterAlpha (default) = false
+     backend (default) = CPU
+     backendResource (default) = 
+          BackendResource:
+               threadPool: 0x0
+               cudaDevice: 0
+               metalDevice: 0x0
+               metalCommandQueue: 0x0
+     kernel (set) = Kernel2D: Gaussian 3 x 3
+
+
+[2025-11-11 02:09:33]: [WARNING] [ConvolutionFilter] convolveCPU(): no ThreadPool available; running single-threaded
+[2025-11-11 02:09:33]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded
+Kernel2D: Gaussian 3 x 3
+
+[       OK ] ConvolutionFilterTest.SimpleGaussianKernel (0 ms)
+[ RUN      ] ConvolutionFilterTest.ApplyBoxFilterKernelToTheImage
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [DEBUG] [ConvolutionFilter] Setup filter settings:
+Parameters:
+     strength (default) = 1.000000
+     frames (default) = [all]
+     layers (default)  = [all]
+     filterAlpha (default) = false
+     backend (set) = CPU
+     backendResource (set) = 
+          BackendResource:
+               threadPool: 0x0
+               cudaDevice: 0
+               metalDevice: 0x0
+               metalCommandQueue: 0x0
+     kernel (set) = Kernel2D: Box 3 x 3
+
+
+[2025-11-11 02:09:33]: [WARNING] [ConvolutionFilter] convolveCPU(): no ThreadPool available; running single-threaded
+[2025-11-11 02:09:33]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded
+[       OK ] ConvolutionFilterTest.ApplyBoxFilterKernelToTheImage (9 ms)
+[ RUN      ] ConvolutionFilterTest.ApplyGaussianFilterKernelToTheImage
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [DEBUG] [ConvolutionFilter] Setup filter settings:
+Parameters:
+     strength (default) = 1.000000
+     frames (default) = [all]
+     layers (default)  = [all]
+     filterAlpha (default) = false
+     backend (set) = CPU
+     backendResource (set) = 
+          BackendResource:
+               threadPool: 0x0
+               cudaDevice: 0
+               metalDevice: 0x0
+               metalCommandQueue: 0x0
+     kernel (set) = Kernel2D: Gaussian 3 x 3
+
+
+[2025-11-11 02:09:33]: [WARNING] [ConvolutionFilter] convolveCPU(): no ThreadPool available; running single-threaded
+[2025-11-11 02:09:33]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded
+[       OK ] ConvolutionFilterTest.ApplyGaussianFilterKernelToTheImage (17 ms)
+[ RUN      ] ConvolutionFilterTest.ApplySobelFilterKernelToTheImage
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [DEBUG] [ConvolutionFilter] Setup filter settings:
+Parameters:
+     strength (default) = 1.000000
+     frames (default) = [all]
+     layers (default)  = [all]
+     filterAlpha (default) = false
+     backend (set) = CPU
+     backendResource (set) = 
+          BackendResource:
+               threadPool: 0x0
+               cudaDevice: 0
+               metalDevice: 0x0
+               metalCommandQueue: 0x0
+     kernel (set) = Kernel2D: SobelX 3 x 3
+
+
+[2025-11-11 02:09:33]: [WARNING] [ConvolutionFilter] convolveCPU(): no ThreadPool available; running single-threaded
+[2025-11-11 02:09:33]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded
+[2025-11-11 02:09:33]: [DEBUG] [ConvolutionFilter] Setup filter settings:
+Parameters:
+     strength (default) = 1.000000
+     frames (default) = [all]
+     layers (default)  = [all]
+     filterAlpha (default) = false
+     backend (set) = CPU
+     backendResource (set) = 
+          BackendResource:
+               threadPool: 0x0
+               cudaDevice: 0
+               metalDevice: 0x0
+               metalCommandQueue: 0x0
+     kernel (set) = Kernel2D: SobelX 3 x 3
+
+
+[2025-11-11 02:09:33]: [WARNING] [ConvolutionFilter] convolveCPU(): no ThreadPool available; running single-threaded
+[2025-11-11 02:09:33]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded
+[       OK ] ConvolutionFilterTest.ApplySobelFilterKernelToTheImage (13 ms)
+[ RUN      ] ConvolutionFilterTest.ApplyGaussianFilterKernelToTheImageParallel
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [DEBUG] [ThreadPool] ThreadPool 0x16dcca998 created with 7 threads.
+[2025-11-11 02:09:33]: [DEBUG] [ConvolutionFilter] Setup filter settings:
+Parameters:
+     strength (default) = 1.000000
+     frames (default) = [all]
+     layers (default)  = [all]
+     filterAlpha (default) = false
+     backend (set) = CPU
+     backendResource (set) = 
+          BackendResource:
+               threadPool: 0x16dcca998
+               cudaDevice: 0
+               metalDevice: 0x0
+               metalCommandQueue: 0x0
+     kernel (set) = Kernel2D: Gaussian 3 x 3
+
+
+[       OK ] ConvolutionFilterTest.ApplyGaussianFilterKernelToTheImageParallel (9 ms)
+[ RUN      ] ConvolutionFilterTest.ApplyGaussianFilterKernelToTheImageParallelSingleThread
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [DEBUG] [ConvolutionFilter] Setup filter settings:
+Parameters:
+     strength (default) = 1.000000
+     frames (default) = [all]
+     layers (default)  = [all]
+     filterAlpha (default) = false
+     backend (set) = CPU
+     backendResource (set) = 
+          BackendResource:
+               threadPool: 0x0
+               cudaDevice: 0
+               metalDevice: 0x0
+               metalCommandQueue: 0x0
+     kernel (set) = Kernel2D: Gaussian 3 x 3
+
+
+[2025-11-11 02:09:33]: [WARNING] [ConvolutionFilter] convolveCPU(): no ThreadPool available; running single-threaded
+[2025-11-11 02:09:33]: [DEBUG] [Parallel] parallelFor(int64_t, int64_t): no ThreadPool avilable; runing single-threaded
+[       OK ] ConvolutionFilterTest.ApplyGaussianFilterKernelToTheImageParallelSingleThread (11 ms)
+[----------] 11 tests from ConvolutionFilterTest (72 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 1 test suite ran. (72 ms total)
+[  PASSED  ] 11 tests.
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"ConvolutionFilter_test" end time: Nov 11 02:09 GMT
+"ConvolutionFilter_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/20 Testing: NLMFilter_test
+13/20 Test: NLMFilter_test
+Command: "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/bin/NLMFilter_test"
+Directory: /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug
+"NLMFilter_test" start time: Nov 11 02:09 GMT
+Output:
+----------------------------------------------------------
+Running main() from /Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from NLMFilterTest
+[ RUN      ] NLMFilterTest.ApplyNLMFilterKernelToTheImageRabbit
+[2025-11-11 02:09:33]: [DEBUG] [Logger] Logging system initialized
+[2025-11-11 02:09:33]: [DEBUG] [ThreadPool] ThreadPool 0x16bc5a9a8 created with 7 threads.
+[2025-11-11 02:09:33]: [TRACE] [NLMFilter] setParams(): 'strength' parameter not set, using default: 1
+[2025-11-11 02:09:33]: [TRACE] [NLMFilter] setParams(): 'frames' parameter not set, using 'default' value: [all]
+[2025-11-11 02:09:33]: [TRACE] [NLMFilter] setParams(): 'layers' parameter not set, using default: [all]
+[2025-11-11 02:09:33]: [TRACE] [NLMFilter] setParams(): 'filterAlpha' parameter not set, using default: 0
+[2025-11-11 02:09:33]: [INFO] [NLMFilter] Setup filter settings:
+Parameters:
+     strength (default) = 1.000000
+     frames (default) = [all]
+     layers (default)  = [all]
+     filterAlpha (default) = false
+     backend (set) = CPU
+     backendResource (set) = 
+          BackendResource:
+               threadPool: 0x16bc5a9a8
+               cudaDevice: 0
+               metalDevice: 0x0
+               metalCommandQueue: 0x0
+     radius (set) = 7
+     patchRadius (set) = 3
+     sigmaBeauty (set) = 2.000000
+     sigmaAlbedo (set) = 0.000000
+     sigmaNormal (set) = 0.000000
+     sigmaDepth (set) = 0.000000
+
+[2025-11-11 02:09:33]: [TRACE] [Parallel] parallelFor(int64_t) invoked with parameters: start = 0, end = 64, threadPool = provided, chunkSize = 0
+[2025-11-11 02:09:33]: [TRACE] [Parallel] parallelFor(int64_t, int64_t) invoked with parameters: start = 0, end = 64, threadPool = provided, chunkSize = 0
+[2025-11-11 02:09:33]: [TRACE] [Parallel] parallelFor(int64_t, int64_t): threads = 7
+[2025-11-11 02:09:33]: [TRACE] [Parallel] parallelFor(int64_t, int64_t): new chunkSize = 1
+[2025-11-11 02:09:34]: [TRACE] [ThreadPool] ThreadPool 0x16bc5a9a8 stopped.
+layer: default - R
+layer: default - G
+layer: default - B
+layer: default - A
+[       OK ] NLMFilterTest.ApplyNLMFilterKernelToTheImageRabbit (959 ms)
+[----------] 1 test from NLMFilterTest (959 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (959 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.99 sec
+----------------------------------------------------------
+Test Passed.
+"NLMFilter_test" end time: Nov 11 02:09 GMT
+"NLMFilter_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Nov 11 02:09 GMT

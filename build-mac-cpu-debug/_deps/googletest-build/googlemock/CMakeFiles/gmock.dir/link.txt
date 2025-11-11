@@ -1,0 +1,1 @@
+/usr/bin/c++ -g -arch arm64 -dynamiclib -Wl,-headerpad_max_install_names -current_version 1.14.0 -o ../../../lib/libgmock_d.1.14.0.dylib -install_name @rpath/libgmock_d.1.14.0.dylib "CMakeFiles/gmock.dir/src/gmock-all.cc.o"  -Wl,-rpath,/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/lib ../../../lib/libgtest_d.1.14.0.dylib

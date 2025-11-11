@@ -1,0 +1,21 @@
+BuildInfo_test 6 1.18647
+ChannelBuffer_test 6 1.1744
+ConvolutionFilter_test 6 1.25151
+DMXImage_test 6 1.13819
+FileUtils_test 6 1.16444
+FilterFactory_test 6 1.18628
+ImageIOExr_test 6 1.19198
+ImageIO_test 6 1.18361
+Kernel2D_test 6 1.15728
+LayerDictionary_test 6 1.14065
+LayerInfo_test 6 1.13407
+Logger_test 6 1.1839
+NLMFilter_test 6 2.34394
+NumericUtils_test 6 1.12395
+Parallel_test 6 1.20137
+ParamDictionary_test 6 1.19117
+Pixel_test 6 0.117123
+RgbaSample_test 6 0.170622
+StringConversions_test 6 0.215477
+ThreadPool_test 6 0.283823
+---

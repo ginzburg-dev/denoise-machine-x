@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/imath-subbuild/CMakeFiles/imath-populate"
+		},
+		{
+			"file" : "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/imath-subbuild/CMakeFiles/imath-populate.rule"
+		},
+		{
+			"file" : "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/imath-subbuild/CMakeFiles/imath-populate-complete.rule"
+		},
+		{
+			"file" : "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/imath-subbuild/imath-populate-prefix/src/imath-populate-stamp/imath-populate-build.rule"
+		},
+		{
+			"file" : "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/imath-subbuild/imath-populate-prefix/src/imath-populate-stamp/imath-populate-configure.rule"
+		},
+		{
+			"file" : "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/imath-subbuild/imath-populate-prefix/src/imath-populate-stamp/imath-populate-download.rule"
+		},
+		{
+			"file" : "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/imath-subbuild/imath-populate-prefix/src/imath-populate-stamp/imath-populate-install.rule"
+		},
+		{
+			"file" : "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/imath-subbuild/imath-populate-prefix/src/imath-populate-stamp/imath-populate-mkdir.rule"
+		},
+		{
+			"file" : "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/imath-subbuild/imath-populate-prefix/src/imath-populate-stamp/imath-populate-patch.rule"
+		},
+		{
+			"file" : "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/imath-subbuild/imath-populate-prefix/src/imath-populate-stamp/imath-populate-test.rule"
+		},
+		{
+			"file" : "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/imath-subbuild/imath-populate-prefix/src/imath-populate-stamp/imath-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"imath-populate"
+		],
+		"name" : "imath-populate"
+	}
+}

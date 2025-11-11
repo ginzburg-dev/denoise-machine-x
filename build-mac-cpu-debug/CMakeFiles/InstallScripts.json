@@ -1,0 +1,34 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/imath-build/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/imath-build/config/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/imath-build/src/Imath/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-build/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-build/cmake/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-build/src/lib/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-build/src/lib/Iex/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-build/src/lib/IlmThread/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-build/src/lib/OpenEXRCore/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-build/src/lib/OpenEXR/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-build/src/lib/OpenEXRUtil/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-build/src/bin/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-build/src/bin/exr2aces/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-build/src/bin/exrheader/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-build/src/bin/exrinfo/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-build/src/bin/exrmaketiled/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-build/src/bin/exrstdattr/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-build/src/bin/exrmakepreview/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-build/src/bin/exrenvmap/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-build/src/bin/exrmultiview/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-build/src/bin/exrmultipart/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-build/src/bin/exrcheck/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-build/src/bin/exrmanifest/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-build/src/examples/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/googletest-build/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/googletest-build/googlemock/cmake_install.cmake",
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/googletest-build/googletest/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

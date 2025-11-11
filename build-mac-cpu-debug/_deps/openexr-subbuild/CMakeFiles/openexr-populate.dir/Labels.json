@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-subbuild/CMakeFiles/openexr-populate"
+		},
+		{
+			"file" : "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-subbuild/CMakeFiles/openexr-populate.rule"
+		},
+		{
+			"file" : "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-subbuild/CMakeFiles/openexr-populate-complete.rule"
+		},
+		{
+			"file" : "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-subbuild/openexr-populate-prefix/src/openexr-populate-stamp/openexr-populate-build.rule"
+		},
+		{
+			"file" : "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-subbuild/openexr-populate-prefix/src/openexr-populate-stamp/openexr-populate-configure.rule"
+		},
+		{
+			"file" : "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-subbuild/openexr-populate-prefix/src/openexr-populate-stamp/openexr-populate-download.rule"
+		},
+		{
+			"file" : "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-subbuild/openexr-populate-prefix/src/openexr-populate-stamp/openexr-populate-install.rule"
+		},
+		{
+			"file" : "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-subbuild/openexr-populate-prefix/src/openexr-populate-stamp/openexr-populate-mkdir.rule"
+		},
+		{
+			"file" : "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-subbuild/openexr-populate-prefix/src/openexr-populate-stamp/openexr-populate-patch.rule"
+		},
+		{
+			"file" : "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-subbuild/openexr-populate-prefix/src/openexr-populate-stamp/openexr-populate-test.rule"
+		},
+		{
+			"file" : "/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/openexr-subbuild/openexr-populate-prefix/src/openexr-populate-stamp/openexr-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"openexr-populate"
+		],
+		"name" : "openexr-populate"
+	}
+}

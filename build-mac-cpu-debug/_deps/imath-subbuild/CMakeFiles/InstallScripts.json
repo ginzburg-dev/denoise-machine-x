@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-debug/_deps/imath-subbuild/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

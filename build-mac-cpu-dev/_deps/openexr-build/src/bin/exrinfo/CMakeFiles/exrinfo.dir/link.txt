@@ -1,0 +1,1 @@
+/usr/bin/cc -g -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/exrinfo.dir/main.c.o -o ../../../../../bin/exrinfo  -Wl,-rpath,/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-dev/lib ../../../../../lib/libOpenEXRCore-3_2_d.31.3.2.4.dylib ../../../../../lib/libImath-3_1_d.29.9.0.dylib -lm
