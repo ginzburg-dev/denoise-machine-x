@@ -11,12 +11,11 @@ namespace dmxdenoiser {
     #define DMX_DEBUG_BUILD 0
 #endif
 
-
 #if !defined(DMX_ENABLE_CUDA)
     #define DMX_ENABLE_CUDA 0
 #endif
 
-#if defined(__CUDAACC___)
+#if defined(__CUDAARC__) || defined(__CUDA_ARCH__)
     #define DMX_CPU_GPU __host__ __device__
     #if defined(_MSC_VER)
         #define DMX_INLINE __forceinline
@@ -31,3 +30,4 @@ namespace dmxdenoiser {
         #define DMX_INLINE inline __attribute__((always_inline))
     #endif
 #endif
+

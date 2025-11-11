@@ -45,7 +45,7 @@ namespace dmxdenoiser
 
     private:
         // Apply implementation of the filter
-        virtual void applyFilter(const DMXImage& in, DMXImage& out) const = 0; 
+        virtual void applyFilter(const DMXImage& in, DMXImage& out) const = 0;
     };
 
     inline void Filter::resetParams() {

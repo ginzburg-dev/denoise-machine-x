@@ -17,3 +17,4 @@ enum class DMXError
     #include <stdexcept>
     #define DMX_TRAP(MSG) std::runtime_error(MSG)
 #endif
+

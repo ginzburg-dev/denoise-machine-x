@@ -8,10 +8,6 @@
 #include <dmxdenoiser/Parallel.hpp>
 #include <dmxdenoiser/utils/NumericUtils.hpp>
 
-#if DMX_ENABLE_CUDA
-    #include <dmxdenoiser/NLMFilterCUDA.cu>
-#endif
-
 #include <optional>
 #include <cstdint>
 #include <cmath>

@@ -15,10 +15,21 @@
 #include <string_view>
 #include <utility>
 
+#ifndef DMX_MIN_LOG_LEVEL
+#define DMX_MIN_LOG_LEVEL 0
+#endif
+
 namespace dmxdenoiser
 {
 
-    enum class LogLevel { Trace, Debug, Info, Warning, Error, Critical};
+    enum class LogLevel { 
+        Trace, 
+        Debug, 
+        Info, 
+        Warning, 
+        Error, 
+        Critical
+    };
 
     inline constexpr std::string_view ToString(LogLevel level) {
         switch (level) {
@@ -55,10 +66,10 @@ namespace dmxdenoiser
             return std::string(buf);
         }
         
-        void init(LogLevel minLevel, std::ostream* os = nullptr, const std::string& filePath = "") {
+        void init(int minLevel, std::ostream* os = nullptr, const std::string& filePath = "") {
             std::lock_guard<std::mutex> lock{m_mutex};
             m_initialized = true;
-            m_minLevel = static_cast<int>(minLevel);
+            m_minLevel = minLevel;
             m_filePath = filePath;
             m_out = os;
             if (m_fileStream.is_open())       // close old file if any
@@ -93,6 +104,10 @@ namespace dmxdenoiser
             }
         }
 
+        void init(LogLevel minLevel, std::ostream* os = nullptr, const std::string& filePath = "") {
+            init(static_cast<int>(minLevel), os, filePath);
+        }
+
         void shutdown() {
             std::lock_guard<std::mutex> lock{m_mutex};
             if (m_fileStream.is_open())
@@ -109,18 +124,7 @@ namespace dmxdenoiser
         void Log(LogLevel level, std::string_view tag, Args&&... args) {
             if (static_cast<int>(level) < m_minLevel)
                 return;
-            /*
-            auto now = std::chrono::system_clock::now();
-            auto t = std::chrono::system_clock::to_time_t(now);
-            std::tm tm{};
-            #if defined(_WIN32)
-                localtime_s(&tm, &t);
-            #else
-                localtime_r(&t, &tm);
-            #endif
-            char buf[24];
-            std::strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &tm);
-            */
+
             std::string localTime_{this->localTime()};
 
             // Build message text once (handles empty varargs too), with neat spacing
@@ -165,20 +169,18 @@ namespace dmxdenoiser
 } // namespace dmxdenoiser
 
 // Initialize logger
-#define DMX_LOG_INIT(LOGLEVEL, OSTREAMPTR, FILENAME) \
-    dmxdenoiser::Logger::instance().init((LOGLEVEL), (OSTREAMPTR), (FILENAME)); \
-    dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Debug, "Logger", "Logging system initialized")
 
 #if DMX_DEBUG_BUILD
+    #define DMX_LOG_INIT(LOGLEVEL, OSTREAMPTR, FILENAME) \
+        dmxdenoiser::Logger::instance().init((LOGLEVEL), (OSTREAMPTR), (FILENAME)); \
+        dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Debug, "Logger", "Logging system initialized")
     #define DMX_LOG_TRACE(tag, ...) dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Trace, (tag), ##__VA_ARGS__)
-#else
-    #define DMX_LOG_TRACE(tag, ...) ((void)0)
-#endif
-
-#if DMX_DEBUG_BUILD
     #define DMX_LOG_DEBUG(tag, ...) dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Debug, (tag), ##__VA_ARGS__)
 #else
+    #define DMX_LOG_INIT(LOGLEVEL, OSTREAMPTR, FILENAME) \
+        dmxdenoiser::Logger::instance().init((LOGLEVEL), (OSTREAMPTR), (FILENAME))
     #define DMX_LOG_DEBUG(tag, ...) ((void)0)
+    #define DMX_LOG_TRACE(tag, ...) ((void)0)
 #endif
 
 #define DMX_LOG_INFO(tag, ...) dmxdenoiser::Logger::instance().Log(dmxdenoiser::LogLevel::Info, (tag), ##__VA_ARGS__)

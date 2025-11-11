@@ -37,14 +37,16 @@ namespace dmxdenoiser
         return abs_c(a - b) < epsilon;
     }
 
-    DMX_CPU_GPU
-    constexpr inline float clampf(float x, float lo, float hi) {
-        return (x > hi) ? hi : ((x < lo) ? lo : x);
+    DMX_CPU_GPU /*constexpr*/ inline int clampi(int x, int min, int max) {
+        return (x > max) ? max : ((x < min) ? min : x);
     }
 
-    // Blend two floats 
-    DMX_CPU_GPU
-    constexpr inline float floatsBlend(float a, float b, float t) noexcept { 
+    DMX_CPU_GPU /*constexpr*/ inline float clampf(float x, float min, float max) {
+        return (x > max) ? max : ((x < min) ? min : x);
+    }
+
+    // Blend two floats
+    DMX_CPU_GPU /*constexpr*/ inline float floatsBlend(float a, float b, float t) noexcept { 
         t = clampf(t, 0.0f, 1.0f);
         return a + (b - a) * t;
     } 

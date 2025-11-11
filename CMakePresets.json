@@ -6,49 +6,211 @@
     },
     "configurePresets": [
     {
-        "name": "mac-cpu-debug",
-        "displayName": "macOS CPU Debug",
-        "generator": "Ninja",
-        "binaryDir": "build-mac-debug",
+        "name": "mac-cpu-dev",
+        "displayName": "macOS CPU Dev",
+        "generator": "",
+        "binaryDir": "build-mac-cpu-dev",
         "cacheVariables": {
             "CMAKE_BUILD_TYPE": "Debug",
             "BUILD_CUDA": "OFF",
-            "BUILD_TESTING": "ON"
+            "BUILD_TESTING": "ON",
+            "DMX_ENABLE_HEAVY_TESTS": "ON",
+            "DMX_MIN_LOG_LEVEL": "0"
         }
     },
     {
-        "name": "linux-cuda-release",
+        "name": "mac-cpu-debug",
+        "displayName": "macOS CPU Debug",
+        "generator": "",
+        "binaryDir": "build-mac-cpu-debug",
+        "cacheVariables": {
+            "CMAKE_BUILD_TYPE": "Debug",
+            "BUILD_CUDA": "OFF",
+            "BUILD_TESTING": "ON",
+            "DMX_ENABLE_HEAVY_TESTS": "OFF",
+            "DMX_MIN_LOG_LEVEL": "1"
+        }
+    },
+    {
+        "name": "linux-cpu-dev",
+        "displayName": "Linux CPU Dev",
+        "generator": "Ninja",
+        "binaryDir": "build-linux-cpu-dev",
+        "cacheVariables": {
+            "CMAKE_BUILD_TYPE": "Debug",
+            "BUILD_CUDA": "OFF",
+            "BUILD_TESTING": "ON",
+            "DMX_ENABLE_HEAVY_TESTS": "ON",
+            "DMX_MIN_LOG_LEVEL": "0"
+        }
+    },
+    {
+        "name": "linux-cpu-debug",
+        "displayName": "Linux CPU Debug",
+        "generator": "Ninja",
+        "binaryDir": "build-linux-cpu-debug",
+        "cacheVariables": {
+            "CMAKE_BUILD_TYPE": "Debug",
+            "BUILD_CUDA": "OFF",
+            "BUILD_TESTING": "ON",
+            "DMX_ENABLE_HEAVY_TESTS": "OFF",
+            "DMX_MIN_LOG_LEVEL": "1"
+        }
+    },
+    {
+        "name": "linux-cpu-release",
+        "displayName": "Linux CPU Release",
+        "generator": "Ninja",
+        "binaryDir": "build-linux-cpu-release",
+        "cacheVariables": {
+            "CMAKE_BUILD_TYPE": "Release",
+            "BUILD_CUDA": "OFF",
+            "BUILD_TESTING": "OFF"
+        }
+    },
+    {
+        "name": "linux-gpu-dev",
+        "displayName": "Linux CUDA Dev",
+        "generator": "Ninja",
+        "binaryDir": "build-linux-gpu-dev",
+        "cacheVariables": {
+            "CMAKE_BUILD_TYPE": "Debug",
+            "BUILD_CUDA": "ON",
+            "BUILD_TESTING": "ON",
+            "DMX_ENABLE_HEAVY_TESTS": "ON",
+            "DMX_MIN_LOG_LEVEL": "0",
+            "CMAKE_CUDA_COMPILER": "nvcc",
+            "CMAKE_CUDA_ARCHITECTURES": "75;86"
+        }
+    },
+    {
+        "name": "linux-gpu-debug",
+        "displayName": "Linux CUDA Debug",
+        "generator": "Ninja",
+        "binaryDir": "build-linux-gpu-debug",
+        "cacheVariables": {
+            "CMAKE_BUILD_TYPE": "Debug",
+            "BUILD_CUDA": "ON",
+            "BUILD_TESTING": "ON",
+            "DMX_ENABLE_HEAVY_TESTS": "OFF",
+            "DMX_MIN_LOG_LEVEL": "1",
+            "CMAKE_CUDA_COMPILER": "nvcc",
+            "CMAKE_CUDA_ARCHITECTURES": "75;86"
+        }
+    },
+    {
+        "name": "linux-gpu-release",
         "displayName": "Linux CUDA Release",
         "generator": "Ninja",
-        "binaryDir": "build-linux-cuda",
+        "binaryDir": "build-linux-gpu-release",
         "cacheVariables": {
             "CMAKE_BUILD_TYPE": "Release",
             "BUILD_CUDA": "ON",
-            "BUILD_TESTING": "ON"
+            "BUILD_TESTING": "OFF",
+            "CMAKE_CUDA_COMPILER": "nvcc",
+            "CMAKE_CUDA_ARCHITECTURES": "75;86"
         }
     },
     {
-        "name": "windows-cuda",
+        "name": "windows-gpu-dev",
+        "displayName": "Windows CUDA Dev",
+        "generator": "Ninja Multi-Config",
+        "binaryDir": "${sourceDir}/build-win-gpu-dev",
+        "cacheVariables": {
+            "CMAKE_BUILD_TYPE": "Debug",
+            "BUILD_TESTING": "ON",
+            "BUILD_CUDA": "ON",
+            "DMX_MIN_LOG_LEVEL": "0",
+            "CMAKE_C_COMPILER": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe",
+            "CMAKE_CXX_COMPILER": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe",
+            "CMAKE_CUDA_COMPILER": "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.0/bin/nvcc.exe",
+            "CMAKE_CUDA_ARCHITECTURES": "native"
+        }
+    },
+    {
+        "name": "windows-gpu-debug",
         "displayName": "Windows CUDA Debug",
         "generator": "Ninja Multi-Config",
-        "binaryDir": "${sourceDir}/build-win-cuda",
+        "binaryDir": "${sourceDir}/build-win-gpu-debug",
+        "cacheVariables": {
+            "CMAKE_BUILD_TYPE": "Debug",
+            "BUILD_TESTING": "ON",
+            "BUILD_CUDA": "ON",
+            "DMX_MIN_LOG_LEVEL": "1",
+            "CMAKE_C_COMPILER": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe",
+            "CMAKE_CXX_COMPILER": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe",
+            "CMAKE_CUDA_COMPILER": "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.0/bin/nvcc.exe",
+            "CMAKE_CUDA_ARCHITECTURES": "native"
+        }
+    },
+    {
+        "name": "windows-gpu-release",
+        "displayName": "Windows CUDA Release",
+        "generator": "Ninja Multi-Config",
+        "binaryDir": "${sourceDir}/build-win-gpu-release",
         "cacheVariables": {
             "CMAKE_BUILD_TYPE": "Release",
             "BUILD_TESTING": "ON",
             "BUILD_CUDA": "ON",
+            "CMAKE_C_COMPILER": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe",
+            "CMAKE_CXX_COMPILER": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe",
             "CMAKE_CUDA_COMPILER": "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.0/bin/nvcc.exe",
             "CMAKE_CUDA_ARCHITECTURES": "native"
         }
     }
     ],
     "buildPresets": [
+        { "name": "mac-cpu-dev", "configurePreset": "mac-cpu-dev" },
         { "name": "mac-cpu-debug", "configurePreset": "mac-cpu-debug" },
-        { "name": "linux-cuda-release", "configurePreset": "linux-cuda-release" },
-        { "name": "windows-cuda-debug", "configurePreset": "windows-cuda", "configuration": "Debug" }
+        { "name": "linux-cpu-debug", "configurePreset": "linux-cpu-debug" },
+        { "name": "linux-cpu-release", "configurePreset": "linux-cpu-release" },
+        { "name": "linux-gpu-debug", "configurePreset": "linux-gpu-debug" },
+        { "name": "linux-gpu-release", "configurePreset": "linux-gpu-release" },
+        { "name": "windows-gpu-debug", "configurePreset": "windows-gpu-debug" },
+        { "name": "windows-gpu-release", "configurePreset": "windows-gpu-release" }
     ],
     "testPresets": [
-        { "name": "mac-cpu-debug", "configurePreset": "mac-cpu-debug" },
-        { "name": "linux-cuda-release", "configurePreset": "linux-cuda-release" },
-        { "name": "windows-cuda_debug-ctest", "configurePreset": "windows-cuda",  "configuration": "Debug" }
+        { 
+            "name": "mac-cpu-dev", 
+            "displayName": "Mac CPU Dev Tests",
+            "configurePreset": "mac-cpu-dev",
+            "output": 
+            {
+                "outputOnFailure": true,
+                "verbosity": "default"
+            },
+            "execution": {
+                "jobs": 16
+            }
+        },
+        { 
+            "name": "mac-cpu-debug", 
+            "displayName": "Mac CPU Debug Tests",
+            "configurePreset": "mac-cpu-debug",
+            "output": 
+            {
+                "outputOnFailure": true,
+                "verbosity": "default"
+            },
+            "execution": {
+                "jobs": 16
+            }
+        },
+        { 
+            "name": "linux-cpu-debug", 
+            "displayName": "Linux CPU Debug Tests",
+            "configurePreset": "linux-cpu-debug",
+            "output": 
+            {
+                "outputOnFailure": true,
+                "verbosity": "verbose"
+            },
+            "execution": {
+                "jobs": 16
+            }
+        },
+        { "name": "linux-gpu-release", "configurePreset": "linux-gpu-release" },
+        { "name": "windows-gpu-debug", "configurePreset": "windows-gpu-debug" },
+        { "name": "windows-gpu-release", "configurePreset": "windows-gpu-release" }
     ]
 }
