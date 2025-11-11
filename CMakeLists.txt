@@ -73,7 +73,7 @@ target_link_libraries(dmxcore
     OpenEXR::OpenEXR
 )
 
-if(DMX_CUDA_ENABLED)
+if(BUILD_CUDA)
   if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
     set(CMAKE_CUDA_ARCHITECTURES "75;86;87;89;90;120" CACHE STRING "CUDA architectures")
   endif()

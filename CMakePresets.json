@@ -34,7 +34,7 @@
     {
         "name": "linux-cpu-dev",
         "displayName": "Linux CPU Dev",
-        "generator": "Ninja",
+        "generator": "Unix Makefiles",
         "binaryDir": "build-linux-cpu-dev",
         "cacheVariables": {
             "CMAKE_BUILD_TYPE": "Debug",
@@ -47,7 +47,7 @@
     {
         "name": "linux-cpu-debug",
         "displayName": "Linux CPU Debug",
-        "generator": "Ninja",
+        "generator": "Unix Makefiles",
         "binaryDir": "build-linux-cpu-debug",
         "cacheVariables": {
             "CMAKE_BUILD_TYPE": "Debug",
@@ -60,7 +60,7 @@
     {
         "name": "linux-cpu-release",
         "displayName": "Linux CPU Release",
-        "generator": "Ninja",
+        "generator": "Unix Makefiles",
         "binaryDir": "build-linux-cpu-release",
         "cacheVariables": {
             "CMAKE_BUILD_TYPE": "Release",
@@ -71,7 +71,7 @@
     {
         "name": "linux-gpu-dev",
         "displayName": "Linux CUDA Dev",
-        "generator": "Ninja",
+        "generator": "Unix Makefiles",
         "binaryDir": "build-linux-gpu-dev",
         "cacheVariables": {
             "CMAKE_BUILD_TYPE": "Debug",
@@ -86,7 +86,7 @@
     {
         "name": "linux-gpu-debug",
         "displayName": "Linux CUDA Debug",
-        "generator": "Ninja",
+        "generator": "Unix Makefiles",
         "binaryDir": "build-linux-gpu-debug",
         "cacheVariables": {
             "CMAKE_BUILD_TYPE": "Debug",
@@ -101,7 +101,7 @@
     {
         "name": "linux-gpu-release",
         "displayName": "Linux CUDA Release",
-        "generator": "Ninja",
+        "generator": "Unix Makefiles",
         "binaryDir": "build-linux-gpu-release",
         "cacheVariables": {
             "CMAKE_BUILD_TYPE": "Release",
