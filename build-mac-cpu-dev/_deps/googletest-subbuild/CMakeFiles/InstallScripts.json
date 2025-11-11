@@ -1,7 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/Users/dmitryginzburg/Development/denoise-machine-x/build-mac-cpu-dev/_deps/googletest-subbuild/cmake_install.cmake"
-	],
-	"Parallel" : false
-}
