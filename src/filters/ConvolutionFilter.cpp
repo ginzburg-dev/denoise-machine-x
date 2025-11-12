@@ -23,146 +23,43 @@ namespace dmxdenoiser
     void ConvolutionFilter::setParams(const ParamDictionary& params)
     {
         resetParams();
-
-        std::string paramsInfo{};
-
-        if (auto v = params.getSingleParam<float>("strength")) {
-            m_strength = *v;
-            paramsInfo += "     strength (set) = " + std::to_string(m_strength) + "\n";
-        }
-        else
-        {
-            paramsInfo += "     strength (default) = " + std::to_string(m_strength) + "\n";
-            DMX_LOG_TRACE("ConvolutionFilter", "setParams(): 'strength' parameter not set, using default: ", m_strength);
-        }
-        
-        if (auto v = params.getArrayParam<int>("frames"))
-        {
-            m_frames = *v;
-            paramsInfo += "     frames (set) = " + joinVector(m_frames, ", ", "[","]", "all") + "\n";
-        }
-        else
-        {
-            paramsInfo += "     frames (default) = " + joinVector(m_frames, ", ", "[","]", "all") + "\n";
-            DMX_LOG_TRACE("ConvolutionFilter", "setParams(): 'frames' parameter not set, using 'default' value: ",
-                joinVector(m_frames, ", ", "[","]", "all"));
-        }
-        
-        if (auto v = params.getArrayParam<std::string>("layers")) 
-        {
-            m_layers = *v;
-            paramsInfo += "     layers (set) = " + joinVector(m_layers, ", ", "[","]", "all") + "\n";
-        }
-        else
-        {
-            paramsInfo += "     layers (default)  = " + joinVector(m_layers, ", ", "[","]", "all") + "\n";
-            DMX_LOG_TRACE("ConvolutionFilter", 
-                "setParams(): 'layers' parameter not set, using default: ", joinVector(m_layers, ", ", "[","]", "all"));
-        }
-
-        if (auto v = params.getSingleParam<bool>("filterAlpha"))
-        {
-            m_filterAlpha = *v;
-            paramsInfo += "     filterAlpha (set) = " + std::string(m_filterAlpha ? "true" : "false") + "\n";
-        }
-        else
-        {
-            paramsInfo += "     filterAlpha (default) = " + std::string(m_filterAlpha ? "true" : "false") + "\n";
-            DMX_LOG_TRACE("ConvolutionFilter", 
-                "setParams(): 'filterAlpha' parameter not set, using default: ", m_filterAlpha);
-        }
-
-        if (auto v = params.getSingleParam<Backend>("backend"))
-        {
-            m_backend = *v;
-            paramsInfo += "     backend (set) = " + dmxdenoiser::ToString(m_backend) + "\n";
-        }
-        else
-        {
-            paramsInfo += "     backend (default) = " + dmxdenoiser::ToString(m_backend) + "\n";
-            DMX_LOG_TRACE("ConvolutionFilter", 
-                "setParams(): 'backend' parameter not set, using default: ", dmxdenoiser::ToString(m_backend));
-        }
-
-        if (auto v = params.getSingleParam<BackendResource>("backendResource"))
-        {
-            m_backendResource = *v;
-            paramsInfo += "     backendResource (set) = \n" + m_backendResource.ToString(10) + "\n";
-        }
-        else
-        {
-            paramsInfo += "     backendResource (default) = \n" + m_backendResource.ToString(10) + "\n";
-            DMX_LOG_TRACE("ConvolutionFilter", "setParams(): 'backendResource' parameter not set, using default: \n", m_backendResource.ToString(10));
-        }
+        Filter::setParams(params);
         
         if (auto v = params.getSingleParam<Kernel2D>("kernel")) { 
             m_kernel.set(*v);
-            paramsInfo += "     kernel (set) = " + m_kernel.ToString() + "\n";
+            m_filterInfo += "\tkernel (set) = " + m_kernel.ToString() + "\n";
         }
         else
         {
-            DMX_LOG_ERROR("ConvolutionFilter", "setParams(): Missing required parameter 'kernel'");
-            throw std::runtime_error("ConvolutionFilter::setParams(): Missing required parameter 'kernel'");
+            DMX_LOG_ERROR(Name(), "setParams(): Missing required parameter 'kernel'");
+            std::string errorMessage = std::string(Name()) + "::setParams(): Missing required parameter 'kernel'";
+            throw std::runtime_error(errorMessage);
         }
-        DMX_LOG_DEBUG("ConvolutionFilter", "Setup filter settings:\nParameters:\n", paramsInfo);
+        DMX_LOG_DEBUG(Name(), "Setup filter settings:\nParameters:\n", ToString());
     };
 
-    void ConvolutionFilter::convolveCPU(const DMXImage& input, DMXImage& output) const
+    void ConvolutionFilter::runFilterCPU(
+        const DMXImage& input,
+        DMXImage& output,
+        const std::vector<int>& layers,
+        const std::vector<int>& frames
+    ) const
     {
         ThreadPool* pool = m_backendResource.threadPool;
         if(!pool)
-            DMX_LOG_WARNING("ConvolutionFilter", "convolveCPU(): no ThreadPool available; running single-threaded");
+            DMX_LOG_WARNING(Name(), "runFilterCPU(): no ThreadPool available; running single-threaded");
 
         const int width = input.width();
         const int height = input.height();
         const int ksize = m_kernel.size();
         const int offset = ksize/2;
 
-        std::vector<int> framesIndices;
-        // If no specific frames were set, process all frames by default.
-        if (m_frames.empty())
+        for(int frameIdx = 0; frameIdx < frames.size(); ++frameIdx)
         {
-            for (int i = 0; i < input.numFrames(); ++i) // Add all frames
-                    framesIndices.push_back(i);
-        } else {
-            for (int i = 0; i < m_frames.size(); ++i)
+            int frame = frames[frameIdx];
+            for(int layerIdx = 0; layerIdx < layers.size(); ++layerIdx)
             {
-                int requestedFrame = m_frames[i];
-                if(requestedFrame < input.numFrames())
-                    framesIndices.push_back(requestedFrame);
-                else
-                    DMX_LOG_WARNING("ConvolutionFilter",
-                        "convolveCPU(): requested frame ", requestedFrame,
-                        " out of range for input; skipping");
-            }
-        }
-
-        std::vector<int> layerIndices;
-        // If no specific layers were set, process by default.   
-        if (m_layers.empty()) {
-            layerIndices = input.getFilteringLayersIndices();
-        } else {
-            for (const auto& layer : m_layers)
-            {
-                if (input.hasLayer(layer))
-                    layerIndices.push_back(input.getLayerIndex(layer));
-                else
-                    DMX_LOG_WARNING("ConvolutionFilter", "setParams(): requested layer '", layer, "' not found; skipping");
-            }
-        }
-
-        if (framesIndices.empty() || layerIndices.empty()) {
-            DMX_LOG_WARNING("ConvolutionFilter",
-                "convolveCPU(): no valid frames or layers to process; skipping");
-            return;
-}
-
-        for(int frameIdx = 0; frameIdx < framesIndices.size(); ++frameIdx)
-        {
-            int frame = framesIndices[frameIdx];
-            for(int layerIdx = 0; layerIdx < layerIndices.size(); ++layerIdx)
-            {
-                int layer = layerIndices[layerIdx];
+                int layer = layers[layerIdx];
                 parallelFor(0, to_i64(height), [&](std::int64_t y) {
                     for(std::int64_t x = 0; x < to_i64(width); ++x)
                     {
@@ -185,95 +82,29 @@ namespace dmxdenoiser
         }
     }
 
-    void ConvolutionFilter::convolveGPU(const DMXImage& input, DMXImage& output) const
+    void ConvolutionFilter::runFilterGPU(
+        const DMXImage& input,
+        DMXImage& output,
+        const std::vector<int>& layers,
+        const std::vector<int>& frames
+    ) const
     {
         #if DMX_ENABLE_CUDA
             int width = input.width();
             int height = input.height();
             int ksize = m_kernel.size();
-
-            std::vector<int> framesIndices;
-            // If no specific frames were set, process all frames by default.
-            if (m_frames.empty())
-            {
-                for (int i = 0; i < input.numFrames(); ++i) // Add all frames
-                        framesIndices.push_back(i);
-            } else {
-                for (int i = 0; i < m_frames.size(); ++i)
-                {
-                    int requestedFrame = m_frames[i];
-                    if(requestedFrame < input.numFrames())
-                        framesIndices.push_back(requestedFrame);
-                    else
-                        DMX_LOG_WARNING("ConvolutionFilter",
-                            "convolveGPU(): requested frame ", requestedFrame,
-                            " out of range for input; skipping");
-                }
-            }
-
-            std::vector<int> layerIndices;
-            // If no specific layers were set, process by default.   
-            if (m_layers.empty()) {
-                layerIndices = input.getFilteringLayersIndices();
-            } else {
-                for (const auto& layer : m_layers)
-                {
-                    if (input.hasLayer(layer))
-                        layerIndices.push_back(input.getLayerIndex(layer));
-                    else
-                        DMX_LOG_WARNING("ConvolutionFilter", "setParams(): requested layer '", layer, "' not found; skipping");
-                }
-            }
-
-            if (framesIndices.empty() || layerIndices.empty()) {
-                DMX_LOG_WARNING("ConvolutionFilter",
-                    "convolveCPU(): no valid frames or layers to process; skipping");
-                return;
-
             convolve2D_CUDA(input, output, framesIndices, layerIndices, m_kernel, m_strength, m_filterAlpha);
-
         #else
-            DMX_LOG_ERROR("ConvolutionFilter", "convolveGPU(): no CUDA build");
-            throw std::runtime_error("convolveGPU(): no CUDA build");
+            DMX_LOG_ERROR(Name(), "runFilterGPU(): no CUDA build");
+            throw std::runtime_error("runFilterGPU(): no CUDA build");
         #endif
     }
 
-    void ConvolutionFilter::convolveMETAL(const DMXImage& input, DMXImage& output) const
-    {
-        //#if DMX_ENABLE_METAL
-        //    // METAL logic
-        //#else
-            DMX_LOG_ERROR("ConvolutionFilter", "convolveMETAL(): no METAL build");
-            throw std::runtime_error("convolveMETAL(): no METAL build");
-        //#endif
-    }
+    void ConvolutionFilter::resetParams() { 
+        Filter::resetParams();
+        m_kernel.clear();
+    };
     
-    void ConvolutionFilter::applyFilter(const DMXImage& in, DMXImage& out) const
-    {
-        if (m_kernel.size() == 0) {
-            DMX_LOG_ERROR("ConvolutionFilter", "applyFilter(): Kernel is empty, size=0x0");
-            throw std::runtime_error("ConvolutionFilter::applyFilter(): Kernel is empty, size=0x0");
-        }
-
-        if (m_backend == Backend::CPU) {
-            this->convolveCPU(in, out);
-        } else if (m_backend == Backend::GPU) {
-            this->convolveGPU(in, out);
-        }  else if (m_backend == Backend::METAL) {
-            this->convolveMETAL(in, out);
-        } else {
-            DMX_LOG_ERROR("ConvolutionFilter",
-                "applyFilter(): Unsupported backend: ", dmxdenoiser::ToString(m_backend));
-            throw std::runtime_error("ConvolutionFilter::applyFilter(): Unsupported backend");
-        }
-    };
-
-    std::string ConvolutionFilter::ToString() const
-    {
-        // IN PROGRESS
-        return "ConvolutionFilter: \n" + m_kernel.ToString(4);
-    };
-
     REGISTER_FILTER(ConvolutionFilter)
 
 } // namespace dmxdenoiser

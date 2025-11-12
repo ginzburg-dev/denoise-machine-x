@@ -37,6 +37,8 @@ namespace dmxdenoiser
         return abs_c(a - b) < epsilon;
     }
 
+    DMX_CPU_GPU inline float sqr(float a) { return a*a; }
+
     DMX_CPU_GPU /*constexpr*/ inline int clampi(int x, int min, int max) {
         return (x > max) ? max : ((x < min) ? min : x);
     }

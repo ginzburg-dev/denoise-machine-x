@@ -77,18 +77,20 @@ TEST_F(FilterFactoryTest, CanOverrideFilterRegistration){
             SpectralFilter() = default;
             ~SpectralFilter() override = default;
             void setParams(const ParamDictionary& params) override {};
-            std::string ToString() const override { return "SpectralFilter"; };
 
         protected:
             void resetParams() override {};
 
-        private:
-            void applyFilter(const DMXImage& in, DMXImage& out) const override {};
+            virtual void runFilterCPU(
+                const DMXImage& input,
+                DMXImage& output,
+                const std::vector<int>& layers,
+                const std::vector<int>& frames
+            ) const override {};
         };
         return std::make_unique<SpectralFilter>();
     });
     auto filter = FilterFactory::instance().create("ConvolutionFilter");
     ASSERT_NE(filter, nullptr);
     EXPECT_STREQ(filter->Name(), "SpectralFilter");
-    EXPECT_EQ(filter->ToString(), "SpectralFilter");
 }
