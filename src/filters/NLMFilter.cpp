@@ -135,8 +135,9 @@ namespace dmxdenoiser
                 for(std::int64_t x = 0; x < to_i64(width); ++x)
                 {
                     // TODO: Layering - apply weights from beauty to all the layers
-                    // for(auto& layer : layers) 
+                    // std::vector<PixelRGBA> orig()
                     PixelRGBA orig = input.get(to_int(x), to_int(y), frame, beautyLayerIndex);
+                    //for(auto& layer : layers)
                     PixelRGBA sum = {0.0f, 0.0f, 0.0f, 0.0f};
                     float weightSum = 0.f;
                     for(int ky = -m_radius; ky <= m_radius; ++ky)
