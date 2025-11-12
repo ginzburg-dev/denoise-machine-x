@@ -23,188 +23,119 @@ namespace dmxdenoiser
     void NLMFilter::setParams(const ParamDictionary& params)
     {
         resetParams();
+        Filter::setParams(params);
 
-        std::string paramsInfo{};
-
-        if (auto v = params.getSingleParam<float>("strength")) {
-            m_strength = *v;
-            paramsInfo += "     strength (set) = " + std::to_string(m_strength) + "\n";
-        }
-        else
-        {
-            paramsInfo += "     strength (default) = " + std::to_string(m_strength) + "\n";
-            DMX_LOG_TRACE("NLMFilter", "setParams(): 'strength' parameter not set, using default: ", m_strength);
-        }
-        
-        if (auto v = params.getArrayParam<int>("frames"))
-        {
-            m_frames = *v;
-            paramsInfo += "     frames (set) = " + joinVector(m_frames, ", ", "[","]", "all") + "\n";
-        }
-        else
-        {
-            paramsInfo += "     frames (default) = " + joinVector(m_frames, ", ", "[","]", "all") + "\n";
-            DMX_LOG_TRACE("NLMFilter", "setParams(): 'frames' parameter not set, using 'default' value: ",
-                joinVector(m_frames, ", ", "[","]", "all"));
-        }
-        
-        if (auto v = params.getArrayParam<std::string>("layers")) 
-        {
-            m_layers = *v;
-            paramsInfo += "     layers (set) = " + joinVector(m_layers, ", ", "[","]", "all") + "\n";
-        }
-        else
-        {
-            paramsInfo += "     layers (default)  = " + joinVector(m_layers, ", ", "[","]", "all") + "\n";
-            DMX_LOG_TRACE("NLMFilter", 
-                "setParams(): 'layers' parameter not set, using default: ", joinVector(m_layers, ", ", "[","]", "all"));
-        }
-
-        if (auto v = params.getSingleParam<bool>("filterAlpha"))
-        {
-            m_filterAlpha = *v;
-            paramsInfo += "     filterAlpha (set) = " + std::string(m_filterAlpha ? "true" : "false") + "\n";
-        }
-        else
-        {
-            paramsInfo += "     filterAlpha (default) = " + std::string(m_filterAlpha ? "true" : "false") + "\n";
-            DMX_LOG_TRACE("NLMFilter", 
-                "setParams(): 'filterAlpha' parameter not set, using default: ", m_filterAlpha);
-        }
-
-        if (auto v = params.getSingleParam<Backend>("backend"))
-        {
-            m_backend = *v;
-            paramsInfo += "     backend (set) = " + dmxdenoiser::ToString(m_backend) + "\n";
-        }
-        else
-        {
-            paramsInfo += "     backend (default) = " + dmxdenoiser::ToString(m_backend) + "\n";
-            DMX_LOG_TRACE("NLMFilter", 
-                "setParams(): 'backend' parameter not set, using default: ", dmxdenoiser::ToString(m_backend));
-        }
-
-        if (auto v = params.getSingleParam<BackendResource>("backendResource"))
-        {
-            m_backendResource = *v;
-            paramsInfo += "     backendResource (set) = \n" + m_backendResource.ToString(10) + "\n";
-        }
-        else
-        {
-            paramsInfo += "     backendResource (default) = \n" + m_backendResource.ToString(10) + "\n";
-            DMX_LOG_TRACE("NLMFilter", "setParams(): 'backendResource' parameter not set, using default: \n", m_backendResource.ToString(10));
-        }
-        
         if (auto v = params.getSingleParam<int>("radius")) {
             m_radius = *v;
-            paramsInfo += "     radius (set) = " + std::to_string(m_radius) + "\n";
+            m_filterInfo += "\tradius (set) = " + std::to_string(m_radius) + "\n";
         }
         else
         {
-            paramsInfo += "     radius (default) = \n" + std::to_string(m_radius) + "\n";
-            DMX_LOG_TRACE("NLMFilter", "setParams(): 'radius' parameter not set, using default: \n", std::to_string(m_radius));
+            m_filterInfo += "\tradius (default) = \n" + std::to_string(m_radius) + "\n";
+            DMX_LOG_TRACE(Name(), "setParams(): 'radius' parameter not set, using default: \n", std::to_string(m_radius));
         }
 
         if (auto v = params.getSingleParam<int>("patchRadius")) {
             m_patchRadius = *v;
-            paramsInfo += "     patchRadius (set) = " + std::to_string(m_patchRadius) + "\n";
+            m_filterInfo += "\tpatchRadius (set) = " + std::to_string(m_patchRadius) + "\n";
         }
         else
         {
-            paramsInfo += "     patchRadius (default) = \n" + std::to_string(m_patchRadius) + "\n";
-            DMX_LOG_TRACE("NLMFilter", "setParams(): 'patchRadius' parameter not set, using default: \n", std::to_string(m_patchRadius));
+            m_filterInfo += "\tpatchRadius (default) = \n" + std::to_string(m_patchRadius) + "\n";
+            DMX_LOG_TRACE(Name(), "setParams(): 'patchRadius' parameter not set, using default: \n", 
+                std::to_string(m_patchRadius));
         }
 
         if (auto v = params.getSingleParam<float>("sigmaBeauty")) {
             m_sigmaBeauty = *v;
-            paramsInfo += "     sigmaBeauty (set) = " + std::to_string(m_sigmaBeauty) + "\n";
+            m_filterInfo += "\tsigmaBeauty (set) = " + std::to_string(m_sigmaBeauty) + "\n";
         }
         else
         {
-            paramsInfo += "     sigmaBeauty (default) = \n" + std::to_string(m_sigmaBeauty) + "\n";
-            DMX_LOG_TRACE("NLMFilter", "setParams(): 'sigmaBeauty' parameter not set, using default: \n", std::to_string(m_sigmaBeauty));
+            m_filterInfo += "\tsigmaBeauty (default) = \n" + std::to_string(m_sigmaBeauty) + "\n";
+            DMX_LOG_TRACE(Name(), "setParams(): 'sigmaBeauty' parameter not set, using default: \n", std::to_string(m_sigmaBeauty));
         }
 
         if (auto v = params.getSingleParam<float>("sigmaAlbedo")) {
             m_sigmaAlbedo = *v;
-            paramsInfo += "     sigmaAlbedo (set) = " + std::to_string(m_sigmaAlbedo) + "\n";
+            m_filterInfo += "\tsigmaAlbedo (set) = " + std::to_string(m_sigmaAlbedo) + "\n";
         }
         else
         {
-            paramsInfo += "     sigmaAlbedo (default) = \n" + std::to_string(m_sigmaAlbedo) + "\n";
-            DMX_LOG_TRACE("NLMFilter", "setParams(): 'sigmaAlbedo' parameter not set, using default: \n", std::to_string(m_sigmaAlbedo));
+            m_filterInfo += "\tsigmaAlbedo (default) = \n" + std::to_string(m_sigmaAlbedo) + "\n";
+            DMX_LOG_TRACE(Name(), "setParams(): 'sigmaAlbedo' parameter not set, using default: \n", std::to_string(m_sigmaAlbedo));
         }
 
         if (auto v = params.getSingleParam<float>("sigmaNormal")) {
             m_sigmaNormal = *v;
-            paramsInfo += "     sigmaNormal (set) = " + std::to_string(m_sigmaNormal) + "\n";
+            m_filterInfo += "\tsigmaNormal (set) = " + std::to_string(m_sigmaNormal) + "\n";
         }
         else
         {
-            paramsInfo += "     sigmaNormal (default) = \n" + std::to_string(m_sigmaNormal) + "\n";
-            DMX_LOG_TRACE("NLMFilter", "setParams(): 'sigmaNormal' parameter not set, using default: \n", std::to_string(m_sigmaNormal));
+            m_filterInfo += "\tsigmaNormal (default) = \n" + std::to_string(m_sigmaNormal) + "\n";
+            DMX_LOG_TRACE(Name(), "setParams(): 'sigmaNormal' parameter not set, using default: \n", 
+                std::to_string(m_sigmaNormal));
         }
 
         if (auto v = params.getSingleParam<float>("sigmaDepth")) {
             m_sigmaDepth = *v;
-            paramsInfo += "     sigmaDepth (set) = " + std::to_string(m_sigmaDepth) + "\n";
+            m_filterInfo += "\tsigmaDepth (set) = " + std::to_string(m_sigmaDepth) + "\n";
         }
         else
         {
-            paramsInfo += "     sigmaDepth (default) = \n" + std::to_string(m_sigmaDepth) + "\n";
-            DMX_LOG_TRACE("NLMFilter", "setParams(): 'sigmaDepth' parameter not set, using default: \n", std::to_string(m_sigmaDepth));
+            m_filterInfo += "\tsigmaDepth (default) = \n" + std::to_string(m_sigmaDepth) + "\n";
+            DMX_LOG_TRACE(Name(), "setParams(): 'sigmaDepth' parameter not set, using default: \n", 
+                std::to_string(m_sigmaDepth));
         }
 
-        DMX_LOG_INFO("NLMFilter", "Setup filter settings:\nParameters:\n", paramsInfo);
+        DMX_LOG_DEBUG(Name(), "Setup filter settings:\nParameters:\n", ToString());
     };
 
-    void NLMFilter::runFilterCPU(const DMXImage& input, DMXImage& output) const
+    void NLMFilter::resetParams() { 
+        Filter::resetParams();
+        m_radius = 4;
+        m_patchRadius = 3;
+        m_sigmaBeauty = 1.f;
+        m_sigmaAlbedo = 1.f;
+        m_sigmaNormal = 1.f;
+        m_sigmaDepth = 1.f;
+    };
+
+    void NLMFilter::runFilterCPU(
+            const DMXImage& input,
+            DMXImage& output,
+            const std::vector<int>& layers,
+            const std::vector<int>& frames
+    ) const
     {
         ThreadPool* pool = m_backendResource.threadPool;
         if(!pool)
-            DMX_LOG_WARNING("NLMFilter", "runFilterCPU(): no ThreadPool available; running single-threaded");
-        
+            DMX_LOG_WARNING(Name(), "runFilterCPU(): no ThreadPool available; running single-threaded");
+
+        float eps = 1e-12f;
+
         int width = input.width();
         int height = input.height();
         bool isAlbedo = input.hasLayer("albedo");
         bool isNormal = input.hasLayer("normal");
         bool isDepth = input.hasLayer("depth");
 
-        std::vector<int> framesIndices;
-        // If no specific frames were set, process all frames by default.
-        if (m_frames.empty())
-        {
-            for (int i = 0; i < input.numFrames(); ++i) // Add all frames
-                    framesIndices.push_back(i);
-        } else {
-            for (int i = 0; i < m_frames.size(); ++i)
-            {
-                int requestedFrame = m_frames[i];
-                if(requestedFrame < input.numFrames())
-                    framesIndices.push_back(requestedFrame);
-                else
-                    DMX_LOG_WARNING("NLMFilter", "setParams(): requested frame ", 
-                        requestedFrame, " not found; skipping");
-            }
-        }
-        
-        for(int frameIdx = 0; frameIdx < framesIndices.size(); ++frameIdx)
-        {
-            int frame = framesIndices[frameIdx];
-            int beautyLayerIndex = input.getLayerIndex("beauty");
-            int albedoLayerIndex = -1;
-            int normalLayerIndex = -1;
-            int depthLayerIndex = -1;
-            if (isAlbedo) albedoLayerIndex = input.getLayerIndex("albedo");
-            if (isNormal) normalLayerIndex = input.getLayerIndex("normal");
-            if (isDepth) depthLayerIndex = input.getLayerIndex("depth");
+        int beautyLayerIndex = input.getLayerIndex("beauty");
+        int albedoLayerIndex = -1;
+        int normalLayerIndex = -1;
+        int depthLayerIndex = -1;
+        if (isAlbedo) albedoLayerIndex = input.getLayerIndex("albedo");
+        if (isNormal) normalLayerIndex = input.getLayerIndex("normal");
+        if (isDepth) depthLayerIndex = input.getLayerIndex("depth");
 
-            float eps = 1e-12f;
-            auto sqr = [](float v){ return v*v; };
-
+        for(int frameIdx = 0; frameIdx < frames.size(); ++frameIdx)
+        {
+            int frame = frames[frameIdx];
             parallelFor(0, to_i64(height), [&](std::int64_t y) {
                 for(std::int64_t x = 0; x < to_i64(width); ++x)
                 {
+                    // TODO: Layering - apply weights from beauty to all the layers
+                    // for(auto& layer : layers) 
                     PixelRGBA orig = input.get(to_int(x), to_int(y), frame, beautyLayerIndex);
                     PixelRGBA sum = {0.0f, 0.0f, 0.0f, 0.0f};
                     float weightSum = 0.f;
@@ -282,48 +213,6 @@ namespace dmxdenoiser
         }
         
     }
-
-    void NLMFilter::runFilterGPU(const DMXImage& input, DMXImage& output) const
-    {
-        #if DMX_ENABLE_CUDA
-            // GPU logic
-        #else
-            DMX_LOG_ERROR("NLMFilter", "runFilterGPU(): no CUDA build");
-            throw std::runtime_error("runFilterGPU(): no CUDA build");
-        #endif
-    }
-
-    void NLMFilter::runFilterMETAL(const DMXImage& input, DMXImage& output) const
-    {
-        //#if DMX_ENABLE_METAL
-        //    // METAL logic
-        //#else
-            DMX_LOG_ERROR("NLMFilter", "runFilterMETAL(): no METAL build");
-            throw std::runtime_error("runFilterMETAL(): no METAL build");
-        //#endif
-    }
-    
-    void NLMFilter::applyFilter(const DMXImage& in, DMXImage& out) const
-    {
-        if (m_patchRadius == 0) {
-            DMX_LOG_ERROR("NLMFilter", "applyFilter(): patchRadius is zero");
-            throw std::runtime_error("NLMFilter::applyFilter(): patchRadius is zero");
-        }
-
-        if (m_backend == Backend::CPU) {
-            this->runFilterCPU(in, out);
-        } else if (m_backend == Backend::GPU) {
-            this->runFilterGPU(in, out);
-        }  else if (m_backend == Backend::METAL) {
-            this->runFilterMETAL(in, out);
-        }
-    };
-
-    std::string NLMFilter::ToString() const
-    {
-        // IN PROGRESS
-        return "NLMFilter: \n";
-    };
 
     REGISTER_FILTER(NLMFilter)
 
