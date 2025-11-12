@@ -1,6 +1,4 @@
-FILTER-001: Filter: avoid storing frameIndex / layerIndex as members - pass the relevant frames/layers (or indices) to applyFilter().
-FILTER-002: Filters: refactor hardcoding including Logs - use Name() method, Backend - repeating in every filter. backend methods -> universal
-FILTER-003: Filters: Checking Logs can pick from ConvoFilter
+
 FILTER-004: UMImage: unified memory allocation for CUDA
 FILTER-005: Convo and NLM CPU GPU: try to simplify pixel operations and make
 FILTER-006: ConvolutionFilter and all filters: ToString() ??
@@ -56,3 +54,10 @@ PSNR/SSIM basic metrics
         |        CLI        |
         O-------------------O
 
+
+
+Addressed:
+
+FILTER-001: Filter: avoid storing frameIndex / layerIndex as members - pass the relevant frames/layers (or indices) to applyFilter().
+FILTER-002: Filters: refactor hardcoding including Logs - use Name() method, Backend - repeating in every filter. backend methods -> universal
+FILTER-003: Filters: Checking Logs can pick from ConvoFilter
