@@ -56,7 +56,8 @@ namespace dmxdenoiser
         void write(
             const std::string& filename,
             const DMXImage& img,
-            const std::vector<std::string>& layers) const override;
+            const std::vector<std::string>& layers,
+            int frame = 0) const override;
 
         ImageInfo getImageInfo(const std::string& filename) const override;
         

@@ -1,3 +1,4 @@
+#include <dmxdenoiser/Aov.hpp>
 #include <dmxdenoiser/ChannelInfo.hpp>
 #include <dmxdenoiser/ChannelBuffer.hpp>
 #include <dmxdenoiser/ImageFileType.hpp>
@@ -42,6 +43,7 @@ namespace dmxdenoiser
             DMX_LOG_ERROR("ImageIOExr", "read(): File \"", filename, "\" not found.");
             throw std::runtime_error("File \"" + filename + "\" not found.");
         }
+        DMX_LOG_TRACE("ImageIOExr", "read(): ", "Start reading file \"", filename, "\".");
 
         int numChannels = DEFAULT_NUM_CHANNELS;
         
@@ -49,6 +51,7 @@ namespace dmxdenoiser
             throw std::runtime_error("The DMXImage does not have an initialized LayerDictionary");
 
         auto fileInfo = getImageInfo(filename);
+        DMX_LOG_TRACE("ImageIOExr", "read(): ", "Read ImageInfo: ", fileInfo.ToString());
 
         auto layerMap = fileInfo.layers;
         int width   = fileInfo.width;
@@ -69,8 +72,10 @@ namespace dmxdenoiser
 
         for(const auto& [layerName, exrLayerName] : layers)
         {
-            if (!layerMap.hasLayer(exrLayerName))
+            if (!layerMap.hasLayer(exrLayerName)) {
+                DMX_LOG_ERROR("ImageIOExr", "read(): ", "Layer " + exrLayerName + " does not exist.", "layers arg: ", ToString(layers));
                 throw std::runtime_error("Layer " + exrLayerName + " does not exist.");
+            }
             
             auto channels = layerMap.getLayer(exrLayerName)->channels;
 
@@ -152,7 +157,8 @@ namespace dmxdenoiser
     void ImageIOExr::write(
             const std::string& filename,
             const DMXImage& img,
-            const std::vector<std::string>& layers) const
+            const std::vector<std::string>& layers,
+            int frame) const
     {
         int width = img.width();
         int height = img.height();

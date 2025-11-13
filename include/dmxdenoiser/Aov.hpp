@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <string>
+#include <sstream>
 #include <string_view>
 #include <map>
 #include <vector>
@@ -60,6 +61,15 @@ namespace dmxdenoiser
             }
         }
         return true;
+    }
+
+    inline std::string ToString(const AovDictionary& aovs)
+    {   
+        std::ostringstream oss;
+        oss << "AovDictionary:\n";
+        for(const auto& [l, r] : aovs)
+            oss << "\t[" << l << ", " << r << "]\n";
+        return oss.str();
     }
 
 } // namespace dmxdenoiser

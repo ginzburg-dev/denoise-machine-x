@@ -61,6 +61,7 @@ cmake -S . -B build -G Ninja ^
 cmake --build build -j16  && ^
 ctest --test-dir build --output-on-failure --verbose -j16
 
+exrinfo -a <image.exr> - exr header info
 
 cmake --preset mac-cpu-debug
 cmake --build --preset mac-cpu-debug -j16

@@ -32,7 +32,8 @@ namespace dmxdenoiser
         else
         {
             m_filterInfo += "\tradius (default) = \n" + std::to_string(m_radius) + "\n";
-            DMX_LOG_TRACE(Name(), "setParams(): 'radius' parameter not set, using default: \n", std::to_string(m_radius));
+            DMX_LOG_TRACE(Name(), "setParams(): 'radius' parameter not set, using default: \n",
+                std::to_string(m_radius));
         }
 
         if (auto v = params.getSingleParam<int>("patchRadius")) {
@@ -53,7 +54,8 @@ namespace dmxdenoiser
         else
         {
             m_filterInfo += "\tsigmaBeauty (default) = \n" + std::to_string(m_sigmaBeauty) + "\n";
-            DMX_LOG_TRACE(Name(), "setParams(): 'sigmaBeauty' parameter not set, using default: \n", std::to_string(m_sigmaBeauty));
+            DMX_LOG_TRACE(Name(), "setParams(): 'sigmaBeauty' parameter not set, using default: \n",
+                std::to_string(m_sigmaBeauty));
         }
 
         if (auto v = params.getSingleParam<float>("sigmaAlbedo")) {
@@ -63,7 +65,8 @@ namespace dmxdenoiser
         else
         {
             m_filterInfo += "\tsigmaAlbedo (default) = \n" + std::to_string(m_sigmaAlbedo) + "\n";
-            DMX_LOG_TRACE(Name(), "setParams(): 'sigmaAlbedo' parameter not set, using default: \n", std::to_string(m_sigmaAlbedo));
+            DMX_LOG_TRACE(Name(), "setParams(): 'sigmaAlbedo' parameter not set, using default: \n",
+                std::to_string(m_sigmaAlbedo));
         }
 
         if (auto v = params.getSingleParam<float>("sigmaNormal")) {
@@ -110,7 +113,8 @@ namespace dmxdenoiser
     {
         ThreadPool* pool = m_backendResource.threadPool;
         if(!pool)
-            DMX_LOG_WARNING(Name(), "runFilterCPU(): no ThreadPool available; running single-threaded");
+            DMX_LOG_WARNING(Name(), 
+                "runFilterCPU(): no ThreadPool available; running single-threaded");
 
         float eps = 1e-12f;
 
@@ -134,11 +138,14 @@ namespace dmxdenoiser
             parallelFor(0, to_i64(height), [&](std::int64_t y) {
                 for(std::int64_t x = 0; x < to_i64(width); ++x)
                 {
-                    // TODO: Layering - apply weights from beauty to all the layers
-                    // std::vector<PixelRGBA> orig()
                     PixelRGBA orig = input.get(to_int(x), to_int(y), frame, beautyLayerIndex);
-                    //for(auto& layer : layers)
-                    PixelRGBA sum = {0.0f, 0.0f, 0.0f, 0.0f};
+
+                    std::vector<PixelRGBA> origPixByLayers(layers.size()); // Vector with layers RGBA of origin pixel
+                    for(std::size_t i = 0; i < layers.size(); ++i)
+                        origPixByLayers[i] = input.get(to_int(x), to_int(y), frame, layers[i]);
+
+                    std::vector<PixelRGBA> sum(layers.size(), {0.0f, 0.0f, 0.0f, 0.0f});
+
                     float weightSum = 0.f;
                     for(int ky = -m_radius; ky <= m_radius; ++ky)
                         for(int kx = -m_radius; kx <= m_radius; ++kx)
@@ -147,6 +154,9 @@ namespace dmxdenoiser
                             int py = std::clamp(to_int(y) + ky, 0, height - 1);
 
                             PixelRGBA pixBeautyP = input.get(px, py, frame, beautyLayerIndex);
+                            std::vector<PixelRGBA> pPixByLayers(layers.size());
+                            for(std::size_t i = 0; i < layers.size(); ++i)
+                                pPixByLayers[i] = input.get(px, py, frame, layers[i]);
 
                             float ssdBeauty = 0.f;
                             float ssdAlbedo = 0.f;
@@ -200,15 +210,20 @@ namespace dmxdenoiser
                             if (isNormal) w *= std::exp(-ssdNormal/std::max(eps, m_sigmaNormal*m_sigmaNormal));
                             if (isDepth) w *= std::exp(-ssdDepth/std::max(eps, m_sigmaDepth*m_sigmaDepth));
                             weightSum += w;
-                            sum += w * pixBeautyP;
-                        }
-                    if (weightSum > 0.0f) {
-                        sum /= weightSum;
-                    } else {
-                        sum = orig;
+
+                            // Sum weighted values for all layers
+                            for(std::size_t i = 0; i < pPixByLayers.size(); ++i)
+                                sum[i] += w * pPixByLayers[i];
                     }
-                    sum = blendPixels(orig, sum, m_strength, m_filterAlpha);
-                    output.at(to_int(x), to_int(y), frame, beautyLayerIndex) = sum;
+                    for(std::size_t i = 0; i < layers.size(); ++i) {
+                        if (weightSum > 0.0f) {
+                            sum[i] /= weightSum;
+                        } else {
+                            sum[i] = origPixByLayers[i];
+                        }
+                        sum[i] = blendPixels(origPixByLayers[i], sum[i], m_strength, m_filterAlpha);
+                        output.at(to_int(x), to_int(y), frame, layers[i]) = sum[i];
+                    }
                 }
             }, pool);
         }

@@ -1,4 +1,4 @@
-.PHONY: build-mac-cpu-dev build-mac-metal-dev build-mac-cpu-debug build-mac-metal-debug
+.PHONY: all
 
 # Mac
 build-mac-cpu-dev:

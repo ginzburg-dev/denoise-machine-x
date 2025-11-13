@@ -1,15 +1,17 @@
+FILTER-004: NLMFilter CPU layers - forest doesn't save properly / missed channels
+FILTER-005: NLM GPU
+REFACTOR-001: Move function definitions from headers to cpp files where possible
+REFACTOR-002: Logging process. Filtering etc.
+MEMORY-001: ? UMImage: unified memory allocation for CUDA
 
-FILTER-004: UMImage: unified memory allocation for CUDA
-FILTER-005: Convo and NLM CPU GPU: try to simplify pixel operations and make
-FILTER-006: ConvolutionFilter and all filters: ToString() ??
-FILTER-007: Move function definitions from headers to cpp files where possible
-
+IO-002: ImageIOExr read / write check logic (multiple files as layers cause UB)
+IO-001: Store EXR header in ImageInfo, pass it to DMXImage as metadata map, and write it back to preserve correct header.
+DMXImage-005: LayerDict / AovDictionary - check logic and refactor
+DMXImage-004: rename Data to ptr_to_data — calling x.data().data() just to retrieve a pointer feels awkward.
+DMXIMAGE-003: DMXImage: frame map (to compute mv guidience).
 DMXIMAGE-001: DMXImage: Duplicate or copy layers from one image to another (for Filter::convolve2D())
 DMXIMAGE-002: DMXImage: Frame count should be odd.
-DMXIMAGE-003: DMXImage: frame map (to compute mv guidience)
-DMXImage: rename Data to ptr_to_data — calling x.data().data() just to retrieve a pointer feels awkward.
 ImageIOExr: separate dataWindow and displayWindow in params, fix read, write and ImageInfo to read actual display resolution ??
-Store EXR header in ImageInfo, pass it to DMXImage as metadata map, and write it back to preserve correct header.
 
 DenoiserParams: params
 ImageSequence: Add multi-frame logic (frame logic)
