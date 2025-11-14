@@ -1,0 +1,23 @@
+{
+    "ConvolutionFilter": {
+        "strength": 1.0,
+        "filterAlpha": false,
+        "divideAlbedo": true,
+        "kernel": {
+            "name": "Gaussian",
+            "size": 7,
+            "sigma": 1
+        }
+    },
+    "NLMFilter": {
+        "strength": 1.0,
+        "filterAlpha": false,
+        "divideAlbedo": true,
+        "radius": 4,
+        "patchRadius": 3,
+        "sigmaBeauty": 1.0,
+        "sigmaAlbedo": 1.0,
+        "sigmaNormal": 1.0,
+        "sigmaDepth ": 1.0
+    }
+}

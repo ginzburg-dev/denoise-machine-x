@@ -5,6 +5,7 @@ Thumbs.db
 /build*
 /Testing/
 *.dSYM
+*.log
 /.vscode/
 /.VSCodeCounter/
 /vcpkg/

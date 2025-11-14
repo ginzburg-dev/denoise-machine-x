@@ -2,6 +2,7 @@
 
 #include "TestConfig.hpp"
 #include "AssertLogContains.hpp"
+#include <dmxdenoiser/Aov.hpp>
 #include <dmxdenoiser/Backend.hpp>
 #include <dmxdenoiser/DMXImage.hpp>
 #include <dmxdenoiser/FilterKernels.hpp>
@@ -103,16 +104,13 @@ void applyFilterToImageFile(
     params.addBackendResource("backendResource", res);
     EXPECT_NO_THROW(NLMFilter->setParams(params));
 
-    EXPECT_NO_THROW(NLMFilter->apply(img, {"beauty", "albedo", "normal", "depth" }));
+    std::vector<std::string> outLayers{};
+    if(filterAllLayers)
+        outLayers = {"beauty", "albedo", "normal", "depth" };
+
+    EXPECT_NO_THROW(NLMFilter->apply(img, outLayers));
 
     // Write result to EXR
-    std::vector<std::string> outLayers{};
-    if (filterAllLayers) {
-        for(const auto& [layer, chname] : aovs)
-            outLayers.push_back(layer);
-    } else {
-        outLayers.push_back({"beauty"});
-    }
 
     if (filenameBeauty != "")
         io->write(outputFileName+"_beauty.exr", img, {"beauty"} );
@@ -165,8 +163,8 @@ TEST_F(NLMFilterTest, ApplyNLMFilterKernelToTheImagePalmAllLayers)
             DMX_LOG_TRACE("NLMFilter_test", "Layer name: ", name, ", Channel name: ", ch.name);
 
     AovDictionary aovs = { 
-        {"beauty", "rgba"},
-        {"layer1", "layer1"}
+        {"beauty", "default"},
+        {"diffuse", "diffuse"}
     };
 
     dmxdenoiser::DMXImage img{info.width, info.height, 1, LayerDictionary{aovs}};
@@ -191,17 +189,17 @@ TEST_F(NLMFilterTest, ApplyNLMFilterKernelToTheImagePalmAllLayers)
     EXPECT_NO_THROW(NLMFilter->apply(img));
 
     // Write result to EXR
-    io->write(outputFileName, img, {"beauty", "layer1"});
+    io->write(outputFileName, img, {"beauty", "diffuse"});
 }
 
 #if DMX_ENABLE_HEAVY_TESTS
 TEST_F(NLMFilterTest, ApplyNLMFilterKernelToTheImageForest)
 {
     ThreadPool threadPool(0);
-    std::string filenameBeauty = "../examples/sample_forest/TGB0203070_env_mid_anim_rgba.0001.exr";
-    std::string filenameAlbedo = "../examples/sample_forest/TGB0203070_env_mid_anim_albedo.0001.exr";
-    std::string filenameNormal = "../examples/sample_forest/TGB0203070_env_mid_anim_normal.0001.exr";
-    std::string filenameDepth = "../examples/sample_forest/TGB0203070_env_mid_anim_depth.0001.exr";
+    std::string filenameBeauty = "../examples/sample_forest/forest_rgba.exr";
+    std::string filenameAlbedo = "../examples/sample_forest/forest_albedo.exr";
+    std::string filenameNormal = "../examples/sample_forest/forest_normal.exr";
+    std::string filenameDepth = "../examples/sample_forest/forest_depth.exr";
     std::string outputFileName = "../tests/test_files/forest_nlm_2_1";
     int radius = 2;
     int patchRadius = 1;
@@ -209,40 +207,123 @@ TEST_F(NLMFilterTest, ApplyNLMFilterKernelToTheImageForest)
     float sigmaAlbedo = 0.3f;
     float sigmaNormal = 0.45f;
     float sigmaDepth = 1.0f;
-    applyFilterToImageFile(filenameBeauty, filenameAlbedo, filenameNormal, filenameDepth, 
-                            outputFileName, radius, patchRadius, sigmaBeauty, sigmaAlbedo, 
-                            sigmaNormal, sigmaDepth, &threadPool, 
-                            {
-                                {"beauty", "default"},
-                                {"albedo", "default"},
-                                {"normal", "default"},
-                                {"depth", "depth"}
-                            }, Backend::CPU, false);
+    AovDictionary aovs = { 
+        {"beauty", "default"},
+        {"albedo", "default"},
+        {"normal", "default"},
+        {"depth", "depth"}
+    };
+    std::unique_ptr<ImageIO> io = ImageIO::create(filenameBeauty);
+    auto info = io->getImageInfo(filenameBeauty);
+    for (const auto& [name, exrName] : info.layers.data())
+        for (const auto& ch : exrName.channels)
+            DMX_LOG_TRACE("NLMFilter_test", "Layer name: ", name, ", Channel name: ", ch.name);
+
+    DMXImage img{info.width, info.height, 1, LayerDictionary{aovs}};
+    if (filenameBeauty != "")
+        io->read(filenameBeauty, img, 0, AovDictionary{ {"beauty", aovs.at("beauty")} });
+    else
+        std::clog << "Beauty channel was not provided\n";
+    if (filenameAlbedo != "")
+        io->read(filenameAlbedo, img, 0, AovDictionary{ {"albedo", aovs.at("albedo")} });
+    if (filenameNormal != "")
+        io->read(filenameNormal, img, 0, AovDictionary{ {"normal", aovs.at("normal")} });
+    if (filenameDepth != "")
+        io->read(filenameDepth, img, 0, AovDictionary{ {"depth", aovs.at("depth")} });
+
+    auto NLMFilter = FilterFactory::instance().create("NLMFilter");
+    ParamDictionary params;
+    params.addInt("radius", radius);
+    params.addInt("patchRadius", patchRadius);
+    params.addFloat("sigmaBeauty", sigmaBeauty);
+    params.addFloat("sigmaAlbedo", sigmaAlbedo);
+    params.addFloat("sigmaNormal", sigmaNormal);
+    params.addFloat("sigmaDepth", sigmaDepth);
+    params.addBackend("backend", Backend::CPU);
+    BackendResource res;
+    res.threadPool = &threadPool;
+    params.addBackendResource("backendResource", res);
+    EXPECT_NO_THROW(NLMFilter->setParams(params));
+    std::vector<std::string> outLayers{};
+    outLayers = {}; //{"beauty", "albedo", "normal", "depth" };
+    EXPECT_NO_THROW(NLMFilter->apply(img, outLayers));
+    // Write result to EXR
+    if (filenameBeauty != "")
+        io->write(outputFileName+"_beauty.exr", img, {"beauty"} );
+    else
+        std::clog << "Beauty channel was not provided\n";
+    if (filenameAlbedo != "")
+        io->write(outputFileName+"_albedo.exr", img, {"albedo"} );
+    if (filenameNormal != "")
+        io->write(outputFileName+"_normal.exr", img, {"normal"} );
+    if (filenameDepth != "")
+        io->write(outputFileName+"_depth.exr", img, {"depth"} );
 }
 
 TEST_F(NLMFilterTest, ApplyNLMFilterKernelToTheImageForestAllLayers)
 {
     ThreadPool threadPool(0);
-    std::string filenameBeauty = "../examples/sample_forest/TGB0203070_env_mid_anim_rgba.0001.exr";
-    std::string filenameAlbedo = "../examples/sample_forest/TGB0203070_env_mid_anim_albedo.0001.exr";
-    std::string filenameNormal = "../examples/sample_forest/TGB0203070_env_mid_anim_normal.0001.exr";
-    std::string filenameDepth = "../examples/sample_forest/TGB0203070_env_mid_anim_depth.0001.exr";
-    std::string outputFileName = "../tests/test_files/forest_nlm_2_1_all_layers.exr";
+    std::string filenameBeauty = "../examples/sample_forest/forest_rgba.exr";
+    std::string filenameAlbedo = "../examples/sample_forest/forest_albedo.exr";
+    std::string filenameNormal = "../examples/sample_forest/forest_normal.exr";
+    std::string filenameDepth = "../examples/sample_forest/forest_depth.exr";
+    std::string outputFileName = "../tests/test_files/forest_nlm_2_1_allLayers";
     int radius = 2;
     int patchRadius = 1;
     float sigmaBeauty = 10.0f;
-    float sigmaAlbedo = 10.f;
-    float sigmaNormal = 10.f;
-    float sigmaDepth = 10.f;
-    applyFilterToImageFile(filenameBeauty, filenameAlbedo, filenameNormal, filenameDepth, 
-                            outputFileName, radius, patchRadius, sigmaBeauty, sigmaAlbedo, 
-                            sigmaNormal, sigmaDepth, &threadPool, 
-                            {
-                                {"beauty", "default"},
-                                {"albedo", "default"},
-                                {"normal", "default"},
-                                {"depth", "depth"}
-                            },
-                            Backend::CPU, true);
+    float sigmaAlbedo = 0.3f;
+    float sigmaNormal = 0.45f;
+    float sigmaDepth = 1.0f;
+    AovDictionary aovs = { 
+        {"beauty", "default"},
+        {"albedo", "default"},
+        {"normal", "default"},
+        {"depth", "depth"}
+    };
+    std::unique_ptr<ImageIO> io = ImageIO::create(filenameBeauty);
+    auto info = io->getImageInfo(filenameBeauty);
+    for (const auto& [name, exrName] : info.layers.data())
+        for (const auto& ch : exrName.channels)
+            DMX_LOG_TRACE("NLMFilter_test", "Layer name: ", name, ", Channel name: ", ch.name);
+
+    DMXImage img{info.width, info.height, 1, LayerDictionary{aovs}};
+    if (filenameBeauty != "")
+        io->read(filenameBeauty, img, 0, AovDictionary{ {"beauty", aovs.at("beauty")} });
+    else
+        std::clog << "Beauty channel was not provided\n";
+    if (filenameAlbedo != "")
+        io->read(filenameAlbedo, img, 0, AovDictionary{ {"albedo", aovs.at("albedo")} });
+    if (filenameNormal != "")
+        io->read(filenameNormal, img, 0, AovDictionary{ {"normal", aovs.at("normal")} });
+    if (filenameDepth != "")
+        io->read(filenameDepth, img, 0, AovDictionary{ {"depth", aovs.at("depth")} });
+
+    auto NLMFilter = FilterFactory::instance().create("NLMFilter");
+    ParamDictionary params;
+    params.addInt("radius", radius);
+    params.addInt("patchRadius", patchRadius);
+    params.addFloat("sigmaBeauty", sigmaBeauty);
+    params.addFloat("sigmaAlbedo", sigmaAlbedo);
+    params.addFloat("sigmaNormal", sigmaNormal);
+    params.addFloat("sigmaDepth", sigmaDepth);
+    params.addBackend("backend", Backend::CPU);
+    BackendResource res;
+    res.threadPool = &threadPool;
+    params.addBackendResource("backendResource", res);
+    EXPECT_NO_THROW(NLMFilter->setParams(params));
+    std::vector<std::string> outLayers{};
+    outLayers = {"beauty", "albedo", "normal", "depth" };
+    EXPECT_NO_THROW(NLMFilter->apply(img, outLayers));
+    // Write result to EXR
+    if (filenameBeauty != "")
+        io->write(outputFileName+"_beauty.exr", img, {"beauty"} );
+    else
+        std::clog << "Beauty channel was not provided\n";
+    if (filenameAlbedo != "")
+        io->write(outputFileName+"_albedo.exr", img, {"albedo"} );
+    if (filenameNormal != "")
+        io->write(outputFileName+"_normal.exr", img, {"normal"} );
+    if (filenameDepth != "")
+        io->write(outputFileName+"_depth.exr", img, {"depth"} );
 }
 #endif

@@ -1,5 +1,11 @@
+FILTER-007: Denoiser, Parser
+
+ML-001: Py training module
+ML-002: Train model
+
 FILTER-004: NLMFilter CPU layers - forest doesn't save properly / missed channels
 FILTER-005: NLM GPU
+FILTER-006: Premult / Unpremult
 REFACTOR-001: Move function definitions from headers to cpp files where possible
 REFACTOR-002: Logging process. Filtering etc.
 MEMORY-001: ? UMImage: unified memory allocation for CUDA

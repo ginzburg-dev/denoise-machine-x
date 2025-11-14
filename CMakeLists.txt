@@ -45,7 +45,7 @@ FetchContent_MakeAvailable(OpenEXR)
 # Sources
 file(GLOB_RECURSE SRC_CPP CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/src/*.cpp)
 file(GLOB_RECURSE SRC_CU  CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/src/*.cu)
-set(CLI_MAIN ${CMAKE_SOURCE_DIR}/cli/main.cpp)
+set(CLI_MAIN ${CMAKE_SOURCE_DIR}/cli/dmxdenoiser/main.cpp)
 
 if(BUILD_CUDA)
   enable_language(CUDA)

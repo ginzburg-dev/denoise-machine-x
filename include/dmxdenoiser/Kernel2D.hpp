@@ -77,7 +77,7 @@ namespace dmxdenoiser
             {
                 for (int y = 0; y < m_size; ++y)
                 {
-                    oss << sIndent << "    [";
+                    oss << sIndent << "\t[";
                     for (int x = 0; x < m_size; ++x)
                     {
                         oss << std::fixed << std::setprecision(4) << (*this)(y, x);
