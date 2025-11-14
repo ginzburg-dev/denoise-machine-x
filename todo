@@ -8,7 +8,8 @@ FILTER-005: NLM GPU
 FILTER-006: Premult / Unpremult
 REFACTOR-001: Move function definitions from headers to cpp files where possible
 REFACTOR-002: Logging process. Filtering etc.
-MEMORY-001: ? UMImage: unified memory allocation for CUDA
+REFACTOR-002: LayerDict addLayer, getLayer - change to get add
+MEMORY-001: ? UMImage: unified memory allocation for CUDA, https://github.com/joshbainbridge/cuda-example/blob/main/defines.h
 
 IO-002: ImageIOExr read / write check logic (multiple files as layers cause UB)
 IO-001: Store EXR header in ImageInfo, pass it to DMXImage as metadata map, and write it back to preserve correct header.

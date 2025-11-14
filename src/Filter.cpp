@@ -136,11 +136,11 @@ namespace dmxdenoiser
         if (auto v = params.getSingleParam<BackendResource>("backendResource"))
         {
             m_backendResource = *v;
-            m_filterInfo += "\tbackendResource (set) = \n" + m_backendResource.ToString(10) + "\n";
+            m_filterInfo += "\tbackendResource (set) = \n" + m_backendResource.ToString(8) + "\n";
         }
         else
         {
-            m_filterInfo += "\tbackendResource (default) = \n" + m_backendResource.ToString(10) + "\n";
+            m_filterInfo += "\tbackendResource (default) = \n" + m_backendResource.ToString(8) + "\n";
             DMX_LOG_TRACE(Name(), 
                 "setParams(): 'backendResource' parameter not set, using default: \n", 
                 m_backendResource.ToString(10));

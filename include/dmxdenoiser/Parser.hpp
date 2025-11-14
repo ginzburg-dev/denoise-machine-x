@@ -8,7 +8,7 @@
 namespace dmxdenoiser
 {
 
-    Options parseArguments(int argc, char** argv);
+    Options parseArguments(int argc, char* argv[]);
 
     AovDictionary parseAov(
         const std::string& input,

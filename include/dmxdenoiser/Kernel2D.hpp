@@ -1,6 +1,7 @@
 // Kernel2D.hpp
 #pragma once
 
+#include <dmxdenoiser/Logger.hpp>
 #include <dmxdenoiser/utils/NumericUtils.hpp>
 
 #include <cmath>

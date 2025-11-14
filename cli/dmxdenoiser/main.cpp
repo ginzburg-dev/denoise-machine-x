@@ -6,7 +6,7 @@
 
 using namespace dmxdenoiser;
 
-int main(int argc, char** argv)
+int main(int argc, char* argv[])
 {
     std::cout << "DMX Denoiser v0.1.0.\n";
 

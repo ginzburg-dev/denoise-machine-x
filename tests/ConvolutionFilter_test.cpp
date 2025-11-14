@@ -79,7 +79,7 @@ TEST_F(ConvolutionFilterTest, ParametersNotSet)
     ParamDictionary params;
     //params.addKernel2D("kernel", kernel);
     //params.addBackend("backend", backend);
-    auto convoFilter = DMX_CREATE_FILTER("ConvolutionFilter");
+    auto convoFilter = DMX_CREATE_FILTER("ConvolutionFilter", nullptr);
     DMXImage img{};
     //EXPECT_THROW(convoFilter->apply(img), std::runtime_error);
 
@@ -94,9 +94,8 @@ TEST_F(ConvolutionFilterTest, ParametersNotSetInfoLog)
     ParamDictionary params;
     params.addKernel2D("kernel", FilterKernels::getBoxKernel(3));
     //params.addBackend("backend", backend);
-    auto convoFilter = DMX_CREATE_FILTER("ConvolutionFilter");
+    auto convoFilter = DMX_CREATE_FILTER("ConvolutionFilter", &params);
     DMXImage img(10, 10, 1, LayerDictionary{"beauty"});
-    EXPECT_NO_THROW(convoFilter->setParams(params));
     EXPECT_NO_THROW(convoFilter->apply(img));
 
     // Check log
@@ -110,12 +109,9 @@ TEST_F(ConvolutionFilterTest, ParametersSetFramesLayersInfoLog)
     params.addKernel2D("kernel", FilterKernels::getBoxKernel(3));
     params.addStringArray("layers", {"beauty", "diffuse", "specular", "unknown"});
     params.addIntArray("frames", {1, 2, 3, 4, 5, 6, 7, 8});
-    //params.addBackend("backend", backend);
-    auto convoFilter = DMX_CREATE_FILTER("ConvolutionFilter");
     DMXImage img(10, 10, 5, LayerDictionary{"beauty", "diffuse", "specular", "normal", "depth"});
-    EXPECT_NO_THROW(convoFilter->setParams(params));
+    auto convoFilter = DMX_CREATE_FILTER("ConvolutionFilter", &params);
     EXPECT_NO_THROW(convoFilter->apply(img));
-
     // Check log
     assertLogContains(getLogPath(), "requested frame", "requested layer", "not found", "6", "7", "8", "unknown");
 }

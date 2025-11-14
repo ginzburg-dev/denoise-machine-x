@@ -41,27 +41,13 @@ namespace dmxdenoiser
     * Maps: file path (e.g., "/path/to/image.exr") -> AOV dictionary for that file.
     * The AOV dictionary maps AOV names (e.g., "albedo", "depth") to layer names inside the file.
     * Example:
-    *   InputFilesMap files = {
+    *   InputFileAovMap files = {
     *      {"/images/shot01.exr", {{"albedo", "Diffuse"}, {"depth", "Z"}}},
     *      {"/images/shot02.exr", {{"beauty", "default"}}}
     *   };
     * @note Header: Aov.hpp
     */
-    using InputFilesMap = std::map<std::string, AovDictionary>;
-
-    inline bool hasRequiredAovs(InputFilesMap& dict)
-    {   
-        for (const auto& [filename, aovs] : dict)
-        {
-            for (const auto& [name, layer] : aovs)
-            {
-                auto it = std::find(DEFAULT_AOVS.begin(), DEFAULT_AOVS.end(), name);
-                if (it == DEFAULT_AOVS.end() || layer.empty() )
-                    return false;
-            }
-        }
-        return true;
-    }
+    using InputFileAovMap = std::map<std::string, AovDictionary>;
 
     inline std::string ToString(const AovDictionary& aovs)
     {   

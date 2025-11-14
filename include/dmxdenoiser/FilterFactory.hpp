@@ -3,6 +3,7 @@
 
 #include <dmxdenoiser/Filter.hpp>
 #include <dmxdenoiser/Logger.hpp>
+#include <dmxdenoiser/ParamDictionary.hpp>
 
 #include <functional>
 #include <memory>
@@ -55,13 +56,18 @@ namespace dmxdenoiser
         }
 
         /// Create filter by name
-        std::unique_ptr<Filter> create(const std::string& name) const
+        std::unique_ptr<Filter> create(
+            const std::string& name,
+            const ParamDictionary* params = nullptr) const
         {
             std::lock_guard<std::mutex> lock(m_mutex);
             auto it = m_creators.find(name);
             if (it != m_creators.end())
             {
-                return it->second();
+                auto filter = it->second();
+                if(params)
+                    filter->setParams(*params);
+                return filter;
             }
             DMX_LOG_ERROR("FilterFactory", "Filter not registered: " + name);
             throw std::runtime_error("Filter not registered: " + name);
@@ -79,6 +85,7 @@ namespace dmxdenoiser
 
 } // namespace dmxdenoiser
 
-#define DMX_CREATE_FILTER(NAME) FilterFactory::instance().create(NAME)
+// Example: DMX_CREATE_FILTER("ConvolutionFilter", nullptr);
+#define DMX_CREATE_FILTER(NAME, PARAMS) FilterFactory::instance().create(NAME, PARAMS)
 
 #endif // DMXDENOISER_FILTER_FACTORY_H

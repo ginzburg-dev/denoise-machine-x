@@ -3,6 +3,7 @@
 
 #include <dmxdenoiser/Aov.hpp>
 #include <dmxdenoiser/Filter.hpp>
+#include <dmxdenoiser/ParamDictionary.hpp>
 
 #include <string>
 #include <string_view>
@@ -10,7 +11,12 @@
 
 namespace dmxdenoiser
 {
-
+    struct FilterConfig 
+    {
+        std::string name{};
+        ParamDictionary params{};
+    };
+    
     struct Options
     {
         int ncores = -1;
@@ -21,7 +27,8 @@ namespace dmxdenoiser
         std::string outputFolder{};
         std::string configFile{};
         bool albedoDivide = true;
-        InputFilesMap inputs{};
+        InputFileAovMap inputs{};
+        std::vector<FilterConfig> filters{};
     };
 
 } // namespace dmxdenoiser

@@ -146,8 +146,9 @@ namespace dmxdenoiser
         oss << sIndent << "\tFrames: " << m_numFrames << "\n";
         oss << sIndent << "\tChannels: " << m_numChannels << "\n";
         oss << sIndent << "\tLayers: ";
-        for (const auto& [name, __] : m_layers.data())
+        for (const auto& [name, layerInfo] : m_layers.data())
             oss << name << ' ';
+        oss << "\n";
         return oss.str();
     }
 

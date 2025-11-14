@@ -28,9 +28,9 @@ namespace dmxdenoiser
         setLayerOffsets();
     }
 
-    LayerDictionary::LayerDictionary(const InputFilesMap& inputFilesMap)
+    LayerDictionary::LayerDictionary(const InputFileAovMap& inputFileAovMap)
     {
-        for (const auto& [key, aovs] : inputFilesMap)
+        for (const auto& [key, aovs] : inputFileAovMap)
             for (const auto& [name, layer] : aovs )
             {
                 m_layers[name] = LayerInfo{layer};

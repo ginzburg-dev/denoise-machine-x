@@ -27,7 +27,7 @@ namespace dmxdenoiser
         
         if (auto v = params.getSingleParam<Kernel2D>("kernel")) { 
             m_kernel.set(*v);
-            m_filterInfo += "\tkernel (set) = " + m_kernel.ToString() + "\n";
+            m_filterInfo += "\tkernel (set) = " + m_kernel.ToString(0, true) + "\n";
         }
         else
         {

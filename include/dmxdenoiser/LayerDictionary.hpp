@@ -24,7 +24,7 @@ namespace dmxdenoiser
         LayerDictionary(std::initializer_list<std::string_view> layerList)
             : LayerDictionary(std::vector<std::string_view>{layerList}) {}
         explicit LayerDictionary(const AovDictionary& aovDictionary);
-        explicit LayerDictionary(const InputFilesMap& inputFilesMap);
+        explicit LayerDictionary(const InputFileAovMap& inputFileAovMap);
         ~LayerDictionary() = default;
 
         void addLayer(std::string_view name, std::string_view fileLayerName = "");

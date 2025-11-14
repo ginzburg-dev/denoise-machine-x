@@ -14,15 +14,16 @@ namespace dmxdenoiser
     {
     public:
         Denoiser() = default;
-        Denoiser(const Options& opt);
-        ~Denoiser() = default;
-
+        explicit Denoiser(const Options& opt);
         void init(const Options& opt);
 
+        void run();
+
+        ~Denoiser() = default;
+
     private:
-        std::vector<std::unique_ptr<Filter>> filters{};
-        std::vector<int> frames{};
-        std::vector<std::string> layers{};
+        Options m_options{};
+        std::vector<std::unique_ptr<Filter>> m_filters{};
 
     }
 

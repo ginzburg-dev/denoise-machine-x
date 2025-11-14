@@ -42,7 +42,7 @@ TEST_F(FilterFactoryTest, CanCreateRegisteredFilter){
 }
 
 TEST_F(FilterFactoryTest, CanCreateRegisteredFilterWithDefinition){
-    auto  exampleFilter = DMX_CREATE_FILTER("ConvolutionFilter");
+    auto  exampleFilter = DMX_CREATE_FILTER("ConvolutionFilter", nullptr);
     ASSERT_NE(exampleFilter, nullptr);
     std::string exampleFilterString = exampleFilter->ToString();
     EXPECT_TRUE(exampleFilterString.find("ConvolutionFilter:") != std::string::npos);

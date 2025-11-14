@@ -43,9 +43,9 @@ namespace dmxdenoiser
     {
         std::ostringstream oss;
         oss << "ImageInfo: \n";
-        oss << "    Dimensions: " << width << " x " << height << '\n';
-        oss << "    ImageFileType: " << type << '\n';
-        oss << "    Layers: ";
+        oss << "\tDimensions: " << width << " x " << height << '\n';
+        oss << "\tImageFileType: " << type << '\n';
+        oss << "\tLayers: ";
         for (const auto& i : layers.data())
         {
             oss << i.first << ' ';
