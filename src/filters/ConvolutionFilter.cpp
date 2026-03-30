@@ -1,12 +1,13 @@
 #include <dmxdenoiser/Aov.hpp>
+#include <dmxdenoiser/Config.hpp>
 #include <dmxdenoiser/DMXImage.hpp>
-#include <dmxdenoiser/StringConversions.hpp>
 #include <dmxdenoiser/FilterFactory.hpp>
 #include <dmxdenoiser/FilterKernels.hpp>
 #include <dmxdenoiser/filters/ConvolutionCUDA.hpp>
 #include <dmxdenoiser/filters/ConvolutionFilter.hpp>
 #include <dmxdenoiser/Logger.hpp>
 #include <dmxdenoiser/Parallel.hpp>
+#include <dmxdenoiser/StringConversions.hpp>
 #include <dmxdenoiser/utils/NumericUtils.hpp>
 
 #include <optional>
@@ -93,7 +94,7 @@ namespace dmxdenoiser
             int width = input.width();
             int height = input.height();
             int ksize = m_kernel.size();
-            convolve2D_CUDA(input, output, framesIndices, layerIndices, m_kernel, m_strength, m_filterAlpha);
+            convolve2D_CUDA(input, output, frames, layers, m_kernel, m_strength, m_filterAlpha);
         #else
             DMX_LOG_ERROR(Name(), "runFilterGPU(): no CUDA build");
             throw std::runtime_error("runFilterGPU(): no CUDA build");

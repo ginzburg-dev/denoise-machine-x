@@ -1,6 +1,8 @@
 // AssertLogContains.hpp
 #pragma once
 
+#include <dmxdenoiser/Config.hpp>
+
 #include <gtest/gtest.h>
 
 #include <cassert>
