@@ -3,7 +3,6 @@ FILTER-007: Denoiser, Parser
 ML-001: Py training module
 ML-002: Train model
 
-FILTER-004: NLMFilter CPU layers - forest doesn't save properly / missed channels
 FILTER-005: NLM GPU
 FILTER-006: Premult / Unpremult
 REFACTOR-001: Move function definitions from headers to cpp files where possible
@@ -37,7 +36,6 @@ Release pipeline
 GetParameter: add defaulting
 ParseArgs: parsing inputs
 
-
 ML spatial
 ML Samples: video about collecting process
 
@@ -49,6 +47,8 @@ ImageInfo: Update ToString()
 GUI / async display
 noise analyzer
 PSNR/SSIM basic metrics
+
+cli: cg/video denoiser
 
 
         O-------------------O

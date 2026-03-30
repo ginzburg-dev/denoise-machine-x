@@ -45,7 +45,7 @@ namespace dmxdenoiser
         }
         DMX_LOG_TRACE("ImageIOExr", "read(): ", "Start reading file \"", filename, "\".");
 
-        int numChannels = DEFAULT_NUM_CHANNELS;
+        int numChannels = kDefaultNumChannels;
         
         if (!img.hasValidLayerDictionary())
             throw std::runtime_error("The DMXImage does not have an initialized LayerDictionary");

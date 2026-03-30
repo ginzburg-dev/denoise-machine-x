@@ -1,9 +1,6 @@
 // Config.hpp
 #pragma once
 
-namespace dmxdenoiser {
-    inline constexpr int DEFAULT_NUM_CHANNELS = 4; // RGBA global internal fixed size for all images
-} // namespace dmxdenoiser
 
 #ifndef NDEBUG
     #define DMX_DEBUG_BUILD 1
@@ -31,3 +28,6 @@ namespace dmxdenoiser {
     #endif
 #endif
 
+namespace dmxdenoiser {
+    inline constexpr int kDefaultNumChannels = 4; // RGBA global internal fixed size for all images
+} // namespace dmxdenoiser

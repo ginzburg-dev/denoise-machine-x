@@ -18,6 +18,7 @@
 #include <string_view>
 #include <memory>
 #include <thread>
+#include <vector>
 
 using namespace dmxdenoiser;
 
@@ -77,41 +78,37 @@ void applyFilterToImageFile(
 TEST_F(ConvolutionFilterTest, ParametersNotSet)
 {
     ParamDictionary params;
-    //params.addKernel2D("kernel", kernel);
-    //params.addBackend("backend", backend);
-    auto convoFilter = DMX_CREATE_FILTER("ConvolutionFilter", nullptr);
-    DMXImage img{};
-    //EXPECT_THROW(convoFilter->apply(img), std::runtime_error);
+    EXPECT_THROW(
+        DMX_CREATE_FILTER("ConvolutionFilter", &params), std::runtime_error 
+    );
 
     // Check log
     std::string tag{"ConvolutionFilter"};
-    std::string msg{"Kernel is empty, size=0x0"};
-    assertLogContains(getLogPath(), "WARNING", "no valid frames or layers to process", tag, msg);
+    assertLogContains(getLogPath(), "ERROR", tag);
 }
 
 TEST_F(ConvolutionFilterTest, ParametersNotSetInfoLog)
 {
     ParamDictionary params;
     params.addKernel2D("kernel", FilterKernels::getBoxKernel(3));
-    //params.addBackend("backend", backend);
     auto convoFilter = DMX_CREATE_FILTER("ConvolutionFilter", &params);
     DMXImage img(10, 10, 1, LayerDictionary{"beauty"});
     EXPECT_NO_THROW(convoFilter->apply(img));
 
     // Check log
     assertLogContains(getLogPath(), "strength",
-        "layers", "filterAlpha", "backend", "backendResource");
+        "filterAlpha", "backend", "BackendResource", "kernel");
 }
 
 TEST_F(ConvolutionFilterTest, ParametersSetFramesLayersInfoLog)
 {
     ParamDictionary params;
     params.addKernel2D("kernel", FilterKernels::getBoxKernel(3));
-    params.addStringArray("layers", {"beauty", "diffuse", "specular", "unknown"});
-    params.addIntArray("frames", {1, 2, 3, 4, 5, 6, 7, 8});
+    std::vector<std::string> layers{"beauty", "diffuse", "specular", "unknown"};
+    std::vector<int> frames{1, 2, 3, 4, 5, 6, 7, 8};
     DMXImage img(10, 10, 5, LayerDictionary{"beauty", "diffuse", "specular", "normal", "depth"});
     auto convoFilter = DMX_CREATE_FILTER("ConvolutionFilter", &params);
-    EXPECT_NO_THROW(convoFilter->apply(img));
+    EXPECT_NO_THROW(convoFilter->apply(img, layers, frames));
     // Check log
     assertLogContains(getLogPath(), "requested frame", "requested layer", "not found", "6", "7", "8", "unknown");
 }
