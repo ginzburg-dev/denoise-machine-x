@@ -1,6 +1,8 @@
 #include <dmxdenoiser/ChannelBuffer.hpp>
 #include <dmxdenoiser/DMXImage.hpp>
 #include <dmxdenoiser/PixelType.hpp>
+#include <dmxdenoiser/Logger.hpp>
+#include <dmxdenoiser/StringConversions.hpp>
 
 #include <algorithm>
 #include <cstddef>
@@ -181,8 +183,9 @@ namespace dmxdenoiser
 
     std::vector<ChannelBuffer> copyDMXImageToChannelBuffers(
         const DMXImage& img,
-        const std::vector<std::string>& layers
-        )
+        const std::vector<std::string>& layers,
+        int frame
+    )
     {
         std::vector<ChannelBuffer> buff;
         buff.resize(0);
@@ -191,6 +194,9 @@ namespace dmxdenoiser
         int height = img.height();
         int bufferSize = width * height;
         auto& pixels = img.data();
+        
+        for(int i = 0; i < layers.size(); ++i)
+            DMX_LOG_TRACE("ChannelBuffer", "copyDMXImageToChannelBuffers():", "layer[", i,"] = ", layers[i]);
 
         for(int i = 0; i < layers.size(); ++i)
         {
@@ -198,7 +204,7 @@ namespace dmxdenoiser
                 throw std::runtime_error("DMXImage does not contain \"" + layers[i] + "\" layer");
 
             auto layerInfo = img.getLayers().getLayer(layers[i]);
-            std::size_t layerBaseIndex = img.getPixelIndex(0, 0, 0, layers[i]);
+            std::size_t layerBaseIndex = img.getPixelIndex(0, 0, frame, layers[i]);
             auto layerExrName = img.getLayers().getLayer(layers[i])->originalName;
             auto layerChannels = img.getLayers().getLayer(layers[i])->channels;
             int numChannels = layerChannels.size();

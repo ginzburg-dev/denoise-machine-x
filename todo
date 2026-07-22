@@ -1,35 +1,69 @@
-Filter: avoid storing frameIndex / layerIndex as members - pass the relevant frames/layers (or indices) to applyFilter().
-Filters: refactor hardcoding including Logs - use Name() method, Backend - repeating in every filter. backend methods -> universal
-Filters: Checking Logs can pick from ConvoFilter
-UMImage: unified memory allocation for CUDA
-Convo and NLM CPU GPU: try to simplify pixel operations and make
-ConvolutionFilter and all filters: ToString() ??
-Move function definitions from headers to cpp files where possible
+1. refactor to simplify read and write. images to high level. 
+        DMXImage<N> - image with n frames
 
-DMXImage: Duplicate or copy layers from one image to another (for Filter::convolve2D())
-DMXImage: Frame count should be odd.
-DMXImage: frame map (to compute mv guidience)
-DMXImage: rename Data to ptr_to_data — calling x.data().data() just to retrieve a pointer feels awkward.
+        System AOVs:
+                enum class AOVS { BEAUTY, ALBEDO, NORMAL }
+                or enum class GuidedAOVs { ALBEDO, NORMAL }
+
+        Simplify to read low level every image to every DMX_IMAGE
+
+        Read/Write EXR - separate image type reader with spec param 
+                struct IOExr{ 
+                        Read();
+                        Write();
+                        std::map<std::string> header 
+                }
+
+        Read/parse options, read images -> create filters  -> run filters cascade ->
+
+        Readers - register all readers as plugins, choos impl in data io class.
+
+FILTER-007: Denoiser, Parser
+
+ML-001: Py training module
+ML-002: Train model
+
+FILTER-005: NLM GPU
+FILTER-006: Premult / Unpremult
+REFACTOR-001: Move function definitions from headers to cpp files where possible
+REFACTOR-002: Logging process. Filtering etc.
+REFACTOR-002: LayerDict addLayer, getLayer - change to get add
+MEMORY-001: ? UMImage: unified memory allocation for CUDA, https://github.com/joshbainbridge/cuda-example/blob/main/defines.h
+
+
+IO-001: refactor 
+
+IO-002: ImageIOExr read / write check logic (multiple files as layers cause UB) - refactor Image reading / wrighting
+IO-001: Store EXR header in ImageInfo, pass it to DMXImage as metadata map, and write it back to preserve correct header.
+
+DMXImage-005: LayerDict / AovDictionary - check logic and refactor 
+
+
+
+
+DMXImage-004: rename Data to ptr_to_data — calling x.data().data() just to retrieve a pointer feels awkward.
+DMXIMAGE-003: DMXImage: frame map (to compute mv guidience).
+DMXIMAGE-001: DMXImage: Duplicate or copy layers from one image to another (for Filter::convolve2D())
+DMXIMAGE-002: DMXImage: Frame count should be odd.
 ImageIOExr: separate dataWindow and displayWindow in params, fix read, write and ImageInfo to read actual display resolution ??
-Store EXR header in ImageInfo, pass it to DMXImage as metadata map, and write it back to preserve correct header.
 
 DenoiserParams: params
 ImageSequence: Add multi-frame logic (frame logic)
 CLI: full pipeline
 
 NML filter: CUDA
-Temporal Filter: CPU CUDA, MV estimator/generator based on MSE and mv guidence
+Temporal Filter: CPU CUDA,
+MV Generator: based on MSE and mv guidence
 ConvolutionFilter: add METAL backend implementations
 
-makegile: create filter, build, quality-check, format, etc.
+makeile: create filter, build, quality-check, format, etc.
 tools/python wrapper
 Git actions: debug / release
 BuildInfo: data from cmake, changelog, version
 Release pipeline
 
 GetParameter: add defaulting
-ParseArgs: parsing inputs
-
+ParseArgs: parsing inputs + Json
 
 ML spatial
 ML Samples: video about collecting process
@@ -42,6 +76,8 @@ ImageInfo: Update ToString()
 GUI / async display
 noise analyzer
 PSNR/SSIM basic metrics
+
+cli: cg/video denoiser
 
 
         O-------------------O
@@ -56,3 +92,10 @@ PSNR/SSIM basic metrics
         |        CLI        |
         O-------------------O
 
+
+
+Addressed:
+
+FILTER-001: Filter: avoid storing frameIndex / layerIndex as members - pass the relevant frames/layers (or indices) to applyFilter().
+FILTER-002: Filters: refactor hardcoding including Logs - use Name() method, Backend - repeating in every filter. backend methods -> universal
+FILTER-003: Filters: Checking Logs can pick from ConvoFilter

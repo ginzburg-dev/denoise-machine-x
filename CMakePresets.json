@@ -2,7 +2,7 @@
     "version": 4,
     "cmakeMinimumRequired": {
         "major": 3,
-        "minor": 23
+        "minor": 26
     },
     "configurePresets": [
     {
@@ -162,6 +162,7 @@
     "buildPresets": [
         { "name": "mac-cpu-dev", "configurePreset": "mac-cpu-dev" },
         { "name": "mac-cpu-debug", "configurePreset": "mac-cpu-debug" },
+        { "name": "linux-cpu-dev", "configurePreset": "linux-cpu-dev" },
         { "name": "linux-cpu-debug", "configurePreset": "linux-cpu-debug" },
         { "name": "linux-cpu-release", "configurePreset": "linux-cpu-release" },
         { "name": "linux-gpu-debug", "configurePreset": "linux-gpu-debug" },
@@ -196,7 +197,20 @@
                 "jobs": 16
             }
         },
-        { 
+        {
+            "name": "linux-cpu-dev",
+            "displayName": "Linux CPU Dev Tests",
+            "configurePreset": "linux-cpu-dev",
+            "output":
+            {
+                "outputOnFailure": true,
+                "verbosity": "verbose"
+            },
+            "execution": {
+                "jobs": 16
+            }
+        },
+        {
             "name": "linux-cpu-debug", 
             "displayName": "Linux CPU Debug Tests",
             "configurePreset": "linux-cpu-debug",

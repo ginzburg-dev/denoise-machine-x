@@ -5,14 +5,10 @@ Thumbs.db
 /build*
 /Testing/
 *.dSYM
+*.log
 /.vscode/
 /.VSCodeCounter/
 /vcpkg/
 /vcpkg_installed/
 
 tests/test_files/
-
-CTestTestfile.cmake
-Makefile
-cmake_install.cmake
-cuda-keyring_1.1-1_all.deb

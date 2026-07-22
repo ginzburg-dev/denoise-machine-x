@@ -8,12 +8,19 @@ namespace dmxdenoiser
     void logBuildBanner() {
 
         #if DMX_DEBUG_BUILD
-            constexpr const char* buildMode = "Debug";
+            constexpr const char* kBuildMode = "Debug";
         #else
-            constexpr const char* buildMode = "Release";
+            constexpr const char* kBuildMode = "Release";
         #endif
 
-        DMX_LOG_INFO("BuildInfo", "\"", DMX_NAME, "\" (", DMX_SHORT_NAME, "), version: ",  DMX_VERSION, ", (", DMX_BUILD_DATE,"), build mode: ", buildMode );
+        DMX_LOG_INFO(
+            "BuildInfo", 
+            "\"", kProductName, "\" "
+            "(", kProductShortName, "), ",
+            "version: ", kBuildVersion, ", ",
+            "(", kBuildDate, "), ",
+            "build mode: ", kBuildMode
+        );
     }
 
 } // namespace dmxdenoiser 

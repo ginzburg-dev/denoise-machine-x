@@ -21,7 +21,7 @@ namespace dmxdenoiser
         int height{};
         int numFrames{};
         LayerDictionary layers{};
-        int numChannels = DEFAULT_NUM_CHANNELS;
+        int numChannels = kDefaultNumChannels;
     };
 
     class DMXImage
@@ -29,11 +29,12 @@ namespace dmxdenoiser
     public:
         DMXImage() = default;
         DMXImage(
-                int width, 
-                int height, 
-                int numFrames, 
-                LayerDictionary layers, 
-                int numChannels = DEFAULT_NUM_CHANNELS);
+            int width,
+            int height,
+            int numFrames,
+            LayerDictionary layers,
+            int numChannels = kDefaultNumChannels
+        );
         DMXImage(const DMXImageOptions& opt);
         
         DMXImage(const DMXImage&) = default;
@@ -45,7 +46,8 @@ namespace dmxdenoiser
             int height, 
             int numFrames, 
             LayerDictionary layers, 
-            int numChannels = DEFAULT_NUM_CHANNELS);
+            int numChannels = kDefaultNumChannels
+        );
 
         int width() const { return m_width; }
         int height() const { return m_height; }
@@ -91,7 +93,7 @@ namespace dmxdenoiser
         int m_width{};
         int m_height{};
         int m_numFrames{};
-        int m_numChannels = DEFAULT_NUM_CHANNELS;
+        int m_numChannels = kDefaultNumChannels;
         LayerDictionary m_layers;
         std::vector<float> m_pixels;
 

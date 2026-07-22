@@ -142,12 +142,13 @@ namespace dmxdenoiser
 
         std::ostringstream oss;
         oss << sIndent << "DMXImage: \n";
-        oss << sIndent << "    Dimensions: " << m_width << " x " << m_height << "\n";
-        oss << sIndent << "    Frames: " << m_numFrames << "\n";
-        oss << sIndent << "    Channels: " << m_numChannels << "\n";
-        oss << sIndent << "    Layers: ";
-        for (const auto& [name, __] : m_layers.data())
+        oss << sIndent << "\tDimensions: " << m_width << " x " << m_height << "\n";
+        oss << sIndent << "\tFrames: " << m_numFrames << "\n";
+        oss << sIndent << "\tChannels: " << m_numChannels << "\n";
+        oss << sIndent << "\tLayers: ";
+        for (const auto& [name, layerInfo] : m_layers.data())
             oss << name << ' ';
+        oss << "\n";
         return oss.str();
     }
 

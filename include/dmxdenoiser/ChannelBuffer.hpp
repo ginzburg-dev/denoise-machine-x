@@ -82,11 +82,13 @@ namespace dmxdenoiser
         const std::vector<ChannelBuffer>& buff,
         std::string_view layer, 
         int frame, 
-        DMXImage& img);
+        DMXImage& img
+    );
 
     std::vector<ChannelBuffer> copyDMXImageToChannelBuffers(
         const DMXImage& img,
-        const std::vector<std::string>& layers
-        );
+        const std::vector<std::string>& layers,
+        int frame = 0
+    );
     
 } // namespace dmxdenoiser

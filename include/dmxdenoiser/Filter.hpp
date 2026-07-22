@@ -18,42 +18,73 @@ namespace dmxdenoiser
 
     /*Abstract Base*/
     struct Filter
-    {   
+    {
+        // Default parameters
         float m_strength = 1.0f; // Mixing factor with the original, range [0.0, 1.0]
         bool m_filterAlpha = false;
-        std::vector<int> m_frames;
-        std::vector<std::string> m_layers;
         Backend m_backend = Backend::CPU;
         BackendResource m_backendResource;
+        std::string m_filterInfo{};
 
         virtual const char* Name() const = 0;
+
         virtual void setParams(const ParamDictionary& params) = 0;
-        void apply(const DMXImage& in, DMXImage& out) const { applyFilter(in, out); }
-        void apply(DMXImage& inOut) const { 
-            DMXImage tmp{ inOut };
-            applyFilter(inOut, tmp);
-            inOut = std::move(tmp);
-        }
+
+        void apply(
+            const DMXImage& in,
+            DMXImage& out, 
+            const std::vector<std::string>& layers = {},
+            const std::vector<int>& frames = {}
+        ) const;
+        void apply(
+            DMXImage& inOut,
+            const std::vector<std::string>& layers = {},
+            const std::vector<int>& frames = {}
+        ) const;
 
         // String representation of the filter name and parameters for logging.
-        virtual std::string ToString() const = 0; 
+        std::string ToString() const; 
         
         virtual ~Filter() = default;
 
     protected:
         virtual void resetParams() = 0;
 
+        // Apply implementations of the filter. NVI pattern
+        virtual void runFilterCPU(
+            const DMXImage& input,
+            DMXImage& output,
+            const std::vector<int>& layers,
+            const std::vector<int>& frames
+        ) const = 0;
+
+        virtual void runFilterGPU(
+            const DMXImage& input,
+            DMXImage& output,
+            const std::vector<int>& layers,
+            const std::vector<int>& frames
+        ) const;
+        
+        virtual void runFilterMETAL(
+            const DMXImage& input,
+            DMXImage& output,
+            const std::vector<int>& layers,
+            const std::vector<int>& frames
+        ) const;
+
     private:
-        // Apply implementation of the filter
-        virtual void applyFilter(const DMXImage& in, DMXImage& out) const = 0;
+        std::vector<int> resolveFrameIndices(
+            const DMXImage& input,
+            const std::vector<int>& frames
+        ) const;
+        std::vector<int> resolveLayerIndices(
+            const DMXImage& input,
+            const std::vector<std::string>& layers
+        ) const;
+
     };
 
-    inline void Filter::resetParams() {
-        m_strength = 1.0f; m_filterAlpha = false;
-        m_frames.clear(); m_layers.clear();
-        m_backend = Backend::CPU; m_backendResource = {};
-    };
-    
+
     /**
     * @brief Maps filter names to their parameter dictionaries.
     *

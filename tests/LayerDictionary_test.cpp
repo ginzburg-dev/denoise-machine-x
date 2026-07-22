@@ -62,7 +62,7 @@ TEST(LayerDictionary, CreateLayerDictionaryWithInputFilesMap)
 {
     std::vector<std::string> aovsRef{"beauty", "albedo", "normal", "depth"};
     std::vector<std::string> aovsNamesRef{"default", "albedo", "normal", "default"};
-    InputFilesMap filesMap{ 
+    InputFileAovMap filesMap{ 
         {"file1.exr", {{"albedo", "albedo"}, {"beauty","default"}}},
         {"file2.exr", {{"depth", "default"}, {"normal", "normal"}}}
     };

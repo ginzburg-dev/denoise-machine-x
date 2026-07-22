@@ -1,8 +1,9 @@
-#ifndef DMXDENOISER_DENOISER_PARAMS_H
-#define DMXDENOISER_DENOISER_PARAMS_H
+// Options.hpp
+#pragma once
 
 #include <dmxdenoiser/Aov.hpp>
 #include <dmxdenoiser/Filter.hpp>
+#include <dmxdenoiser/ParamDictionary.hpp>
 
 #include <string>
 #include <string_view>
@@ -11,19 +12,19 @@
 namespace dmxdenoiser
 {
 
-    struct DenoiserParams
+    struct Options
     {
         int ncores = -1;
         bool gpu = false;
         int startFrame;
         int endFrame;
-        std::string inputFileName{};
-        std::string outputFileName{};
+        std::string inputFolder{};
+        std::string outputFolder{};
+        std::string configFile{};
         bool albedoDivide = true;
-        InputFilesMap inputs{};
-        FilterMap filters{};
+        InputFileAovMap inputs{};
+        std::vector<Filter> filters{};
     };
 
 } // namespace dmxdenoiser
 
-#endif // DMXDENOISER_DENOISER_PARAMS_H

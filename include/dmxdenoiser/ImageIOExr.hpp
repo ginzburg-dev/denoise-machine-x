@@ -14,16 +14,6 @@
 namespace dmxdenoiser
 {
 
-    struct ExrOutputChannel
-    {
-        std::string name{};
-        Imf::PixelType pixelType{};
-        char* ptr = nullptr;
-        ExrOutputChannel(const std::string& name_, Imf::PixelType pixelType_, char* ptr_)
-            : name{name_}, pixelType{pixelType_}, ptr{ptr_}
-        {}
-    };
-
     constexpr std::string_view exrCompressionName(Imf::Compression c) noexcept {
         switch (c) {
             case Imf::NO_COMPRESSION:   return "NONE";
@@ -56,7 +46,8 @@ namespace dmxdenoiser
         void write(
             const std::string& filename,
             const DMXImage& img,
-            const std::vector<std::string>& layers) const override;
+            const std::vector<std::string>& layers,
+            int frame = 0) const override;
 
         ImageInfo getImageInfo(const std::string& filename) const override;
         

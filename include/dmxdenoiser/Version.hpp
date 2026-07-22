@@ -1,8 +1,15 @@
 // Version.hpp
 #pragma once
 
-#define DMX_NAME "denoise-machine-x"
-#define DMX_SHORT_NAME "dmxdenoiser"
-#define DMX_VERSION "0.1.0"
+#include <string>
+#include <string_view>
 
-#define DMX_BUILD_DATE __DATE__" " __TIME__
+namespace dmxdenoiser {
+
+inline constexpr const char* kProductName = "denoise-machine-x";
+inline constexpr const char* kProductShortName = "dmxdenoiser";
+inline constexpr const char* kBuildVersion = "0.1.0";
+inline constexpr const char* kBuildDate = __DATE__ " " __TIME__;
+
+} // namespace dmxdenoiser
+

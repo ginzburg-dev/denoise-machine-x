@@ -61,10 +61,10 @@ namespace dmxdenoiser
                 sIndent += " ";
 
         oss << sIndent << "BackendResource:\n";
-        oss << sIndent << "     threadPool: " << static_cast<const void*>(threadPool) << '\n';
-        oss << sIndent << "     cudaDevice: " << cudaDevice << '\n';
-        oss << sIndent << "     metalDevice: " << static_cast<const void*>(metalDevice) << '\n';
-        oss << sIndent << "     metalCommandQueue: " << static_cast<const void*>(metalCommandQueue);
+        oss << sIndent << "\tthreadPool: " << static_cast<const void*>(threadPool) << '\n';
+        oss << sIndent << "\tcudaDevice: " << cudaDevice << '\n';
+        oss << sIndent << "\tmetalDevice: " << static_cast<const void*>(metalDevice) << '\n';
+        oss << sIndent << "\tmetalCommandQueue: " << static_cast<const void*>(metalCommandQueue);
         return oss.str();
     }
 

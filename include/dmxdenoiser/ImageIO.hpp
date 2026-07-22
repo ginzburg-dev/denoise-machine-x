@@ -43,7 +43,9 @@ namespace dmxdenoiser
         virtual void write(
             const std::string& filename,
             const DMXImage& img,
-            const std::vector<std::string>& layers) const = 0;
+            const std::vector<std::string>& layers,
+            int frame = 0
+        ) const = 0;
 
         virtual ImageInfo getImageInfo(const std::string& filename) const = 0;
         

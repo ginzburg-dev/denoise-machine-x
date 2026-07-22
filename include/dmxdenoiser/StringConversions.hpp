@@ -119,4 +119,14 @@ namespace dmxdenoiser{
         return result;
     }
 
+    inline std::pair<std::string, std::string> splitString(
+        const std::string& str, const std::string& delimiter
+    ) {
+        std::size_t pos = str.find(delimiter);
+        if (pos == std::string::npos) {
+            return {str, ""};
+        }
+        return {str.substr(0,pos), str.substr(pos+1)};
+    }
+
 } // namespace dmxdenoiser

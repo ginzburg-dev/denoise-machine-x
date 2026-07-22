@@ -36,24 +36,17 @@ namespace dmxdenoiser
 
         void setParams(const ParamDictionary& params) override;
 
-        std::string ToString() const override;
-
     protected:
-        void resetParams() override { 
-            Filter::resetParams();
-            m_radius = 4;
-            m_patchRadius = 3;
-            m_sigmaBeauty = 1.f;
-            m_sigmaAlbedo = 1.f;
-            m_sigmaNormal = 1.f;
-            m_sigmaDepth = 1.f;
-        };
+        void resetParams() override;
 
-    private:
-        void applyFilter(const DMXImage& in, DMXImage& out) const override;
-        void runFilterCPU(const DMXImage& input, DMXImage& output) const;
-        void runFilterGPU(const DMXImage& input, DMXImage& output) const;
-        void runFilterMETAL(const DMXImage& input, DMXImage& output) const;
+        // Apply implementations of the filter. NVI pattern
+        void runFilterCPU(
+            const DMXImage& input,
+            DMXImage& output,
+            const std::vector<int>& layers,
+            const std::vector<int>& frames
+        ) const override;
+
     };
 
 } // namespace dmxdenoiser

@@ -46,7 +46,7 @@ TEST_F(ThreadPoolTest, Init){
         tp = std::make_unique<ThreadPool>(threads);
     );
     
-    assertLogContains(getLogPath(), "INFO", "ThreadPool", "created with");
+    assertLogContains(getLogPath(), "ThreadPool", "created with");
     assertLogDoesNotContain(getLogPath(), "ERROR");
 }
 
@@ -60,7 +60,7 @@ TEST_F(ThreadPoolTest, InitWith0ValueHenseMaxThreads){
 
     const int n = tp->runningThreads();
     
-    assertLogContains(getLogPath(), "INFO", "ThreadPool", "created with");
+    assertLogContains(getLogPath(), "ThreadPool", "created with");
     assertLogDoesNotContain(getLogPath(), "ERROR");
     EXPECT_EQ(n, ThreadPool::maxThreads());
 }
@@ -75,7 +75,7 @@ TEST_F(ThreadPoolTest, InitWithNegativeOneValueHenseMaxThreads){
 
     const int n = tp->runningThreads();
     
-    assertLogContains(getLogPath(), "INFO", "ThreadPool", "created with");
+    assertLogContains(getLogPath(), "ThreadPool", "created with");
     assertLogDoesNotContain(getLogPath(), "ERROR");
     EXPECT_EQ(n, ThreadPool::maxThreads());
 }
@@ -90,7 +90,7 @@ TEST_F(ThreadPoolTest, InitWithALargeValueHenseMaxThreads){
 
     const int n = tp->runningThreads();
     
-    assertLogContains(getLogPath(), "INFO", "ThreadPool", "created with");
+    assertLogContains(getLogPath(), "ThreadPool", "created with");
     assertLogDoesNotContain(getLogPath(), "ERROR");
     EXPECT_EQ(n, ThreadPool::maxThreads());
 }

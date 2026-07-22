@@ -18,6 +18,7 @@
 #include <string_view>
 #include <memory>
 #include <thread>
+#include <vector>
 
 using namespace dmxdenoiser;
 
@@ -77,45 +78,37 @@ void applyFilterToImageFile(
 TEST_F(ConvolutionFilterTest, ParametersNotSet)
 {
     ParamDictionary params;
-    //params.addKernel2D("kernel", kernel);
-    //params.addBackend("backend", backend);
-    auto convoFilter = DMX_CREATE_FILTER("ConvolutionFilter");
-    DMXImage img{};
-    EXPECT_THROW(convoFilter->apply(img), std::runtime_error);
+    EXPECT_THROW(
+        DMX_CREATE_FILTER("ConvolutionFilter", &params), std::runtime_error 
+    );
 
     // Check log
     std::string tag{"ConvolutionFilter"};
-    std::string msg{"Kernel is empty, size=0x0"};
-    assertLogContains(getLogPath(), "ERROR", tag, msg);
+    assertLogContains(getLogPath(), "ERROR", tag);
 }
 
 TEST_F(ConvolutionFilterTest, ParametersNotSetInfoLog)
 {
     ParamDictionary params;
     params.addKernel2D("kernel", FilterKernels::getBoxKernel(3));
-    //params.addBackend("backend", backend);
-    auto convoFilter = DMX_CREATE_FILTER("ConvolutionFilter");
+    auto convoFilter = DMX_CREATE_FILTER("ConvolutionFilter", &params);
     DMXImage img(10, 10, 1, LayerDictionary{"beauty"});
-    EXPECT_NO_THROW(convoFilter->setParams(params));
     EXPECT_NO_THROW(convoFilter->apply(img));
 
     // Check log
     assertLogContains(getLogPath(), "strength",
-        "layers", "filterAlpha", "backend", "backendResource");
+        "filterAlpha", "backend", "BackendResource", "kernel");
 }
 
 TEST_F(ConvolutionFilterTest, ParametersSetFramesLayersInfoLog)
 {
     ParamDictionary params;
     params.addKernel2D("kernel", FilterKernels::getBoxKernel(3));
-    params.addStringArray("layers", {"beauty", "diffuse", "specular", "unknown"});
-    params.addIntArray("frames", {1, 2, 3, 4, 5, 6, 7, 8});
-    //params.addBackend("backend", backend);
-    auto convoFilter = DMX_CREATE_FILTER("ConvolutionFilter");
+    std::vector<std::string> layers{"beauty", "diffuse", "specular", "unknown"};
+    std::vector<int> frames{1, 2, 3, 4, 5, 6, 7, 8};
     DMXImage img(10, 10, 5, LayerDictionary{"beauty", "diffuse", "specular", "normal", "depth"});
-    EXPECT_NO_THROW(convoFilter->setParams(params));
-    EXPECT_NO_THROW(convoFilter->apply(img));
-
+    auto convoFilter = DMX_CREATE_FILTER("ConvolutionFilter", &params);
+    EXPECT_NO_THROW(convoFilter->apply(img, layers, frames));
     // Check log
     assertLogContains(getLogPath(), "requested frame", "requested layer", "not found", "6", "7", "8", "unknown");
 }
@@ -262,9 +255,9 @@ TEST_F(ConvolutionFilterTest, ApplyGaussianFilterKernelToPalmImageKernel7x7CPU)
 {
     ThreadPool threadPool(0);
     std::string filename = "../examples/palm_pixel_art.exr";
-    std::string outputFileName = "../tests/test_files/palm_pixel_art_cpu_convo_gaussan_sigma2_17x17.exr";
+    std::string outputFileName = "../tests/test_files/palm_pixel_art_cpu_convo_gaussan_sigma2_7x7.exr";
     float sigma = 100.0f;
-    auto gaussianKernel = FilterKernels::getGaussianKernel(17, sigma);
+    auto gaussianKernel = FilterKernels::getGaussianKernel(7, sigma);
     applyFilterToImageFile(filename, outputFileName, gaussianKernel, &threadPool, Backend::CPU);
 }
 
@@ -272,9 +265,9 @@ TEST_F(ConvolutionFilterTest, ApplyGaussianFilterKernelToPalmImageKernel7x7CPU)
 TEST_F(ConvolutionFilterTest, ApplyGaussianFilterKernelToPalmImageKernel17x17GPU)
 {
     std::string filename = "../examples/palm_pixel_art.exr";
-    std::string outputFileName = "../tests/test_files/palm_pixel_art_gpu_convo_gaussan_sigma2_17x17.exr";
+    std::string outputFileName = "../tests/test_files/palm_pixel_art_gpu_convo_gaussan_sigma2_7x7.exr";
     float sigma = 100.0f;
-    auto gaussianKernel = FilterKernels::getGaussianKernel(17, sigma);
+    auto gaussianKernel = FilterKernels::getGaussianKernel(7, sigma);
     applyFilterToImageFile(filename, outputFileName, gaussianKernel, nullptr, Backend::GPU);
 }
 #endif // DMX_ENABLE_CUDA

@@ -16,7 +16,7 @@ namespace dmxdenoiser
         int height{};
         int numLayers{};
         int numFrames{};
-        int numChannels = DEFAULT_NUM_CHANNELS;
+        int numChannels = kDefaultNumChannels;
 
         DMX_CPU_GPU
         bool inBounds(int x, int y, int frame, int layer) const {

@@ -20,7 +20,7 @@ namespace dmxdenoiser
     ///   - "filterAlpha": bool (whether to filter alpha channel, optional)     default: false
     struct ConvolutionFilter : public Filter
     {
-        // Parameters
+        // Filter parameters
         Kernel2D m_kernel;
 
         // Required: unique filter name
@@ -38,16 +38,24 @@ namespace dmxdenoiser
 
         void setParams(const ParamDictionary& params) override;
 
-        std::string ToString() const override;
-
     protected:
-        void resetParams() override { Filter::resetParams(); m_kernel.clear(); };
+        void resetParams() override;
 
-    private:
-        void applyFilter(const DMXImage& in, DMXImage& out) const override;
-        void convolveCPU(const DMXImage& input, DMXImage& output) const;
-        void convolveGPU(const DMXImage& input, DMXImage& output) const;
-        void convolveMETAL(const DMXImage& input, DMXImage& output) const;
+        // Apply implementations of the filter. NVI pattern
+        void runFilterCPU(
+            const DMXImage& input,
+            DMXImage& output,
+            const std::vector<int>& layers,
+            const std::vector<int>& frames
+        ) const override;
+        
+        void runFilterGPU(
+            const DMXImage& input,
+            DMXImage& output,
+            const std::vector<int>& layers,
+            const std::vector<int>& frames
+        ) const override;
+
     };
 
 } // namespace dmxdenoiser
