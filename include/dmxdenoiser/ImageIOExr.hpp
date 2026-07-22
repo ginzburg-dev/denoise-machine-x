@@ -14,16 +14,6 @@
 namespace dmxdenoiser
 {
 
-    struct ExrOutputChannel
-    {
-        std::string name{};
-        Imf::PixelType pixelType{};
-        char* ptr = nullptr;
-        ExrOutputChannel(const std::string& name_, Imf::PixelType pixelType_, char* ptr_)
-            : name{name_}, pixelType{pixelType_}, ptr{ptr_}
-        {}
-    };
-
     constexpr std::string_view exrCompressionName(Imf::Compression c) noexcept {
         switch (c) {
             case Imf::NO_COMPRESSION:   return "NONE";

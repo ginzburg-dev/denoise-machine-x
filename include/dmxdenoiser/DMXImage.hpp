@@ -29,11 +29,12 @@ namespace dmxdenoiser
     public:
         DMXImage() = default;
         DMXImage(
-                int width, 
-                int height, 
-                int numFrames, 
-                LayerDictionary layers, 
-                int numChannels = kDefaultNumChannels);
+            int width,
+            int height,
+            int numFrames,
+            LayerDictionary layers,
+            int numChannels = kDefaultNumChannels
+        );
         DMXImage(const DMXImageOptions& opt);
         
         DMXImage(const DMXImage&) = default;
@@ -45,7 +46,8 @@ namespace dmxdenoiser
             int height, 
             int numFrames, 
             LayerDictionary layers, 
-            int numChannels = kDefaultNumChannels);
+            int numChannels = kDefaultNumChannels
+        );
 
         int width() const { return m_width; }
         int height() const { return m_height; }
