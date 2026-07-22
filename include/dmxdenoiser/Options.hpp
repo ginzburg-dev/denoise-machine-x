@@ -11,12 +11,7 @@
 
 namespace dmxdenoiser
 {
-    struct FilterConfig 
-    {
-        std::string name{};
-        ParamDictionary params{};
-    };
-    
+
     struct Options
     {
         int ncores = -1;
@@ -28,7 +23,7 @@ namespace dmxdenoiser
         std::string configFile{};
         bool albedoDivide = true;
         InputFileAovMap inputs{};
-        std::vector<FilterConfig> filters{};
+        std::vector<Filter> filters{};
     };
 
 } // namespace dmxdenoiser
