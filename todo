@@ -1,3 +1,23 @@
+1. refactor to simplify read and write. images to high level. 
+        DMXImage<N> - image with n frames
+
+        System AOVs:
+                enum class AOVS { BEAUTY, ALBEDO, NORMAL }
+                or enum class GuidedAOVs { ALBEDO, NORMAL }
+
+        Simplify to read low level every image to every DMX_IMAGE
+
+        Read/Write EXR - separate image type reader with spec param 
+                struct IOExr{ 
+                        Read();
+                        Write();
+                        std::map<std::string> header 
+                }
+
+        Read/parse options, read images -> create filters  -> run filters cascade ->
+
+        Readers - register all readers as plugins, choos impl in data io class.
+
 FILTER-007: Denoiser, Parser
 
 ML-001: Py training module
@@ -10,9 +30,17 @@ REFACTOR-002: Logging process. Filtering etc.
 REFACTOR-002: LayerDict addLayer, getLayer - change to get add
 MEMORY-001: ? UMImage: unified memory allocation for CUDA, https://github.com/joshbainbridge/cuda-example/blob/main/defines.h
 
-IO-002: ImageIOExr read / write check logic (multiple files as layers cause UB)
+
+IO-001: refactor 
+
+IO-002: ImageIOExr read / write check logic (multiple files as layers cause UB) - refactor Image reading / wrighting
 IO-001: Store EXR header in ImageInfo, pass it to DMXImage as metadata map, and write it back to preserve correct header.
-DMXImage-005: LayerDict / AovDictionary - check logic and refactor
+
+DMXImage-005: LayerDict / AovDictionary - check logic and refactor 
+
+
+
+
 DMXImage-004: rename Data to ptr_to_data — calling x.data().data() just to retrieve a pointer feels awkward.
 DMXIMAGE-003: DMXImage: frame map (to compute mv guidience).
 DMXIMAGE-001: DMXImage: Duplicate or copy layers from one image to another (for Filter::convolve2D())
@@ -24,17 +52,18 @@ ImageSequence: Add multi-frame logic (frame logic)
 CLI: full pipeline
 
 NML filter: CUDA
-Temporal Filter: CPU CUDA, MV estimator/generator based on MSE and mv guidence
+Temporal Filter: CPU CUDA,
+MV Generator: based on MSE and mv guidence
 ConvolutionFilter: add METAL backend implementations
 
-makegile: create filter, build, quality-check, format, etc.
+makeile: create filter, build, quality-check, format, etc.
 tools/python wrapper
 Git actions: debug / release
 BuildInfo: data from cmake, changelog, version
 Release pipeline
 
 GetParameter: add defaulting
-ParseArgs: parsing inputs
+ParseArgs: parsing inputs + Json
 
 ML spatial
 ML Samples: video about collecting process
