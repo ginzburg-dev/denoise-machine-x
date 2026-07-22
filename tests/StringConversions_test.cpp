@@ -5,6 +5,7 @@
 #include <string>
 #include <string_view>
 #include <vector>
+#include <utility>
 
 using namespace dmxdenoiser;
 
@@ -116,3 +117,34 @@ TEST(StringConversions, IntToStringPadded) {
     EXPECT_EQ(intToStringPadded(100, 3), "100");
 }
 
+TEST(StringConversions, SplitStringWithDelimiter)
+{
+    std::string input { "image.####.exr:N" };
+    auto p = splitString(input, ":");
+    EXPECT_EQ(p.first, "image.####.exr");
+    EXPECT_EQ(p.second, "N");
+}
+
+TEST(StringConversions, SplitStringWithoutDelimiter)
+{
+    std::string input { "image.####.exr" };
+    auto p = splitString(input, ":");
+    EXPECT_EQ(p.first, "image.####.exr");
+    EXPECT_EQ(p.second, "");
+}
+
+TEST(StringConversions, SplitStringEndOfStringDelimiter)
+{
+    std::string input { "image.####.exr:" };
+    auto p = splitString(input, ":");
+    EXPECT_EQ(p.first, "image.####.exr");
+    EXPECT_EQ(p.second, "");
+}
+
+TEST(StringConversions, SplitStringStartOfStringDelimiter)
+{
+    std::string input { ":image.####.exr" };
+    auto p = splitString(input, ":");
+    EXPECT_EQ(p.first, "");
+    EXPECT_EQ(p.second, "image.####.exr");
+}
