@@ -1,37 +1,33 @@
+PRESET ?= mac-cpu-debug
+JOBS ?= 4
 
+.PHONY: configure build test check ci \
+	build-mac-cpu-dev build-mac-cpu-debug \
+	build-linux-cpu-dev build-linux-cpu-debug
 
-# Mac
+configure:
+	cmake --preset $(PRESET)
 
-.PHONY: build-mac-cpu-dev
+build: configure
+	cmake --build --preset $(PRESET) --parallel $(JOBS)
+
+test: build
+	ctest --preset $(PRESET) --parallel $(JOBS)
+
+check: test
+
+# The same Linux CPU pipeline used by GitHub Actions.
+ci:
+	$(MAKE) check PRESET=linux-cpu-debug JOBS=$(JOBS)
 
 build-mac-cpu-dev:
-	rm -rf tests/test_files/*
-	cmake --preset mac-cpu-dev
-	cmake --build --preset mac-cpu-dev -j8
-	ctest --preset mac-cpu-dev -j8 --output-log tests/test_files/test_logs/AllTests.log
-
-.PHONY: build-mac-cpu-debug
+	$(MAKE) check PRESET=mac-cpu-dev JOBS=$(JOBS)
 
 build-mac-cpu-debug:
-	rm -rf tests/test_files/*
-	cmake --preset mac-cpu-debug
-	cmake --build --preset mac-cpu-debug -j8
-	ctest --preset mac-cpu-debug -j8 --output-log tests/test_files/test_logs/AllTests.log
-
-# Linux
-
-.PHONY: build-linux-cpu-dev
+	$(MAKE) check PRESET=mac-cpu-debug JOBS=$(JOBS)
 
 build-linux-cpu-dev:
-	rm -rf tests/test_files/*
-	cmake --preset linux-cpu-dev
-	cmake --build --preset linux-cpu-dev -j8
-	ctest --preset linux-cpu-dev -j8 --output-log tests/test_files/test_logs/AllTests.log
-
-.PHONY: build-linux-cpu-debug
+	$(MAKE) check PRESET=linux-cpu-dev JOBS=$(JOBS)
 
 build-linux-cpu-debug:
-	rm -rf tests/test_files/*
-	cmake --preset linux-cpu-debug
-	cmake --build --preset linux-cpu-debug -j8
-	ctest --preset linux-cpu-debug -j8 --output-log tests/test_files/test_logs/AllTests.log
+	$(MAKE) check PRESET=linux-cpu-debug JOBS=$(JOBS)

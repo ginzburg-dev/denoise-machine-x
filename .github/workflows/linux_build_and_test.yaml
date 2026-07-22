@@ -5,23 +5,29 @@ on:
     branches: [ main, develop ]
   pull_request:
     branches: [ main, develop ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   linux-build-and-test:
+    name: linux-build-and-test
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
-    - name: Set up CMake
-      uses: jwlawson/actions-setup-cmake@v2
+      - name: Set up CMake
+        uses: jwlawson/actions-setup-cmake@v2
 
-    - name: Configure
-      run: cmake --preset linux-cpu-debug
-
-    - name: Build
-      run: cmake --build --preset linux-cpu-debug
-
-    - name: Run tests
-      run: ctest --preset linux-cpu-debug
+      - name: Configure, build, and test
+        run: make ci

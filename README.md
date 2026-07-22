@@ -134,6 +134,12 @@ cmake --list-presets
 For example, the Linux CPU configuration used by CI can be reproduced with:
 
 ```bash
+make ci
+```
+
+Or by invoking the presets directly:
+
+```bash
 cmake --preset linux-cpu-debug
 cmake --build --preset linux-cpu-debug
 ctest --preset linux-cpu-debug
