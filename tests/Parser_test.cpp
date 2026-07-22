@@ -29,6 +29,7 @@ protected:
     }
 };
 
+
 TEST_F(ParserTest, ParseArgs)
 {
     const char* argv[] = { 
@@ -42,7 +43,7 @@ TEST_F(ParserTest, ParseArgs)
         "--config", "./config/filter.json",
         "--beauty", "image.####.exr",
         "--albedo", "image.####.exr:albedo",
-        "--normal", "image.####.exr:normal",
+        "--normal", "image.####.exr:N",
         "--depth", "image_depth.####.exr:depth",
     };
     int argc = 23;
@@ -53,4 +54,8 @@ TEST_F(ParserTest, ParseArgs)
     EXPECT_EQ(opt.endFrame, 100);
     EXPECT_EQ(opt.inputFolder, std::string("./input"));
     EXPECT_EQ(opt.outputFolder, std::string("./output"));
+    EXPECT_EQ(opt.inputs.at("image.####.exr").at("beauty"), "default");
+    EXPECT_EQ(opt.inputs.at("image.####.exr").at("albedo"), "albedo");
+    EXPECT_EQ(opt.inputs.at("image.####.exr").at("normal"), "N");
+    EXPECT_EQ(opt.inputs.at("image_depth.####.exr").at("depth"), "depth");
 }

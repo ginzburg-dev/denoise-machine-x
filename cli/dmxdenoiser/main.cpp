@@ -1,6 +1,7 @@
 #include <dmxdenoiser/DMXImage.hpp>
 #include <dmxdenoiser/Logger.hpp>
 #include <dmxdenoiser/Options.hpp>
+#include <dmxdenoiser/Parser.hpp>
 
 #include <iostream>
 
@@ -13,10 +14,15 @@ int main(int argc, char* argv[])
     // Init log
     DMX_LOG_INIT(DMX_MIN_LOG_LEVEL, &std::clog, "./dmxdenoiser.log");
 
-    // parse params
-    std::cout << argv[argc-1] << '\n';
-    for(int i = 1; i < argc; ++i)
-            std::cout << argv[i] << ' ';
+    Options options { parseArguments(argc, argv) };
+
+    // Create filters
+
+    // Load images
+
+    // Run denoiser (filters, images)
+
+    DMX_LOG_SHUTDOWN;
 
     return 0;
 }

@@ -1,16 +1,18 @@
 #include <dmxdenoiser/Options.hpp>
 #include <dmxdenoiser/ParamDictionary.hpp>
 #include <dmxdenoiser/Parser.hpp>
+#include <dmxdenoiser/StringConversions.hpp>
 #include <dmxdenoiser/Logger.hpp>
 
 #include <cstddef>
 #include <string>
+#include <utility>
 
 namespace dmxdenoiser
 {
     /*
     ./dmxdenoiser 
-    --start 1 
+    --start 1
     --end 100 
     --gpu 0
     --frames 3
@@ -20,20 +22,6 @@ namespace dmxdenoiser
     --depth tech.####.exr:z
     --aluxary
     --output filtered.####.exr
-
-
-    struct Options
-    {
-        int ncores = -1;
-        bool gpu = false;
-        int startFrame;
-        int endFrame;
-        std::string inputFile{};
-        std::string outputFile{};
-        bool albedoDivide = true;
-        InputFilesMap inputs{};
-        FilterMap filters{};
-    };
     */
 
     Options parseArguments(int argc, char** argv) {
@@ -76,23 +64,27 @@ namespace dmxdenoiser
                 DMX_LOG_DEBUG("Parser", "parseArguments(): read argument \"", 
                     argv[i], "\" = ", argv[i+1]);
             } else if(arg == "--beauty") {
-                // TODO: implement splitting by ":" delimiter
-                // opt.inputs[std::string(argv[i+1])] = std::string(argv[i+1]);
+                auto beautySplit = splitString(std::string(argv[i+1]), std::string(kAovDelimiter));
+                opt.inputs[beautySplit.first]["beauty"] = 
+                    beautySplit.second.empty() ? "default" : beautySplit.second;
                 DMX_LOG_DEBUG("Parser", "parseArguments(): read argument \"", 
                     argv[i], "\" = ", argv[i+1]);
             } else if(arg == "--albedo") {
-                // TODO: implement splitting by ":" delimiter
-                // opt.inputs[std::string(argv[i+1])] = std::string(argv[i+1]);
+                auto albedoSplit = splitString(std::string(argv[i+1]), std::string(kAovDelimiter));
+                opt.inputs[albedoSplit.first]["albedo"] = 
+                    albedoSplit.second.empty() ? "default" : albedoSplit.second;
                 DMX_LOG_DEBUG("Parser", "parseArguments(): read argument \"", 
                     argv[i], "\" = ", argv[i+1]);
             } else if(arg == "--normal") {
-                // TODO: implement splitting by ":" delimiter
-                // opt.inputs[std::string(argv[i+1])] = std::string(argv[i+1]);
+                auto normalSplit = splitString(std::string(argv[i+1]), std::string(kAovDelimiter));
+                opt.inputs[normalSplit.first]["normal"] = 
+                    normalSplit.second.empty() ? "default" : normalSplit.second;
                 DMX_LOG_DEBUG("Parser", "parseArguments(): read argument \"", 
                     argv[i], "\" = ", argv[i+1]);
             } else if(arg == "--depth") {
-                // TODO: implement splitting by ":" delimiter
-                // opt.inputs[std::string(argv[i+1])] = std::string(argv[i+1]);
+                auto depthSplit = splitString(std::string(argv[i+1]), std::string(kAovDelimiter));
+                opt.inputs[depthSplit.first]["depth"] = 
+                    depthSplit.second.empty() ? "default" : depthSplit.second;
                 DMX_LOG_DEBUG("Parser", "parseArguments(): read argument \"", 
                     argv[i], "\" = ", argv[i+1]);
             }
